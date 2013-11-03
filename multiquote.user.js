@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name Multiquote for the One True Forum
 // @description Changes quote buttons behaviour to quote multiple messages
-// @author Pikrass
-// @version 1674
+// @author Pikrass and mrob27
+// @version 5330
 // @resource quote_waiting imgs/quote_waiting.png
 // @resource quote_ok imgs/quote_ok.png
 // @include http://forums.xkcd.com/viewtopic.php*
@@ -39,7 +39,10 @@ multiquote = {
 
 		var req = new XMLHttpRequest();
 		req.addEventListener('load', this.addQuote.bind(this, req, link));
-		req.open('get', link.quoteUrl, true);
+		/* RPM 2013-10-27: Make a synchronous request (3rd argument false) so that
+		 * the text being quoted will be stored in this.quotes[num].quote by
+		 * addQuote, so that in turn it is available to makeReplyArea. */
+		req.open('get', link.quoteUrl, false);
 		req.send();
 		link.style.backgroundImage = 'url("'+GM_getResourceURL('quote_waiting')+'")';
 
@@ -77,8 +80,12 @@ multiquote = {
 
 		var area = document.createElement('textarea');
 		area.className = 'multiquote-reply';
+		/* RPM 2013-10-27: Fill the reply with the quote-text, so that the user
+		 * can remove unwanted text right away */
+		area.value = this.quotes[pId].quote.replace(/&quot;/gmi, '"')
+		  .replace(/&#58;/g,':').replace(/&#46;/g,'.');
 		area.style.width = '100%';
-		area.style.height = '100px';
+		area.style.height = '300px'; /* 100px is Waaaaayyyy too small! */
 		area.style.fontSize = '1.2em';
 
 		var butDiv = document.createElement('div');
@@ -120,12 +127,17 @@ multiquote = {
 		but.disabled = false;
 	},
 
+	/* addReply is called when the user clicks the "Save" button;
+	 * it saves the contents of the textarea into this.quotes[num].reply
+	 * note that 'num' is eqivalent to 'pId' seen in makeReplyArea */
 	addReply: function(area, num, but) {
 		if(typeof this.quotes[num] == 'undefined') {
 			this.quotes[num] = {}; // This is *absolutely* thread-safe :D
 		}
 
 		this.quotes[num].reply = area.value;
+		/* Save the user's work in a way that will persist across page loads.
+		 * see http://wiki.greasespot.net/GM_setValue */
 		GM_setValue('quotes', JSON.stringify(this.quotes));
 
 		but.value = 'Saved';
@@ -162,7 +174,9 @@ multiquote = {
 			if(s != '')
 				s += "\n\n";
 
-			s += this.quotes[i].quote;
+			/* RPM 2013-10-27: Since we now put the quote text into the reply
+			 * we n longer want to add it here. */
+			/* s += this.quotes[i].quote; */
 
 			if(this.quotes[i].reply)
 				s += "\n" + this.quotes[i].reply;
