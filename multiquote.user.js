@@ -83,7 +83,8 @@ multiquote = {
 		/* RPM 2013-10-27: Fill the reply with the quote-text, so that the user
 		 * can remove unwanted text right away */
 		area.value = this.quotes[pId].quote.replace(/&quot;/gmi, '"')
-		  .replace(/&#58;/g,':').replace(/&#46;/g,'.');
+          .replace(/&#40;/g,'(').replace(/&#41;/g,')')
+		  .replace(/&#46;/g,'.').replace(/&#58;/g,':');
 		area.style.width = '100%';
 		area.style.height = '300px'; /* 100px is Waaaaayyyy too small! */
 		area.style.fontSize = '1.2em';
