@@ -3,7 +3,7 @@
 // @name Open All Spoilers on (Re)Load
 // @description Open all spoilers in the forum posts
 // @author Robert Munafo
-// @version 5723
+// @version 5728
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -85,9 +85,24 @@ openallspoilers = {
 	}
 };
 
-if(location.href.indexOf('viewtopic') != -1)
-	window.addEventListener('DOMContentLoaded',
-      openallspoilers.convert.bind(openallspoilers) );
+// This ersion hypothetically waits for images to load.
+if (window.addEventListener) {
+  window.addEventListener('load',
+    openallspoilers.convert.bind(openallspoilers), false);
+} else if (window.attachEvent) {
+  window.attachEvent('onload',
+    openallspoilers.convert.bind(openallspoilers));
+}
+
+// %%% Ask Pikrass if the "addEventListener('DOMContentLoaded',...)"
+// is needed for non-GreaseMonkey platforms/environments. acto AluisioASG,
+// *Monkey always runs the script after the DOM is built (HTML loaded and
+// converted to a hierarchical tree of objects).
+//
+// Old version which hypothetically doesn't wait for images to load.
+// if(location.href.indexOf('viewtopic') != -1)
+//	window.addEventListener('DOMContentLoaded',
+//      openallspoilers.convert.bind(openallspoilers) );
 
 // The following is an earlier version by Aluísio Augusto Silva Gonçalves
 // It is written in LiveScript
