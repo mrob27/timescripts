@@ -3,7 +3,7 @@
 // @name Open All Spoilers on (Re)Load
 // @description Open all spoilers in the forum posts
 // @author Robert Munafo
-// @version 5711
+// @version 5723
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -89,7 +89,9 @@ if(location.href.indexOf('viewtopic') != -1)
 	window.addEventListener('DOMContentLoaded',
       openallspoilers.convert.bind(openallspoilers) );
 
-
+// The following is an earlier version by Aluísio Augusto Silva Gonçalves
+// It is written in LiveScript
+//
 // # Find the corresponding spoiler content to a given current spoiler button.
 // find-spoiler-content = (spoiler-button) ->
 //   eval-XPath '
