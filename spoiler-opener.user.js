@@ -62,12 +62,24 @@ openallspoilers = {
             if (  (buttons[i].type == 'button')
                && (buttons[i].value == 'Show'))
             {
-			  buttons[i]        // <input type="button" value="Show"  ...
-                .parentNode     // <div class="quotetitle">
-                .parentNode     // <div style="margin:20px; margin-top:5px">
-                .getElementsByTagName('div')[1] // <div class="quotecontent">
+              var myp =
+                buttons[i]       // <input type="button" value="Show"  ...
+                .parentNode;     // <div class="quotetitle">
+
+              var myx =
+                myp.parentNode     // <div style="margin:20px; margin-top:5px">
+                .getElementsByTagName('div')[1]; // <div class="quotecontent">
+
+              myx
                 .getElementsByTagName('div')[0] // <div style="display: none;">
-                .style.display = '';  // remove 'none', making it displayable
+                .style.display = '';   // remove 'none', making it displayable
+
+              buttons[i].value = 'Hide'; // + myx.scrollHeight + 'px';
+
+              // The following does not show an accurate height if the spoiler
+              // contains images, but it at least works when it contains text.
+              myp.getElementsByTagName('b')[0].innerText
+                = myx.clientHeight + 'px';
 			}
 		}
 	}
