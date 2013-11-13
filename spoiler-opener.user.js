@@ -9,6 +9,40 @@
 // @include http://fora.xkcd.com/viewtopic.php*
 // ==/UserScript==
 
+// A Spoiler:'d item is implemented with the following HTML:
+//
+// <div style="margin:20px; margin-top:5px">
+//   <div class="quotetitle">
+//     <b>Spoiler:</b>
+//     <input type="button"
+//            value="Show"
+//            style="width:45px;font-size:10px;margin:0px;padding:0px;"
+//            onclick="[js, see below]" />
+//   </div>
+//   <div class="quotecontent">
+//     <div style="display: none;">
+//       The butler did it! Now you don't have to read the rest of the book!
+//     </div>
+//   </div>
+// </div>
+//
+// Where the "[js, see below]" is the following JavaScript:
+//
+// if (this.parentNode.parentNode.getElementsByTagName('div')[1]
+//      .getElementsByTagName('div')[0].style.display != '')
+// {
+//   this.parentNode.parentNode.getElementsByTagName('div')[1]
+//     .getElementsByTagName('div')[0].style.display = '';
+//   this.innerText = ''; this.value = 'Hide';
+// } else {
+//   this.parentNode.parentNode.getElementsByTagName('div')[1].
+//     getElementsByTagName('div')[0].style.display = 'none';
+//   this.innerText = ''; this.value = 'Show';
+// }
+//
+// Therefore, we can open all spoilers by finding all buttons labeled "Show"
+// and running the "this.parentNode. ... .style.display = '';" on each one.
+
 openallspoilers = {
 	//- log: function (msg) {
 	//-    setTimeout(function() {
@@ -21,11 +55,15 @@ openallspoilers = {
 		var i;
 		for(i=0 ; i<buttons.length ; i++) {
 			//- this.log(i + ' ' + buttons[i].value);
-            if ((buttons[i].type == 'button')
-             && (buttons[i].value == 'Show')) {
-				buttons[i].parentNode.parentNode
-                  .getElementsByTagName('div')[1]
-                  .getElementsByTagName('div')[0].style.display = '';
+            if (  (buttons[i].type == 'button')
+               && (buttons[i].value == 'Show'))
+            {
+			  buttons[i]        // <input type="button" value="Show"  ...
+                .parentNode     // <div class="quotetitle">
+                .parentNode     // <div style="margin:20px; margin-top:5px">
+                .getElementsByTagName('div')[1] // <div class="quotecontent">
+                .getElementsByTagName('div')[0] // <div style="display: none;">
+                .style.display = '';  // remove 'none', making it displayable
 			}
 		}
 	}
