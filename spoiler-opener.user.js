@@ -10,17 +10,17 @@
 // ==/UserScript==
 
 openallspoilers = {
-	log: function (msg) {
-	    setTimeout(function() {
-    	    throw new Error(msg);
-	    }, 0);
-	},
+	//- log: function (msg) {
+	//-    setTimeout(function() {
+    //-	    throw new Error(msg);
+	//-    }, 0);
+	//- },
 
 	convert: function() {
 		var buttons = document.getElementsByTagName('input');
 		var i;
 		for(i=0 ; i<buttons.length ; i++) {
-			this.log(i + ' ' + buttons[i].value);
+			//- this.log(i + ' ' + buttons[i].value);
             if ((buttons[i].type == 'button')
              && (buttons[i].value == 'Show')) {
 				buttons[i].parentNode.parentNode
