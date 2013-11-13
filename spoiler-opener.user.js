@@ -1,14 +1,18 @@
 // ==UserScript==
 // @namespace mrob.com
-// @name No More Spoilers
+// @name Open All Spoilers on (Re)Load
 // @description Open all spoilers in the forum posts
 // @author Robert Munafo
-// @version 5692
+// @version 5711
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
 // ==/UserScript==
 
+// A sample forum page is:
+//
+//   forums.xkcd.com/viewtopic.php?f=7&t=101043&p=3495924#p3495924
+//
 // A Spoiler:'d item is implemented with the following HTML:
 //
 // <div style="margin:20px; margin-top:5px">
@@ -28,17 +32,17 @@
 //
 // Where the "[js, see below]" is the following JavaScript:
 //
-// if (this.parentNode.parentNode.getElementsByTagName('div')[1]
-//      .getElementsByTagName('div')[0].style.display != '')
-// {
-//   this.parentNode.parentNode.getElementsByTagName('div')[1]
-//     .getElementsByTagName('div')[0].style.display = '';
-//   this.innerText = ''; this.value = 'Hide';
-// } else {
-//   this.parentNode.parentNode.getElementsByTagName('div')[1].
-//     getElementsByTagName('div')[0].style.display = 'none';
-//   this.innerText = ''; this.value = 'Show';
-// }
+//   if (this.parentNode.parentNode.getElementsByTagName('div')[1]
+//        .getElementsByTagName('div')[0].style.display != '')
+//   {
+//     this.parentNode.parentNode.getElementsByTagName('div')[1]
+//       .getElementsByTagName('div')[0].style.display = '';
+//     this.innerText = ''; this.value = 'Hide';
+//   } else {
+//     this.parentNode.parentNode.getElementsByTagName('div')[1].
+//       getElementsByTagName('div')[0].style.display = 'none';
+//     this.innerText = ''; this.value = 'Show';
+//   }
 //
 // Therefore, we can open all spoilers by finding all buttons labeled "Show"
 // and running the "this.parentNode. ... .style.display = '';" on each one.
