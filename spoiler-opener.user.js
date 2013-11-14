@@ -7,7 +7,23 @@
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
+// @include http://forums.xkcd.com/posting.php*
+// @include http://fora.xkcd.com/posting.php*
 // ==/UserScript==
+
+// REVISION HISTORY:
+//
+// np5708: Add this script to github
+//   Comment out debugging statements ("log" function)
+//   Add comments explaining how the script works.
+//   Update revision # and make a more descriptive name
+// np5718: Change text 'Spoiler:' to height of contained text (bug: it isn't
+//   counting height of images yet)
+// np5719: Improve comments
+// np5725: Use 'load' or 'onload' event listener instead of 'DOMContentLoaded'
+// np5732: Set backgroundColor of contents of every spoiler to #BBD
+//   so it's obvious which parts were inside the spoilers.
+//   Cross-browser method for getting element heights.
 
 // A sample forum page is:
 //
@@ -48,44 +64,56 @@
 // and running the "this.parentNode. ... .style.display = '';" on each one.
 
 openallspoilers = {
-	//- log: function (msg) {
-	//-    setTimeout(function() {
-    //-	    throw new Error(msg);
-	//-    }, 0);
-	//- },
+  //- log: function (msg) {
+  //-    setTimeout(function() {
+  //-      throw new Error(msg);
+  //-    }, 0);
+  //- },
 
-	convert: function() {
-		var buttons = document.getElementsByTagName('input');
-		var i;
-		for(i=0 ; i<buttons.length ; i++) {
-			//- this.log(i + ' ' + buttons[i].value);
-            if (  (buttons[i].type == 'button')
-               && (buttons[i].value == 'Show'))
-            {
-              var myp =
-                buttons[i]       // <input type="button" value="Show"  ...
-                .parentNode;     // <div class="quotetitle">
+  convert: function() {
+    var buttons = document.getElementsByTagName('input');
+    var i;
+    for(i=0 ; i<buttons.length ; i++) {
+      //- this.log(i + ' ' + buttons[i].value);
+      if (  (buttons[i].type == 'button')
+         && (buttons[i].value == 'Show'))
+      {
+        var myp =
+          buttons[i]       // <input type="button" value="Show"  ...
+          .parentNode;     // <div class="quotetitle">
 
-              var myx =
-                myp.parentNode     // <div style="margin:20px; margin-top:5px">
-                .getElementsByTagName('div')[1]; // <div class="quotecontent">
+        var myx =
+          myp.parentNode     // <div style="margin:20px; margin-top:5px">
+          .getElementsByTagName('div')[1]; // <div class="quotecontent">
 
-              myx
-                .getElementsByTagName('div')[0] // <div style="display: none;">
-                .style.display = '';   // remove 'none', making it displayable
+        var myz = myx
+          .getElementsByTagName('div')[0] // <div style="display: none;">
+          .style;
 
-              buttons[i].value = 'Hide'; // + myx.scrollHeight + 'px';
+        myz.display = '';   // remove 'none', making it displayable
+        myz.backgroundColor="#BBD";
 
-              // The following does not show an accurate height if the spoiler
-              // contains images, but it at least works when it contains text.
-              myp.getElementsByTagName('b')[0].innerText
-                = myx.clientHeight + 'px';
-			}
-		}
-	}
+        buttons[i].value = 'Hide'; // + myx.scrollHeight + 'px';
+
+        // The following does not show an accurate height if the spoiler
+        // contains images, but it at least works when it contains text.
+        var ht;
+        if (myx.clientHeight) { // IE
+          ht = myx.clientHeight + 'px';
+        } else if (window.getComputedStyle) {
+          ht = window.getComputedStyle(myx).getPropertyValue('height');
+        } else if (myx.style['height']) {
+          ht = myx.style['height'];
+        } else {
+          ht = 'unkn';
+        }
+        myp.getElementsByTagName('b')[0].innerText = ht;
+      }
+    }
+  }
 };
 
-// This ersion hypothetically waits for images to load.
+// This version hypothetically waits for images to load.
 if (window.addEventListener) {
   window.addEventListener('load',
     openallspoilers.convert.bind(openallspoilers), false);
