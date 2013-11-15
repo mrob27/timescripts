@@ -24,7 +24,8 @@
 // np5732: Set backgroundColor of contents of every spoiler to #BBD
 //   so it's obvious which parts were inside the spoilers.
 //   Cross-browser method for getting element heights.
-// np5757: Use setTimeout to run the function twice
+// np5757.19: Use setTimeout to run the function twice
+// np5757.25 Wait 9.111 seconds; fix a bug
 
 // A sample forum page is:
 //
@@ -71,11 +72,11 @@ openallspoilers = {
   // I'd like to know about cross-browser support for console.log(). Until
   // then, this is my replacement.
   //
-  //- log: function (msg) {
-  //-    setTimeout(function() {
-  //-      throw new Error(msg);
-  //-    }, 0);
-  //- },
+   log: function (msg) {
+      setTimeout(function() {
+        throw new Error(msg);
+      }, 0);
+   },
 
   convert: function() {
     var buttons = document.getElementsByTagName('input');
@@ -119,7 +120,7 @@ openallspoilers = {
       }
     }
     if (ttd > 0) {
-      setTimeout(openallspoilers, 1011);
+      setTimeout(openallspoilers.convert.bind(openallspoilers), 9111);
       ttd -= 1;
     }
   }
