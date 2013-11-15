@@ -3,7 +3,7 @@
 // @name Open All Spoilers on (Re)Load
 // @description Open all spoilers in the forum posts
 // @author Robert Munafo
-// @version 5757
+// @version 5761
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -26,6 +26,8 @@
 //   Cross-browser method for getting element heights.
 // np5757.19: Use setTimeout to run the function twice
 // np5757.25 Wait 9.111 seconds; fix a bug
+// np5761.68 Fix window.addEventListener/attachEvent calls and add fallback
+//   case if neither deferred method is available.
 
 // A sample forum page is:
 //
@@ -72,11 +74,11 @@ openallspoilers = {
   // I'd like to know about cross-browser support for console.log(). Until
   // then, this is my replacement.
   //
-   log: function (msg) {
-      setTimeout(function() {
-        throw new Error(msg);
-      }, 0);
-   },
+  log: function (msg) {
+    setTimeout(function() {
+      throw new Error(msg);
+    }, 0);
+  },
 
   convert: function() {
     var buttons = document.getElementsByTagName('input');
@@ -119,6 +121,10 @@ openallspoilers = {
         myp.getElementsByTagName('b')[0].innerText = ht;
       }
     }
+
+    // Because myx.clientHeight is sometimes not updated properly (e.g.
+    // Chrome v29 when myx contains newly-loaded images) the global 'ttd'
+    // will be set if we need to wait a while and re-run this function.
     if (ttd > 0) {
       setTimeout(openallspoilers.convert.bind(openallspoilers), 9111);
       ttd -= 1;
@@ -126,29 +132,34 @@ openallspoilers = {
   }
 };
 
-// This version hypothetically waits for images to load.
+// Make it run itself one more time, because 'load', 'onload', and
+// 'DOMContentLoaded' events all fail to wait long enough for the
+// myx.clientHeight property to be correct if myx contains newly-loaded
+// images.
+ttd = 1;
+
+// 3 cases for cross-platform, cross-browser: not necessary for this
+// application but I want this code to be useful elsewhere too!
 if (window.addEventListener) {
-  window.addEventListener('DOMContentLoaded',
+  window.addEventListener('DOMContentLoaded', // was 'load',
     openallspoilers.convert.bind(openallspoilers), false);
-  ttd = 1; // Make it run itself one more time
 } else if (window.attachEvent) {
-  window.attachEvent('DOMContentLoaded',
+  window.attachEvent('onload',
     openallspoilers.convert.bind(openallspoilers));
-  ttd = 1; // make it run itself one more time
-}
+} else {
+  openallspoilers.convert(openallspoilers);
+};
 
 // %%% Ask Pikrass if the "addEventListener('DOMContentLoaded',...)"
 // is needed for non-GreaseMonkey platforms/environments. acto AluisioASG,
 // *Monkey always runs the script after the DOM is built (HTML loaded and
 // converted to a hierarchical tree of objects).
 //
-// Old version which hypothetically doesn't wait for images to load.
+// Pikrass' version also tests if we're reading or posting with:
 // if(location.href.indexOf('viewtopic') != -1)
-//	window.addEventListener('DOMContentLoaded',
-//      openallspoilers.convert.bind(openallspoilers) );
 
-// The following is an earlier version by Aluísio Augusto Silva Gonçalves
-// It is written in LiveScript
+
+// The following is a LiveScript version by Aluísio Augusto Silva Gonçalves
 //
 // # Find the corresponding spoiler content to a given current spoiler button.
 // find-spoiler-content = (spoiler-button) ->
