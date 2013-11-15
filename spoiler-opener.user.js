@@ -3,7 +3,7 @@
 // @name Open All Spoilers on (Re)Load
 // @description Open all spoilers in the forum posts
 // @author Robert Munafo
-// @version 5728
+// @version 5757
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -24,6 +24,7 @@
 // np5732: Set backgroundColor of contents of every spoiler to #BBD
 //   so it's obvious which parts were inside the spoilers.
 //   Cross-browser method for getting element heights.
+// np5757: Use setTimeout to run the function twice
 
 // A sample forum page is:
 //
@@ -63,7 +64,13 @@
 // Therefore, we can open all spoilers by finding all buttons labeled "Show"
 // and running the "this.parentNode. ... .style.display = '';" on each one.
 
+var ttd;
+
 openallspoilers = {
+
+  // I'd like to know about cross-browser support for console.log(). Until
+  // then, this is my replacement.
+  //
   //- log: function (msg) {
   //-    setTimeout(function() {
   //-      throw new Error(msg);
@@ -73,10 +80,11 @@ openallspoilers = {
   convert: function() {
     var buttons = document.getElementsByTagName('input');
     var i;
+    //- this.log('convert started');
     for(i=0 ; i<buttons.length ; i++) {
       //- this.log(i + ' ' + buttons[i].value);
       if (  (buttons[i].type == 'button')
-         && (buttons[i].value == 'Show'))
+         && ((buttons[i].value == 'Show') || (buttons[i].value == 'hide')) )
       {
         var myp =
           buttons[i]       // <input type="button" value="Show"  ...
@@ -93,7 +101,7 @@ openallspoilers = {
         myz.display = '';   // remove 'none', making it displayable
         myz.backgroundColor="#BBD";
 
-        buttons[i].value = 'Hide'; // + myx.scrollHeight + 'px';
+        buttons[i].value = 'hide'; // + myx.scrollHeight + 'px';
 
         // The following does not show an accurate height if the spoiler
         // contains images, but it at least works when it contains text.
@@ -110,16 +118,22 @@ openallspoilers = {
         myp.getElementsByTagName('b')[0].innerText = ht;
       }
     }
+    if (ttd > 0) {
+      setTimeout(openallspoilers, 1011);
+      ttd -= 1;
+    }
   }
 };
 
 // This version hypothetically waits for images to load.
 if (window.addEventListener) {
-  window.addEventListener('load',
+  window.addEventListener('DOMContentLoaded',
     openallspoilers.convert.bind(openallspoilers), false);
+  ttd = 1; // Make it run itself one more time
 } else if (window.attachEvent) {
-  window.attachEvent('onload',
+  window.attachEvent('DOMContentLoaded',
     openallspoilers.convert.bind(openallspoilers));
+  ttd = 1; // make it run itself one more time
 }
 
 // %%% Ask Pikrass if the "addEventListener('DOMContentLoaded',...)"
