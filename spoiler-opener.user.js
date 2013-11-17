@@ -3,7 +3,7 @@
 // @name Open All Spoilers on (Re)Load
 // @description Open all spoilers in the forum posts
 // @author Robert Munafo
-// @version 5761
+// @version 5826
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -24,10 +24,13 @@
 // np5732: Set backgroundColor of contents of every spoiler to #BBD
 //   so it's obvious which parts were inside the spoilers.
 //   Cross-browser method for getting element heights.
-// np5757.19: Use setTimeout to run the function twice
+// np5757.19 Use setTimeout to run the function twice
 // np5757.25 Wait 9.111 seconds; fix a bug
 // np5761.68 Fix window.addEventListener/attachEvent calls and add fallback
 //   case if neither deferred method is available.
+// np5826.91 Do not open the spoilers or change the button title on the
+//   second scan (in case user has decided to close spoiler(s) during the
+//   interval)
 
 // A sample forum page is:
 //
@@ -68,6 +71,7 @@
 // and running the "this.parentNode. ... .style.display = '';" on each one.
 
 var ttd;
+var recalc;
 
 openallspoilers = {
 
@@ -101,16 +105,20 @@ openallspoilers = {
           .getElementsByTagName('div')[0] // <div style="display: none;">
           .style;
 
-        myz.display = '';   // remove 'none', making it displayable
-        myz.backgroundColor="#BBD";
-
-        buttons[i].value = 'hide'; // + myx.scrollHeight + 'px';
+        if (recalc == 0) {
+          // This is the first time: open th spoilers and change the button
+          myz.display = '';   // remove 'none', making it displayable
+          myz.backgroundColor="#BBD";
+          buttons[i].value = 'hide';
+        }
 
         // The following does not show an accurate height if the spoiler
         // contains images, but it at least works when it contains text.
         var ht;
         if (myx.clientHeight) { // IE
-          ht = myx.clientHeight + 'px';
+          ht = myx.clientHeight + 'px'; // In some cases we see a scrollbar, so
+                                        // maybe scrollHeight would be more
+                                        // appropriate
         } else if (window.getComputedStyle) {
           ht = window.getComputedStyle(myx).getPropertyValue('height');
         } else if (myx.style['height']) {
@@ -126,6 +134,7 @@ openallspoilers = {
     // Chrome v29 when myx contains newly-loaded images) the global 'ttd'
     // will be set if we need to wait a while and re-run this function.
     if (ttd > 0) {
+      recalc = 1;
       setTimeout(openallspoilers.convert.bind(openallspoilers), 9111);
       ttd -= 1;
     }
@@ -137,6 +146,7 @@ openallspoilers = {
 // myx.clientHeight property to be correct if myx contains newly-loaded
 // images.
 ttd = 1;
+recalc = 0;
 
 // 3 cases for cross-platform, cross-browser: not necessary for this
 // application but I want this code to be useful elsewhere too!
