@@ -3,7 +3,7 @@
 // @name Open All Spoilers on (Re)Load
 // @description Open all spoilers in the forum posts
 // @author Robert Munafo
-// @version 5826
+// @version 5905
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -31,6 +31,8 @@
 // np5826.91 Do not open the spoilers or change the button title on the
 //   second scan (in case user has decided to close spoiler(s) during the
 //   interval)
+// np5905.00 Run 3 more times instead of just 1, with exponentially increasing
+//   delays (this improves performance when the servers are really slow.)
 
 // A sample forum page is:
 //
@@ -71,6 +73,7 @@
 // and running the "this.parentNode. ... .style.display = '';" on each one.
 
 var ttd;
+var del;
 var recalc;
 
 openallspoilers = {
@@ -135,17 +138,25 @@ openallspoilers = {
     // will be set if we need to wait a while and re-run this function.
     if (ttd > 0) {
       recalc = 1;
-      setTimeout(openallspoilers.convert.bind(openallspoilers), 9111);
+      setTimeout(openallspoilers.convert.bind(openallspoilers), del);
       ttd -= 1;
+      // Go to the next-higher delay interval
+      if (del <= 9111) {
+        del = 100235;
+      } else if (del <= 100235) {
+        del = 1303071;
+      } else if (del <= 1303071) {
+        del = 19546083;
+      }
     }
   }
 };
 
-// Make it run itself one more time, because 'load', 'onload', and
+// Make it run itself a few more times, because 'load', 'onload', and
 // 'DOMContentLoaded' events all fail to wait long enough for the
 // myx.clientHeight property to be correct if myx contains newly-loaded
-// images.
-ttd = 1;
+// images, and because images sometimes take a ch*rping long time to load.
+ttd = 3; del = 9111;
 recalc = 0;
 
 // 3 cases for cross-platform, cross-browser: not necessary for this
