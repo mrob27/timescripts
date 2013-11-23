@@ -3,7 +3,7 @@
 // @name No Tinytext
 // @description Locate tinytext and make it readable
 // @author Robert Munafo
-// @version 5949.74
+// @version 5971.34
 // @downloadURL http://mrob.com/time/scripts-beta/no-tinytext.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -20,6 +20,8 @@
 // np5848.86 Add comment pointing to my sample post
 // np5949.74 Detect and fix very light font colors by changing the background
 //   to black.
+// np5971.34 Add a button at the top of the page that toggles the "reveal
+//   light text" functionality.
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
@@ -39,6 +41,15 @@ var pat2 = new RegExp('^[0-5][0-9]\%$');   // Match '00%' through '59%'
 var pat3 = new RegExp('^[0-9]+\%$');   // Match any number followed by '%'
 var pat4 = new RegExp('^[0-9]+');   // Match just a number at the beginning
 
+
+// A sample post containing font colours deliberately set to be as unreadable
+// as possible:
+//
+//    forums.xkcd.com/viewtopic.php?p=3340789#p3340789
+//
+// Regardless of the HTML, the color will appear to us as a string in
+// the syntax 'rgb(123, 234, 210)' or possibly '#80BFFF'
+
 var pc1 = new RegExp('rgb\\([12][0-9][0-9], [12][0-9][0-9], [12][0-9][0-9]\\)'); // e.g. 'rgb(123, 234, 210)'
 var pc2 = new RegExp('rgb\\(([12][0-9][0-9]), ([12][0-9][0-9]), ([12][0-9][0-9])\\)'); // for use with .match()
 var gthres = 190;
@@ -55,9 +66,92 @@ notinytext = {
     }, 0);
   },
 
+  findAncestorById: function(elem, idName) {
+    this.log('fABC ' + elem.id);
+    if(new RegExp('\\b'+idName+'\\b').test(elem.id))
+      return elem;
+    else {
+      if(elem != document.body)
+        return this.findAncestorById(elem.parentNode, idName);
+      return null;
+    }
+  },
+  
+  // Set button title based on value of an option.
+  setButTitle: function(but, val) {
+    if (val == 0) {
+      but.value = 'Reveal Light Text';
+    } else {
+      but.value = 'Stop Revealing Light Text';
+    }
+  },
+
+  /* addReply will set or clear an option. */
+  addReply: function(but, val) {
+    if(typeof this.opt1 == 'undefined') {
+      this.opt1 = 0; // This is *absolutely* thread-safe :D
+    }
+    
+    // this.opt1 = val; // set value
+    // no, toggle it instead
+    if (this.opt1 == 0) {
+      this.opt1 = 1;
+    } else {
+      this.opt1 = 0;
+    }
+    
+    this.setButTitle(but, this.opt1);
+    but.disabled = false;
+    
+    /* Save the user's work in a way that will persist across page loads.
+		 * see http://wiki.greasespot.net/GM_setValue */
+    GM_setValue('opt1', JSON.stringify(this.opt1));
+  },
+  
+  /* makeReplyArea will add a checkbox that changes an option */
+  makeReplyArea: function(pagebody) {
+    var container = document.createElement('div');
+    
+    var preDiv = document.createElement('div');
+    preDiv.appendChild(document.createTextNode("mrob27's options:"));
+    preDiv.style.marginTop = '10px';
+    preDiv.style.fontSize = '1.3em';
+    
+    var butDiv = document.createElement('div');
+    butDiv.style.textAlign = 'center';
+    var but = document.createElement('input');
+    but.type = 'button';
+    but.value = 'temp-opt1';
+    this.setButTitle(but, this.opt1);
+    but.style.fontWeight = 'bold';
+    but.addEventListener('click', this.addReply.bind(this, but, 2));
+    butDiv.appendChild(but);
+    
+    container.appendChild(preDiv);
+    container.appendChild(butDiv);
+    
+    // pagebody.appendChild(container);
+    pagebody.insertBefore(container, pagebody.firstChild);
+  },
+
   convert: function() {
     var spans = document.getElementsByTagName('span');
     var i; var sz;
+
+    this.opt1 = JSON.parse(GM_getValue('opt1', '0'));
+        
+    // Create the options button.
+    var popes = document.getElementsByClassName('first');
+    var pope = popes[0];
+    this.log('got pope: ' + pope);
+    if (pope) {
+      var pagebody = this.findAncestorById(pope, 'page-body');
+      this.log('got pagebody: ' + pagebody);
+      if (pagebody) {
+        this.makeReplyArea(pagebody);
+      }
+    }
+
     //- this.log('convert started');
     for(i=0 ; i<spans.length ; i++) {
       //- this.log(i + ' ' + spans[i].style.fontSize
@@ -76,22 +170,25 @@ notinytext = {
         spans[i].style.fontSize = sz + "px";
       }
 
-      // Fix text that has a very light colour by changing the background to black
-      if ( pc2.test(spans[i].style.color) )
-      {
-        if ((RegExp.$1 > gthres) && (RegExp.$2 > gthres)
-         && (RegExp.$3 > gthres))
+      if (this.opt1) {
+        // Fix text that has a very light colour by changing the
+        // background to black
+        if ( pc2.test(spans[i].style.color) )
+        {
+          if ((RegExp.$1 > gthres) && (RegExp.$2 > gthres)
+           && (RegExp.$3 > gthres))
+          {
+            spans[i].style.backgroundColor = '#000';
+          }
+          this.log(i + ' ' + spans[i].style.color);
+        };
+        // Test color again using '#80BFFF' syntax
+        if ( pc3.test(spans[i].style.color) )
         {
           spans[i].style.backgroundColor = '#000';
-        }
-        this.log(i + ' ' + spans[i].style.color);
-      };
-      // Test color again using '#80BFFF' syntax
-      if ( pc3.test(spans[i].style.color) )
-      {
-        spans[i].style.backgroundColor = '#000';
-        this.log(i + ' ' + spans[i].style.color);
-      };
+          this.log(i + ' ' + spans[i].style.color);
+        };
+      }
     }
   }
 };
