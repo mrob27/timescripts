@@ -2,8 +2,8 @@
 // @namespace mrob.com
 // @name No Tinytext
 // @description Locate tinytext and make it readable
-// @author Robert Munafo
-// @version 5992.44
+// @author Robert Munafo (with help from azule)
+// @version 5993.54
 // @downloadURL http://mrob.com/time/scripts-beta/no-tinytext.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -27,6 +27,9 @@
 // np5979.01 Change the button to a checkbox.
 // np5991.71 Refactor code to pass an object pointer into the action function
 //   (which should make it easier to add more options)
+// np5993.10 Add second checkbox controlling the 'embiggen tinytext' action
+// np5993.54 Add third checkbox and azule's "red outline with titletext"
+//   method for tinytext
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
@@ -105,8 +108,8 @@ notinytext = {
     }
   },
 
-  /* opt1_action will set or clear an option. */
-  opt1_action: function(chk, optobj, nam) {
+  /* opt_action will set or clear an option. */
+  opt_action: function(chk, optobj, nam) {
     // If the option was just initialized, it will now become set.
     // This makes sense becuse if they've just installed the script
     // and click on the checkbox, they want to set the checkbox.
@@ -155,7 +158,7 @@ notinytext = {
 
     this.setChkVal(chk1, this.opt1.val);
     chk1.addEventListener('click',
-                this.opt1_action.bind(this, chk1, this.opt1, 'opt1'));
+                this.opt_action.bind(this, chk1, this.opt1, 'opt1'));
 
     // Make the checkbox for 'embiggen tiny text'
     var chk2 = document.createElement('input');
@@ -170,12 +173,29 @@ notinytext = {
     
     this.setChkVal(chk2, this.opt2.val);
     chk2.addEventListener('click',
-                this.opt1_action.bind(this, chk2, this.opt2, 'opt2'));
+                this.opt_action.bind(this, chk2, this.opt2, 'opt2'));
+
+    // Make the checkbox for 'highlight tiny text'
+    var chk3 = document.createElement('input');
+    chk3.type = 'checkbox';
+    chk3.value = 'temp-opt3';
+    chk3.id = 'opt3';
+    
+    var lbl3 = document.createElement('label')
+    lbl3.htmlFor = "opt3";
+    var lab3_text = document.createTextNode('Highlight TinyText');
+    lbl3.appendChild(lab3_text);
+    
+    this.setChkVal(chk3, this.opt3.val);
+    chk3.addEventListener('click',
+                this.opt_action.bind(this, chk3, this.opt3, 'opt3'));
 
     opts_div.appendChild(document.createTextNode("　　")); // CJK space, for indentation
     opts_div.appendChild(chk1); opts_div.appendChild(lbl1);
     opts_div.appendChild(document.createTextNode("　"));
     opts_div.appendChild(chk2); opts_div.appendChild(lbl2);
+    opts_div.appendChild(document.createTextNode("　"));
+    opts_div.appendChild(chk3); opts_div.appendChild(lbl3);
 
     container.appendChild(preDiv);
     container.appendChild(opts_div);
@@ -189,7 +209,7 @@ notinytext = {
 
   convert: function() {
     var spans = document.getElementsByTagName('span');
-    var i; var sz;
+    var i; var so; var sz;
 
     this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) }; 
     this.log('init1 opt1 val ' + this.opt1.val);    
@@ -209,6 +229,15 @@ notinytext = {
     };
     this.log('init2 opt2 val ' + this.opt2.val);
 
+    this.opt3 = { val: JSON.parse(GM_getValue('opt3', '0')) }; 
+    this.log('init1 opt3 val ' + this.opt3.val);
+    if (typeof this.opt3 == 'undefined') {
+      this.opt3 = { val: "0" };
+      this.log('init this.obj3 to ' + JSON.stringify(this.opt3));
+      this.opt3.val = JSON.parse(GM_getValue('opt3', '0'));
+    };
+    this.log('init2 opt3 val ' + this.opt3.val);
+
     // Create the options checkboxes.
     var popes = document.getElementsByClassName('first');
     var pope = popes[0];
@@ -225,19 +254,35 @@ notinytext = {
     for(i=0 ; i<spans.length ; i++) {
       //- this.log(i + ' ' + spans[i].style.fontSize
       //-            + ' ' + pat2.test(spans[i].style.fontSize));
-      if (this.opt2.val) {
+      if (this.opt2.val || this.opt3.val) {
         if (pat3.test(spans[i].style.fontSize) )
         {
-          // Extract the number before '%'
-          sz = pat4.exec(spans[i].style.fontSize);
-          if (sz < 50) {
-            // 0->7, 25->8, 50->9
-            sz = 7 + sz/25;
-          } else {
-            // 50->9, 75->11.5, 100->14, 150->19, 200->24
-            sz = 4 + (sz / 10);
-          }
-          spans[i].style.fontSize = sz + "px";
+          // Get so (size original) by extracting the number before '%'
+          so = pat4.exec(spans[i].style.fontSize);
+
+          // mrob27's method of revealing tinytext: compute a new size
+          // for the really small sizes.
+          if (this.opt2.val) {
+            sz = so;
+            if (so < 50) {
+              // 0->7, 25->8, 50->9
+              sz = 7 + so/25;
+            } else {
+              // 50->9, 75->11.5, 100->14, 150->19, 200->24
+              sz = 4 + (so / 10);
+            }
+            spans[i].style.fontSize = sz + "px";
+          };
+
+          // np5993.51: azule's method of revealing tinytext
+          if (this.opt3.val) {
+            if (so < 20) {
+              spans[i].style.outline = "1px dotted red";
+            };
+            if (so < 60) {
+              spans[i].setAttribute('title', spans[i].textContent);
+            };
+          };
         }
       }
 
