@@ -3,7 +3,7 @@
 // @name No Tinytext
 // @description Locate tinytext and make it readable
 // @author Robert Munafo
-// @version 5971.34
+// @version 5979.02
 // @downloadURL http://mrob.com/time/scripts-beta/no-tinytext.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -22,6 +22,7 @@
 //   to black.
 // np5971.34 Add a button at the top of the page that toggles the "reveal
 //   light text" functionality.
+// np5979.01 Change the button to a checkbox.
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
@@ -76,7 +77,7 @@ notinytext = {
       return null;
     }
   },
-  
+
   // Set button title based on value of an option.
   setButTitle: function(but, val) {
     if (val == 0) {
@@ -86,12 +87,21 @@ notinytext = {
     }
   },
 
-  /* addReply will set or clear an option. */
-  addReply: function(but, val) {
+  // Set a checkbox to be on or off
+  setChkVal: function(chk, val) {
+    if (val == 0) {
+      chk.checked=false;
+    } else {
+      chk.checked=true;
+    }
+  },
+
+  /* opt1_action will set or clear an option. */
+  opt1_action: function(chk, val) {
     if(typeof this.opt1 == 'undefined') {
       this.opt1 = 0; // This is *absolutely* thread-safe :D
     }
-    
+
     // this.opt1 = val; // set value
     // no, toggle it instead
     if (this.opt1 == 0) {
@@ -99,39 +109,51 @@ notinytext = {
     } else {
       this.opt1 = 0;
     }
-    
-    this.setButTitle(but, this.opt1);
-    but.disabled = false;
-    
+
+    this.setChkVal(chk, this.opt1);
+    chk.disabled = false;
+
     /* Save the user's work in a way that will persist across page loads.
-		 * see http://wiki.greasespot.net/GM_setValue */
+     * see http://wiki.greasespot.net/GM_setValue */
     GM_setValue('opt1', JSON.stringify(this.opt1));
   },
-  
-  /* makeReplyArea will add a checkbox that changes an option */
-  makeReplyArea: function(pagebody) {
+
+  /* create_checkboxen will add a checkbox that changes an option */
+  create_checkboxen: function(pagebody) {
     var container = document.createElement('div');
-    
+
     var preDiv = document.createElement('div');
     preDiv.appendChild(document.createTextNode("mrob27's options:"));
     preDiv.style.marginTop = '10px';
     preDiv.style.fontSize = '1.3em';
-    
-    var butDiv = document.createElement('div');
-    butDiv.style.textAlign = 'center';
-    var but = document.createElement('input');
-    but.type = 'button';
-    but.value = 'temp-opt1';
-    this.setButTitle(but, this.opt1);
-    but.style.fontWeight = 'bold';
-    but.addEventListener('click', this.addReply.bind(this, but, 2));
-    butDiv.appendChild(but);
-    
+
+    var opts_div = document.createElement('div');
+    opts_div.style.textAlign = 'center';
+
+    var chk = document.createElement('input');
+    chk.type = 'checkbox';
+    chk.value = 'temp-opt1';
+    chk.id = 'opt1';
+
+    var label = document.createElement('label')
+    label.htmlFor = "opt1";
+    var lab_text = document.createTextNode('Reveal Light Text (label)');
+    label.appendChild(lab_text);
+
+    this.setChkVal(chk, this.opt1);
+    chk.addEventListener('click', this.opt1_action.bind(this, chk, 2));
+
+    opts_div.appendChild(chk);
+    opts_div.appendChild(label);
+
     container.appendChild(preDiv);
-    container.appendChild(butDiv);
-    
-    // pagebody.appendChild(container);
-    pagebody.insertBefore(container, pagebody.firstChild);
+    container.appendChild(opts_div);
+
+    // Put the options at the bottom of the page
+    pagebody.appendChild(container);
+
+    // This code puts the options at the top of the page
+    // pagebody.insertBefore(container, pagebody.firstChild);
   },
 
   convert: function() {
@@ -139,7 +161,7 @@ notinytext = {
     var i; var sz;
 
     this.opt1 = JSON.parse(GM_getValue('opt1', '0'));
-        
+
     // Create the options button.
     var popes = document.getElementsByClassName('first');
     var pope = popes[0];
@@ -148,7 +170,7 @@ notinytext = {
       var pagebody = this.findAncestorById(pope, 'page-body');
       this.log('got pagebody: ' + pagebody);
       if (pagebody) {
-        this.makeReplyArea(pagebody);
+        this.create_checkboxen(pagebody);
       }
     }
 
