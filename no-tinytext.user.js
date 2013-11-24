@@ -150,16 +150,32 @@ notinytext = {
 
     var lbl1 = document.createElement('label')
     lbl1.htmlFor = "opt1";
-    var lab_text = document.createTextNode('Reveal Light Text  ');
+    var lab_text = document.createTextNode('Reveal Light Text');
     lbl1.appendChild(lab_text);
 
     this.setChkVal(chk1, this.opt1.val);
     chk1.addEventListener('click',
-                        this.opt1_action.bind(this, chk1, this.opt1, 'opt1'));
+                this.opt1_action.bind(this, chk1, this.opt1, 'opt1'));
+
+    // Make the checkbox for 'embiggen tiny text'
+    var chk2 = document.createElement('input');
+    chk2.type = 'checkbox';
+    chk2.value = 'temp-opt2';
+    chk2.id = 'opt2';
+    
+    var lbl2 = document.createElement('label')
+    lbl2.htmlFor = "opt2";
+    var lab2_text = document.createTextNode('Embiggen TinyText');
+    lbl2.appendChild(lab2_text);
+    
+    this.setChkVal(chk2, this.opt2.val);
+    chk2.addEventListener('click',
+                this.opt1_action.bind(this, chk2, this.opt2, 'opt2'));
 
     opts_div.appendChild(document.createTextNode("　　")); // CJK space, for indentation
-    opts_div.appendChild(chk1);
-    opts_div.appendChild(lbl1);
+    opts_div.appendChild(chk1); opts_div.appendChild(lbl1);
+    opts_div.appendChild(document.createTextNode("　"));
+    opts_div.appendChild(chk2); opts_div.appendChild(lbl2);
 
     container.appendChild(preDiv);
     container.appendChild(opts_div);
@@ -176,16 +192,24 @@ notinytext = {
     var i; var sz;
 
     this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) }; 
-    this.log('init1 got val ' + this.opt1.val);
-    
+    this.log('init1 opt1 val ' + this.opt1.val);    
     if (typeof this.opt1 == 'undefined') {
       this.opt1 = { val: "0" }; 
       this.log('init this.obj1 to ' + JSON.stringify(this.opt1));
       this.opt1.val = JSON.parse(GM_getValue('opt1', '0'));
     };
-    this.log('init2 got val ' + this.opt1.val);
+    this.log('init2 opt1 val ' + this.opt1.val);
 
-    // Create the options button.
+    this.opt2 = { val: JSON.parse(GM_getValue('opt2', '0')) }; 
+    this.log('init1 opt2 val ' + this.opt2.val);
+    if (typeof this.opt2 == 'undefined') {
+      this.opt2 = { val: "0" };
+      this.log('init this.obj2 to ' + JSON.stringify(this.opt2));
+      this.opt2.val = JSON.parse(GM_getValue('opt2', '0'));
+    };
+    this.log('init2 opt2 val ' + this.opt2.val);
+
+    // Create the options checkboxes.
     var popes = document.getElementsByClassName('first');
     var pope = popes[0];
     this.log('got pope: ' + pope);
@@ -201,18 +225,20 @@ notinytext = {
     for(i=0 ; i<spans.length ; i++) {
       //- this.log(i + ' ' + spans[i].style.fontSize
       //-            + ' ' + pat2.test(spans[i].style.fontSize));
-      if (pat3.test(spans[i].style.fontSize) )
-      {
-        // Extract the number before '%'
-        sz = pat4.exec(spans[i].style.fontSize);
-        if (sz < 50) {
-          // 0->7, 25->8, 50->9
-          sz = 7 + sz/25;
-        } else {
-          // 50->9, 75->11.5, 100->14, 150->19, 200->24
-          sz = 4 + (sz / 10);
+      if (this.opt2.val) {
+        if (pat3.test(spans[i].style.fontSize) )
+        {
+          // Extract the number before '%'
+          sz = pat4.exec(spans[i].style.fontSize);
+          if (sz < 50) {
+            // 0->7, 25->8, 50->9
+            sz = 7 + sz/25;
+          } else {
+            // 50->9, 75->11.5, 100->14, 150->19, 200->24
+            sz = 4 + (sz / 10);
+          }
+          spans[i].style.fontSize = sz + "px";
         }
-        spans[i].style.fontSize = sz + "px";
       }
 
       if (this.opt1.val) {
