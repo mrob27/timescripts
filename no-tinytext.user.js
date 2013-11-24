@@ -3,12 +3,14 @@
 // @name No Tinytext
 // @description Locate tinytext and make it readable
 // @author Robert Munafo
-// @version 5979.02
+// @version 5992.44
 // @downloadURL http://mrob.com/time/scripts-beta/no-tinytext.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
+// @include http://echochamber.me/viewtopic.php*
 // @include http://forums.xkcd.com/posting.php*
 // @include http://fora.xkcd.com/posting.php*
+// @include http://echochamber.me/posting.php*
 // ==/UserScript==
 
 // REVISION HISTORY:
@@ -23,6 +25,8 @@
 // np5971.34 Add a button at the top of the page that toggles the "reveal
 //   light text" functionality.
 // np5979.01 Change the button to a checkbox.
+// np5991.71 Refactor code to pass an object pointer into the action function
+//   (which should make it easier to add more options)
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
@@ -48,13 +52,25 @@ var pat4 = new RegExp('^[0-9]+');   // Match just a number at the beginning
 //
 //    forums.xkcd.com/viewtopic.php?p=3340789#p3340789
 //
+// And another with a gradation from white to gray:
+//
+//    forums.xkcd.com/viewtopic.php?p=3341004#p3341004
+//
 // Regardless of the HTML, the color will appear to us as a string in
 // the syntax 'rgb(123, 234, 210)' or possibly '#80BFFF'
 
-var pc1 = new RegExp('rgb\\([12][0-9][0-9], [12][0-9][0-9], [12][0-9][0-9]\\)'); // e.g. 'rgb(123, 234, 210)'
-var pc2 = new RegExp('rgb\\(([12][0-9][0-9]), ([12][0-9][0-9]), ([12][0-9][0-9])\\)'); // for use with .match()
+// This matches e.g. 'rgb(123, 234, 210)'
+var pc1 = new
+   RegExp('rgb\\([12][0-9][0-9], [12][0-9][0-9], [12][0-9][0-9]\\)');
+// This matches the same thing but savee the three numbers, for use
+// with .match()
+var pc2 = new
+   RegExp('rgb\\(([12][0-9][0-9]), ([12][0-9][0-9]), ([12][0-9][0-9])\\)');
+// This matches e.g. '#BFFFFF' (best friends forever!)
+var pc3 = new RegExp('\#[A-F][0-9A-F][A-F][0-9A-F][A-F][0-9A-F]');
+
+// Maximum brightness we'll accept
 var gthres = 190;
-var pc3 = new RegExp('\#[A-F][0-9A-F][A-F][0-9A-F][A-F][0-9A-F]'); // e.g. '#BFFFFF' (best friends forever!)
 
 notinytext = {
 
@@ -78,44 +94,36 @@ notinytext = {
     }
   },
 
-  // Set button title based on value of an option.
-  setButTitle: function(but, val) {
-    if (val == 0) {
-      but.value = 'Reveal Light Text';
-    } else {
-      but.value = 'Stop Revealing Light Text';
-    }
-  },
-
   // Set a checkbox to be on or off
   setChkVal: function(chk, val) {
     if (val == 0) {
       chk.checked=false;
+      this.log('setting checkbox false');
     } else {
       chk.checked=true;
+      this.log('setting checkbox true');
     }
   },
 
   /* opt1_action will set or clear an option. */
-  opt1_action: function(chk, val) {
-    if(typeof this.opt1 == 'undefined') {
-      this.opt1 = 0; // This is *absolutely* thread-safe :D
-    }
-
-    // this.opt1 = val; // set value
-    // no, toggle it instead
-    if (this.opt1 == 0) {
-      this.opt1 = 1;
+  opt1_action: function(chk, optobj, nam) {
+    // If the option was just initialized, it will now become set.
+    // This makes sense becuse if they've just installed the script
+    // and click on the checkbox, they want to set the checkbox.
+    this.log('foo1 ' + nam + ' val is ' + optobj.val);
+    if (optobj.val == 0) {
+      optobj.val = 1;
     } else {
-      this.opt1 = 0;
+      optobj.val = 0;
     }
-
-    this.setChkVal(chk, this.opt1);
+    this.log('foo2 tog to ' + optobj.val);
+    
+    this.setChkVal(chk, optobj.val);
     chk.disabled = false;
-
+    
     /* Save the user's work in a way that will persist across page loads.
      * see http://wiki.greasespot.net/GM_setValue */
-    GM_setValue('opt1', JSON.stringify(this.opt1));
+    GM_setValue(nam, JSON.stringify(optobj.val));
   },
 
   /* create_checkboxen will add a checkbox that changes an option */
@@ -123,28 +131,35 @@ notinytext = {
     var container = document.createElement('div');
 
     var preDiv = document.createElement('div');
-    preDiv.appendChild(document.createTextNode("mrob27's options:"));
-    preDiv.style.marginTop = '10px';
-    preDiv.style.fontSize = '1.3em';
+    preDiv.style.marginTop = '1px';
+    preDiv.style.fontSize = '1.0em';
+    preDiv.style.fontWeight = 'bold';
+    preDiv.style.color = '#0B7';
+    
+    var optstitle = document.createTextNode("Blitzenhelfern by Mrob27:");
+    preDiv.appendChild(optstitle);
 
     var opts_div = document.createElement('div');
-    opts_div.style.textAlign = 'center';
+    opts_div.style.textAlign = 'left';
 
-    var chk = document.createElement('input');
-    chk.type = 'checkbox';
-    chk.value = 'temp-opt1';
-    chk.id = 'opt1';
+    // Make the checkbox for 'reveal light text'
+    var chk1 = document.createElement('input');
+    chk1.type = 'checkbox';
+    chk1.value = 'temp-opt1';
+    chk1.id = 'opt1';
 
-    var label = document.createElement('label')
-    label.htmlFor = "opt1";
-    var lab_text = document.createTextNode('Reveal Light Text (label)');
-    label.appendChild(lab_text);
+    var lbl1 = document.createElement('label')
+    lbl1.htmlFor = "opt1";
+    var lab_text = document.createTextNode('Reveal Light Text  ');
+    lbl1.appendChild(lab_text);
 
-    this.setChkVal(chk, this.opt1);
-    chk.addEventListener('click', this.opt1_action.bind(this, chk, 2));
+    this.setChkVal(chk1, this.opt1.val);
+    chk1.addEventListener('click',
+                        this.opt1_action.bind(this, chk1, this.opt1, 'opt1'));
 
-    opts_div.appendChild(chk);
-    opts_div.appendChild(label);
+    opts_div.appendChild(document.createTextNode("　　")); // CJK space, for indentation
+    opts_div.appendChild(chk1);
+    opts_div.appendChild(lbl1);
 
     container.appendChild(preDiv);
     container.appendChild(opts_div);
@@ -160,7 +175,15 @@ notinytext = {
     var spans = document.getElementsByTagName('span');
     var i; var sz;
 
-    this.opt1 = JSON.parse(GM_getValue('opt1', '0'));
+    this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) }; 
+    this.log('init1 got val ' + this.opt1.val);
+    
+    if (typeof this.opt1 == 'undefined') {
+      this.opt1 = { val: "0" }; 
+      this.log('init this.obj1 to ' + JSON.stringify(this.opt1));
+      this.opt1.val = JSON.parse(GM_getValue('opt1', '0'));
+    };
+    this.log('init2 got val ' + this.opt1.val);
 
     // Create the options button.
     var popes = document.getElementsByClassName('first');
@@ -192,7 +215,7 @@ notinytext = {
         spans[i].style.fontSize = sz + "px";
       }
 
-      if (this.opt1) {
+      if (this.opt1.val) {
         // Fix text that has a very light colour by changing the
         // background to black
         if ( pc2.test(spans[i].style.color) )
@@ -202,13 +225,13 @@ notinytext = {
           {
             spans[i].style.backgroundColor = '#000';
           }
-          this.log(i + ' ' + spans[i].style.color);
+          // this.log(i + ' ' + spans[i].style.color);
         };
         // Test color again using '#80BFFF' syntax
         if ( pc3.test(spans[i].style.color) )
         {
           spans[i].style.backgroundColor = '#000';
-          this.log(i + ' ' + spans[i].style.color);
+          // this.log(i + ' ' + spans[i].style.color);
         };
       }
     }
