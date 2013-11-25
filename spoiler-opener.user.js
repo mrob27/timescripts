@@ -3,12 +3,14 @@
 // @name Open All Spoilers on (Re)Load
 // @description Open all spoilers in the forum posts
 // @author Robert Munafo
-// @version 5905
+// @version 6002.91
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
+// @include http://echochamber.me/viewtopic.php*
 // @include http://forums.xkcd.com/posting.php*
 // @include http://fora.xkcd.com/posting.php*
+// @include http://echochamber.me/posting.php*
 // ==/UserScript==
 
 // REVISION HISTORY:
@@ -33,6 +35,9 @@
 //   interval)
 // np5905.00 Run 3 more times instead of just 1, with exponentially increasing
 //   delays (this improves performance when the servers are really slow.)
+// np6002.91 Make the lavendar background a fair bit lighter so it doesn't
+//   interfere as much with any images, font colours, etc. that the author
+//   might have included.
 
 // A sample forum page is:
 //
@@ -111,7 +116,7 @@ openallspoilers = {
         if (recalc == 0) {
           // This is the first time: open th spoilers and change the button
           myz.display = '';   // remove 'none', making it displayable
-          myz.backgroundColor="#BBD";
+          myz.backgroundColor="#DDF";
           buttons[i].value = 'hide';
         }
 
