@@ -3,7 +3,7 @@
 // @name No Tinytext
 // @description Locate tinytext and make it readable
 // @author Robert Munafo (with help from azule)
-// @version 6011.51
+// @version np6294.73
 // @downloadURL http://mrob.com/time/scripts-beta/no-tinytext.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -31,6 +31,7 @@
 // np5993.54 Add third checkbox and azule's "red outline with titletext"
 //   method for tinytext
 // np6011.51 Add an Azule-like highlighting option for light-colored text.
+// np6294.73 The smallest sizes are still a bit too small for my liking.
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
@@ -289,11 +290,11 @@ notinytext = {
           // for the really small sizes.
           if (this.opt2.val) {
             sz = so;
-            if (so < 50) {
-              // 0->7, 25->8, 50->9
-              sz = 7 + so/25;
+            if (so < 100) {
+              // 0->10, 50->12, 100->14
+              sz = 10 + so/25;
             } else {
-              // 50->9, 75->11.5, 100->14, 150->19, 200->24
+              // 100->14, 150->19, 200->24
               sz = 4 + (so / 10);
             }
             spans[i].style.fontSize = sz + "px";
