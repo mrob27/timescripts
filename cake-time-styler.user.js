@@ -2,7 +2,7 @@
 // ==UserScript==
 // @namespace time.aasg.name
 // @name Cake Time Styler
-// @version 6457.14
+// @version 6459.51
 // @description Restyle the post count of people nearby Cake Time
 // @author Aluísio Augusto Silva Gonçalves <aasg@chirpingmustard.com>
 // @downloadURL http://mrob.com/time/scripts-beta/cake-time-styler.user.js
@@ -19,7 +19,10 @@
 // REVISION HISTORY:
 //
 // 6457.14 copied from time.aasg.name/userscripts/CakeTimeStyler.user.js
-//   and added formatting
+//   and added formatting; postcounts in the mrob sequence (27, 143, 1011)
+//   also cause the random Timeframe to appear.
+// 6459.51 add xkcd color names to comments (from the survey results at
+//   http://xkcd.com/color/rgb/ )
 */
 (function(){
   var a,b,c,d;
@@ -50,9 +53,9 @@
         e=d%100, /* Post count modulo 100, i.e. the last 2 digits of the post count */
         a=a.parentElement,
         0===e?b(a,"#859900"): /* If e is 0 their postcount is an exact multiple
-                                 of 100; show it in bright olive green (?) */
-         e>=97?b(a,"#dc322f"): /* Coming soon, show in slightly-subdued red */
-           3>=e&&b(a,"#268bd2"), /* round-number happenned recently, show in teal */
+                                 of 100; show it in baby poop green */
+         e>=97?b(a,"#dc322f"): /* Coming soon, show in tomato red */
+           3>=e&&b(a,"#268bd2"), /* round-number happened recently, show in water blue */
         /* If post count is 1190, or a few other values special to mrob27, replace
            their avatar with a random frame of Time */
         (27===d||143===d||1011===d||1190===d)
