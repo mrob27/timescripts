@@ -3,7 +3,7 @@
 // @name No Tinytext
 // @description Locate tinytext and make it readable
 // @author Robert Munafo (with help from azule)
-// @version 6317.70
+// @version 7611.06
 // @downloadURL http://mrob.com/time/scripts-beta/no-tinytext.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -33,6 +33,7 @@
 // np6011.51 Add an Azule-like highlighting option for light-colored text.
 // np6294.73 The smallest sizes are still a bit too small for my liking.
 // np6317.70 Start at size 8 instead of size 9
+// np7611.06 Recognize colors 'white' and e.g. '#BFC'
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
@@ -74,6 +75,8 @@ var pc2 = new
    RegExp('rgb\\(([12][0-9][0-9]), ([12][0-9][0-9]), ([12][0-9][0-9])\\)');
 // This matches e.g. '#BFFFFF' (best friends forever!)
 var pc3 = new RegExp('\#[A-F][0-9A-F][A-F][0-9A-F][A-F][0-9A-F]');
+var pc4 = new RegExp('\#[A-F][A-F][A-F]');
+var pc5 = new RegExp('white');
 
 // Maximum brightness we'll accept
 var gthres = 190;
@@ -90,7 +93,7 @@ notinytext = {
   },
 
   findAncestorById: function(elem, idName) {
-    this.log('fABC ' + elem.id);
+    //- console.info('fABC ' + elem.id);
     if(new RegExp('\\b'+idName+'\\b').test(elem.id))
       return elem;
     else {
@@ -104,10 +107,10 @@ notinytext = {
   setChkVal: function(chk, val) {
     if (val == 0) {
       chk.checked=false;
-      this.log('setting checkbox false');
+      console.info('setting checkbox false');
     } else {
       chk.checked=true;
-      this.log('setting checkbox true');
+      console.info('setting checkbox true');
     }
   },
 
@@ -116,13 +119,13 @@ notinytext = {
     // If the option was just initialized, it will now become set.
     // This makes sense becuse if they've just installed the script
     // and click on the checkbox, they want to set the checkbox.
-    this.log('foo1 ' + nam + ' val is ' + optobj.val);
+    console.info('foo1 ' + nam + ' val is ' + optobj.val);
     if (optobj.val == 0) {
       optobj.val = 1;
     } else {
       optobj.val = 0;
     }
-    this.log('foo2 tog to ' + optobj.val);
+    console.info('foo2 tog to ' + optobj.val);
     
     this.setChkVal(chk, optobj.val);
     chk.disabled = false;
@@ -230,48 +233,48 @@ notinytext = {
     var i; var so; var sz;
 
     this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) }; 
-    this.log('init1 opt1 val ' + this.opt1.val);    
+    //- this.log('init1 opt1 val ' + this.opt1.val);    
     if (typeof this.opt1 == 'undefined') {
       this.opt1 = { val: "0" }; 
-      this.log('init this.obj1 to ' + JSON.stringify(this.opt1));
+      console.info('init this.obj1 to ' + JSON.stringify(this.opt1));
       this.opt1.val = JSON.parse(GM_getValue('opt1', '0'));
     };
-    this.log('init2 opt1 val ' + this.opt1.val);
+    console.info('init2 opt1 val ' + this.opt1.val);
 
     this.opt2 = { val: JSON.parse(GM_getValue('opt2', '0')) }; 
-    this.log('init1 opt2 val ' + this.opt2.val);
+    //- this.log('init1 opt2 val ' + this.opt2.val);
     if (typeof this.opt2 == 'undefined') {
       this.opt2 = { val: "0" };
-      this.log('init this.obj2 to ' + JSON.stringify(this.opt2));
+      console.info('init this.obj2 to ' + JSON.stringify(this.opt2));
       this.opt2.val = JSON.parse(GM_getValue('opt2', '0'));
     };
-    this.log('init2 opt2 val ' + this.opt2.val);
+    console.info('init2 opt2 val ' + this.opt2.val);
 
     this.opt3 = { val: JSON.parse(GM_getValue('opt3', '0')) }; 
-    this.log('init1 opt3 val ' + this.opt3.val);
+    //- this.log('init1 opt3 val ' + this.opt3.val);
     if (typeof this.opt3 == 'undefined') {
       this.opt3 = { val: "0" };
-      this.log('init this.obj3 to ' + JSON.stringify(this.opt3));
+      console.info('init this.obj3 to ' + JSON.stringify(this.opt3));
       this.opt3.val = JSON.parse(GM_getValue('opt3', '0'));
     };
-    this.log('init2 opt3 val ' + this.opt3.val);
+    console.info('init2 opt3 val ' + this.opt3.val);
 
     this.opt4 = { val: JSON.parse(GM_getValue('opt4', '0')) }; 
-    this.log('init1 opt4 val ' + this.opt4.val);
+    //- this.log('init1 opt4 val ' + this.opt4.val);
     if (typeof this.opt4 == 'undefined') {
       this.opt4 = { val: "0" };
-      this.log('init this.obj4 to ' + JSON.stringify(this.opt4));
+      console.info('init this.obj4 to ' + JSON.stringify(this.opt4));
       this.opt4.val = JSON.parse(GM_getValue('opt4', '0'));
     };
-    this.log('init2 opt4 val ' + this.opt4.val);
+    console.info('init2 opt4 val ' + this.opt4.val);
 
     // Create the options checkboxes.
     var popes = document.getElementsByClassName('first');
     var pope = popes[0];
-    this.log('got pope: ' + pope);
+    console.info('got pope: ' + pope);
     if (pope) {
       var pagebody = this.findAncestorById(pope, 'page-body');
-      this.log('got pagebody: ' + pagebody);
+      console.info('got pagebody: ' + pagebody);
       if (pagebody) {
         this.create_checkboxen(pagebody);
       }
@@ -326,10 +329,9 @@ notinytext = {
           }
         };
         // Test color again using '#80BFFF' syntax
-        if ( pc3.test(spans[i].style.color) )
-        {
-          so = 1;
-        };
+        if ( pc3.test(spans[i].style.color) ) { so = 1; };
+        if ( pc4.test(spans[i].style.color) ) { so = 1; };
+        if ( pc5.test(spans[i].style.color) ) { so = 1; };
         if (so) {
           if (this.opt1.val) {
             spans[i].style.backgroundColor = '#000';

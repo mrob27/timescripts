@@ -3,7 +3,7 @@
 // @copyright 2013+, Aluisio Augusto Silva Goncalves
 // @copyright 2014, Robert Munafo (mrob27)
 // @description Detects frame references on the xkcd 1190 forums thread, formatted like 'M#2440a', and replaces them with links for the viewers of the various frame numbering standards.
-// @version 7366.81
+// @version 7369.27
 // @downloadURL http://mrob.com/time/scripts-beta/frame-linker.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -34,6 +34,8 @@ to JavaScript by CoffeeScript 1.6.3
  Versions by Robert Munafo (mrob27):
   np7361.01 Formatting cleanup and block-header comments
   np7366.81 Convert to plain ASCII and add a few more comments
+  np7369.27 Preserve original text, i.e. the link's text remains "M#2345"
+instead of being turned into "2345 [mscha]"
 
 */
 
@@ -46,18 +48,21 @@ to JavaScript by CoffeeScript 1.6.3
   STANDARDS = [
     {
       name: 'mscha',
+      Nm: 'M',
       regexp: /\bM#?(\d+[a-z]?)\b/i,
       rewrite: function(frame) {
         return "http://xkcd.mscha.org/viewer/" + frame;
       }
     }, {
       name: 'Aubron',
+      Nm: 'A',
       regexp: /\bA#?(\d+)\b/i,
       rewrite: function(frame) {
         return "http://xkcd.aubronwood.com/?i=" + frame + "&playing=0";
       }
     }, {
       name: 'geekwagon',
+      Nm: 'G',
       regexp: /\bG#?(\d+)\b/i,
       rewrite: function(frame) {
         return "http://geekwagon.net/projects/xkcd1190/?frame=" + frame;
@@ -173,7 +178,8 @@ to JavaScript by CoffeeScript 1.6.3
     var link;
     link = document.createElement('a');
     link.href = standard.rewrite(frameNumber);
-    link.textContent = "" + text + " [" + standard.name + "]";
+    // link.textContent = "" + text + " [" + standard.name + "]";
+    link.textContent = standard.Nm + "#" + text;
     link.title = generateTooltip(frameNumber, standard, getStandards());
     return link;
   };
