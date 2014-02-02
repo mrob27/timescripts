@@ -47,11 +47,10 @@ openallspoilers = {
       setTimeout(openallspoilers.convert.bind(openallspoilers), del);
       ttd -= 1;
       // Go to the next-higher delay interval
-      if           (del <= 1011) { del = 9111;
-      } else if    (del <= 9111) { del = 100235;
-      } else if  (del <= 100235) { del = 1303071;
-      } else if (del <= 1303071) { del = 19546083;
-      }
+      if         (del <= 1011) { del = 9111;     }
+      else if    (del <= 9111) { del = 100235;   }
+      else if  (del <= 100235) { del = 1303071;  }
+      else if (del <= 1303071) { del = 19546083; }
     }
   }
 };
