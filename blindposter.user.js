@@ -3,7 +3,7 @@
 // @name blindposter for OTT
 // @description Hide the "TOPIC REVIEW" section, so you can make a blindpost without being spoiled by anything you might see there
 // @author Robert Munafo
-// @version 7979.02
+// @version 7980.35
 // @downloadURL http://mrob.com/time/scripts-beta/blindposter.user.js
 // @include http://forums.xkcd.com/posting.php*
 // @include http://fora.xkcd.com/posting.php*
@@ -23,6 +23,7 @@
 // np7977.62 Add a prominent message saying 'Topic Review hidden by
 //   blindposter script' to remind user they're using this script
 // np7979.02 Recognize and hide any 'ninja' posts
+// np7980.35 Do not hide my own post preview
 
 blindposter = {
   hideit: function(elem) {
@@ -50,6 +51,8 @@ blindposter = {
       this.hideit(topicreview);
     };
 
+    var preview = document.getElementById("preview");
+
     /* If you 'Submit' a post and a new post has been submitted by someone
        else since the last time you did a 'Preview', it presents the message:
 
@@ -61,12 +64,16 @@ blindposter = {
     var i;
     var inners = document.getElementsByClassName('post bg1');
     for(i=0 ; i<inners.length ; i++) {
-      this.hideit(inners[i]);
+      if (inners[i] != preview) {
+        this.hideit(inners[i]);
+      }
     };
     inners = document.getElementsByClassName('post bg2');
     for(i=0 ; i<inners.length ; i++) {
-      this.hideit(inners[i]);
-    }
+      if (inners[i] != preview) {
+        this.hideit(inners[i]);
+      }
+    };
   }
 };
 
