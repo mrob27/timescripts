@@ -3,19 +3,16 @@
 // @name blindposter for OTT
 // @description Hide the "TOPIC REVIEW" section, so you can make a blindpost without being spoiled by anything you might see there
 // @author Robert Munafo
-// @version 7980.35
+// @version 8001.35
 // @downloadURL http://mrob.com/time/scripts-beta/blindposter.user.js
 // @include http://forums.xkcd.com/posting.php*
 // @include http://fora.xkcd.com/posting.php*
 // @include http://echochamber.me/posting.php*
 // ==/UserScript==
 
-// %%% NOTE: I still need to find out how to identify the section that
-//     shows a new post if you hit 'Submit' and another post has shown up in
-//     the meantime. I'll probably have to actually post something in order
-//     to get that bit to appear. By rooting around in the CSS I think it might
-//     be 'message-box', 'notice', 'posthilit'
-// If someone can tell me what the ID is, I'll make the change sooner.
+// NOTE: I could probably improve what it's doing to hide ninja posts. Right
+// now, when the ninja posts are hidden the preview of my own post is also
+// hidden.
 //
 // REVISION HISTORY:
 //
@@ -24,6 +21,7 @@
 //   blindposter script' to remind user they're using this script
 // np7979.02 Recognize and hide any 'ninja' posts
 // np7980.35 Do not hide my own post preview
+// np8001.35 Remove outdated comments
 
 blindposter = {
   hideit: function(elem) {
@@ -51,6 +49,8 @@ blindposter = {
       this.hideit(topicreview);
     };
 
+    /* Look for the preview of our own post, so we can avoid hiding it
+       during the next bit. */
     var preview = document.getElementById("preview");
 
     /* If you 'Submit' a post and a new post has been submitted by someone
