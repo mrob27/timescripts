@@ -1,7 +1,7 @@
 // ==UserScript==
 // @namespace mrob.com
-// @name Open All Spoilers on (Re)Load
-// @description Open all spoilers in the forum posts
+// @name spoiler-opener for OTT
+// @description Open All Spoilers on (Re)Load
 // @author Robert Munafo
 // @version 6002.91
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js

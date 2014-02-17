@@ -1,6 +1,6 @@
 // ==UserScript==
 // @namespace mrob.com
-// @name Multiquote for the One True Forum
+// @name multiquote for OTT
 // @description Changes quote buttons behaviour to quote multiple messages
 // @author Pikrass and mrob27
 // @version 5330

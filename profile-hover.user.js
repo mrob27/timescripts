@@ -1,6 +1,6 @@
 // ==UserScript==
 // @namespace mrob.com
-// @name profile-hover
+// @name profile-hover for OTT
 // @description  Makes the profile info stay on screen when you scroll through a post.
 // @author Ondrej Mosnáček and Robert Munafo
 // @version 7661.48

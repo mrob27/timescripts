@@ -1,7 +1,7 @@
 // ==UserScript==
 // @namespace mrob.com
-// @name No Tinytext
-// @description Locate tinytext and make it readable
+// @name no-tinytext for OTT
+// @description Locate tiny and/or pale-colored text and make it readable
 // @author Robert Munafo (with help from azule)
 // @version 7611.06
 // @downloadURL http://mrob.com/time/scripts-beta/no-tinytext.user.js
