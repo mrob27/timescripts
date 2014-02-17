@@ -48,7 +48,7 @@ newpixConvertor = {
       var edpar = edits[i].parentNode;
       var comma = str.lastIndexOf(',');
       npd = this.hereticToNewpix(str.substr(4, comma-4));
-      edits[i].lastChild.data = ' at ' + edits[i].lastChild.data
+      edits[i].lastChild.data = ' at ' + str.substr(4, comma-4)
                      + ' = ' + this.NewpixToString(npd) + str.substr(comma);
       // Change the color of the edited message based on how much later
       // it was edited.
