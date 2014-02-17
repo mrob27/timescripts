@@ -8,6 +8,9 @@
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
 // @include http://echochamber.me/viewtopic.php*
+// @include http://forums.xkcd.com/posting.php*
+// @include http://fora.xkcd.com/posting.php*
+// @include http://echochamber.me/posting.php*
 // @run-at document-start
 // ==/UserScript==
 
