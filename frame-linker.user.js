@@ -3,7 +3,7 @@
 // @copyright 2013+, Aluisio Augusto Silva Goncalves
 // @copyright 2014, Robert Munafo (mrob27)
 // @description Detects frame references on the xkcd 1190 forums thread, formatted like 'M#2440a', and replaces them with links for the viewers of the various frame numbering standards.
-// @version 7369.27
+// @version 8026.18
 // @downloadURL http://mrob.com/time/scripts-beta/frame-linker.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -39,6 +39,7 @@ to JavaScript by CoffeeScript 1.6.3
   np7366.81 Convert to plain ASCII and add a few more comments
   np7369.27 Preserve original text, i.e. the link's text remains "M#2345"
 instead of being turned into "2345 [mscha]"
+  np8026.18 Also act on posting.php
 
 */
 
