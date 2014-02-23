@@ -40,6 +40,7 @@ to JavaScript by CoffeeScript 1.6.3
   np7369.27 Preserve original text, i.e. the link's text remains "M#2345"
 instead of being turned into "2345 [mscha]"
   np8026.18 Also act on posting.php
+  np8059.23 Stricter match patterns
 
 */
 
@@ -53,21 +54,21 @@ instead of being turned into "2345 [mscha]"
     {
       name: 'mscha',
       Nm: 'M',
-      regexp: /\bM#?(\d+[a-z]?)\b/i,
+      regexp: /\bM#(\d\d\d+[a-z]?)\b/i,
       rewrite: function(frame) {
         return "http://xkcd.mscha.org/viewer/" + frame;
       }
     }, {
       name: 'Aubron',
       Nm: 'A',
-      regexp: /\bA#?(\d+)\b/i,
+      regexp: /\bA#(\d\d\d+)\b/i,
       rewrite: function(frame) {
         return "http://xkcd.aubronwood.com/?i=" + frame + "&playing=0";
       }
     }, {
       name: 'geekwagon',
       Nm: 'G',
-      regexp: /\bG#?(\d+)\b/i,
+      regexp: /\bG#(\d\d\d+)\b/i,
       rewrite: function(frame) {
         return "http://geekwagon.net/projects/xkcd1190/?frame=" + frame;
       }
