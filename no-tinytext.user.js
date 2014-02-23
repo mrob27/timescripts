@@ -3,7 +3,7 @@
 // @name no-tinytext for OTT
 // @description Locate tiny and/or pale-colored text and make it readable
 // @author Robert Munafo (with help from azule)
-// @version 7611.06
+// @version 8162.47
 // @downloadURL http://mrob.com/time/scripts-beta/no-tinytext.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -34,6 +34,7 @@
 // np6294.73 The smallest sizes are still a bit too small for my liking.
 // np6317.70 Start at size 8 instead of size 9
 // np7611.06 Recognize colors 'white' and e.g. '#BFC'
+// np8162.47 Place checkboxes below the 'WHO IS ONLINE' bit
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
@@ -136,7 +137,7 @@ notinytext = {
   },
 
   /* create_checkboxen will add a checkbox that changes an option */
-  create_checkboxen: function(pagebody) {
+  create_checkboxen: function() {
     var container = document.createElement('div');
 
     var preDiv = document.createElement('div');
@@ -221,11 +222,7 @@ notinytext = {
     container.appendChild(preDiv);
     container.appendChild(opts_div);
 
-    // Put the options at the bottom of the page
-    pagebody.appendChild(container);
-
-    // This code puts the options at the top of the page
-    // pagebody.insertBefore(container, pagebody.firstChild);
+    return(container);
   },
 
   convert: function() {
@@ -269,16 +266,9 @@ notinytext = {
     console.info('init2 opt4 val ' + this.opt4.val);
 
     // Create the options checkboxes.
-    var popes = document.getElementsByClassName('first');
-    var pope = popes[0];
-    console.info('got pope: ' + pope);
-    if (pope) {
-      var pagebody = this.findAncestorById(pope, 'page-body');
-      console.info('got pagebody: ' + pagebody);
-      if (pagebody) {
-        this.create_checkboxen(pagebody);
-      }
-    }
+    var footer = document.getElementById("page-footer");
+    var ft_par = footer.parentNode;
+    ft_par.insertBefore(this.create_checkboxen(), footer);
 
     //- this.log('convert started');
     for(i=0 ; i<spans.length ; i++) {

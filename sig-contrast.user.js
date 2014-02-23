@@ -3,7 +3,7 @@
 // @name sig-contrast for OTT
 // @description  Hides signatures and/or make them easily distinguishable
 // @author Robert Munafo
-// @version 7858.45
+// @version 8162.47
 // @downloadURL http://mrob.com/time/scripts-beta/sig-contrast.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -14,6 +14,7 @@
 //
 // REVISION HISTORY:
 // np7858.45 first version, based mainly on no-tinytext
+// np8162.47 Place checkboxes below the 'WHO IS ONLINE' bit
 
 sig_contrast = {
 
@@ -61,7 +62,7 @@ sig_contrast = {
   },
 
   /* create_checkboxen will add a checkbox that changes an option */
-  create_checkboxen: function(pagebody) {
+  create_checkboxen: function() {
     var container = document.createElement('div');
 
     var preDiv = document.createElement('div');
@@ -114,11 +115,7 @@ sig_contrast = {
     container.appendChild(preDiv);
     container.appendChild(opts_div);
 
-    // Put the options at the bottom of the page
-    pagebody.appendChild(container);
-
-    // This code puts the options at the top of the page
-    // pagebody.insertBefore(container, pagebody.firstChild);
+    return(container);
   },
 
   convert: function() {
@@ -143,16 +140,9 @@ sig_contrast = {
     console.info('init2 opt2 val ' + this.opt2.val);
 
     // Create the options checkboxes.
-    var popes = document.getElementsByClassName('first');
-    var pope = popes[0];
-    console.info('got pope: ' + pope);
-    if (pope) {
-      var pagebody = this.findAncestorById(pope, 'page-body');
-      console.info('got pagebody: ' + pagebody);
-      if (pagebody) {
-        this.create_checkboxen(pagebody);
-      }
-    }
+    var footer = document.getElementById("page-footer");
+    var ft_par = footer.parentNode;
+    ft_par.insertBefore(this.create_checkboxen(), footer);
 
     for(i=0 ; i<sigs.length ; i++) {
       if (this.opt1.val) {
