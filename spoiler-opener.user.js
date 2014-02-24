@@ -3,7 +3,7 @@
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author Robert Munafo
-// @version 6002.91
+// @version 8198.89
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -38,6 +38,8 @@
 // np6002.91 Make the lavendar background a fair bit lighter so it doesn't
 //   interfere as much with any images, font colours, etc. that the author
 //   might have included.
+// np8198.89 If spoiler button is inside a link, change the button text to
+//   '> spURLer! < to make it obvious
 
 // A sample forum page is:
 //
@@ -105,36 +107,65 @@ openallspoilers = {
           buttons[i]       // <input type="button" value="Show"  ...
           .parentNode;     // <div class="quotetitle">
 
+        var mygp = myp.parentNode;  // <div style="margin:20px; margin-top:5px">
+                                    // or <a href="..." class="postlink">
+
+        // console.info('input ' + i + ' myp is a ' + myp.tagName
+        //                           + ' in a ' + mygp.tagName);
+
         var myx =
-          myp.parentNode     // <div style="margin:20px; margin-top:5px">
+          mygp
           .getElementsByTagName('div')[1]; // <div class="quotecontent">
 
-        var myz = myx
-          .getElementsByTagName('div')[0] // <div style="display: none;">
-          .style;
+        if (mygp.tagName == 'A') {
+          // spURLer! Make it obvious by changing the button text
+          // For example, see '20140224 spURLer p23427839.png' which shows how Chrome
+          // handles OTT:1315:10#p3427839
+          console.info('button ' + i + ' is a spURLer!');
+          buttons[i].value = ' > spURLer! < ';
+          // Add 50 to the CSS's specified width
+          buttons[i].style.width = (buttons[i].offsetWidth+50)+'px';
 
-        if (recalc == 0) {
-          // This is the first time: open th spoilers and change the button
-          myz.display = '';   // remove 'none', making it displayable
-          myz.backgroundColor="#DDF";
-          buttons[i].value = 'hide';
-        }
+          // We have to go up 1 more level to find the common ancestor of the
+          // actual content
+          myx = mygp.parentNode.getElementsByTagName('div')[1];
+        };
 
-        // The following does not show an accurate height if the spoiler
-        // contains images, but it at least works when it contains text.
-        var ht;
-        if (myx.clientHeight) { // IE
-          ht = myx.clientHeight + 'px'; // In some cases we see a scrollbar, so
-                                        // maybe scrollHeight would be more
-                                        // appropriate
-        } else if (window.getComputedStyle) {
-          ht = window.getComputedStyle(myx).getPropertyValue('height');
-        } else if (myx.style['height']) {
-          ht = myx.style['height'];
+        if (myx) {
+          // There is a sibling node with content; go ahead and show it.
+          var myz = myx
+            .getElementsByTagName('div')[0] // <div style="display: none;">
+            .style;
+
+          if (recalc == 0) {
+            // This is the first time: open the spoilers and change the button
+            myz.display = '';   // remove 'none', making it displayable
+            myz.backgroundColor="#DDF";
+            buttons[i].value = 'hide';
+          }
+
+          // The following does not show an accurate height if the spoiler
+          // contains images, but it at least works when it contains text.
+          var ht;
+          if (myx.clientHeight) { // IE
+            ht = myx.clientHeight + 'px'; // In some cases we see a scrollbar, so
+                                          // maybe scrollHeight would be more
+                                          // appropriate
+          } else if (window.getComputedStyle) {
+            ht = window.getComputedStyle(myx).getPropertyValue('height');
+          } else if (myx.style['height']) {
+            ht = myx.style['height'];
+          } else {
+            ht = 'unkn';
+          }
+          myp.getElementsByTagName('b')[0].innerText = ht;
         } else {
-          ht = 'unkn';
+          console.info('button ' + i + ' I found no sibling with content.');
+          // we want to change the button text here to make it obvious that there
+          // is a bug
+          buttons[i].value = '(found no content)';
+          buttons[i].style.width = (buttons[i].offsetWidth+50)+'px';
         }
-        myp.getElementsByTagName('b')[0].innerText = ht;
       }
     }
 
@@ -146,13 +177,15 @@ openallspoilers = {
       setTimeout(openallspoilers.convert.bind(openallspoilers), del);
       ttd -= 1;
       // Go to the next-higher delay interval
-      if (del <= 9111) {
+      if (del <= 1011) {
+        del = 9111;
+      } else if (del <= 9111) {
         del = 100235;
       } else if (del <= 100235) {
         del = 1303071;
       } else if (del <= 1303071) {
         del = 19546083;
-      }
+      };
     }
   }
 };
@@ -161,7 +194,7 @@ openallspoilers = {
 // 'DOMContentLoaded' events all fail to wait long enough for the
 // myx.clientHeight property to be correct if myx contains newly-loaded
 // images, and because images sometimes take a ch*rping long time to load.
-ttd = 3; del = 9111;
+ttd = 3; del = 1011;
 recalc = 0;
 
 // 3 cases for cross-platform, cross-browser: not necessary for this
