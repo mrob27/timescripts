@@ -3,7 +3,7 @@
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author Robert Munafo
-// @version 8198.89
+// @version 8201.06
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -40,6 +40,8 @@
 //   might have included.
 // np8198.89 If spoiler button is inside a link, change the button text to
 //   '> spURLer! < to make it obvious
+// np8201.06 Handle a few more cases of Spoiler nested within other tags which
+//   are nested in a URL.
 
 // A sample forum page is:
 //
@@ -109,6 +111,10 @@ openallspoilers = {
 
         var mygp = myp.parentNode;  // <div style="margin:20px; margin-top:5px">
                                     // or <a href="..." class="postlink">
+        var myggp = mygp.parentNode;
+        var myg3p = myggp.parentNode;
+        var myg4p = myg3p.parentNode;
+        var myg5p = myg4p.parentNode;
 
         // console.info('input ' + i + ' myp is a ' + myp.tagName
         //                           + ' in a ' + mygp.tagName);
@@ -117,7 +123,10 @@ openallspoilers = {
           mygp
           .getElementsByTagName('div')[1]; // <div class="quotecontent">
 
-        if (mygp.tagName == 'A') {
+        if ( (mygp.tagName == 'A') || (myggp.tagName == 'A')
+          || (myg3p.tagName == 'A') || (myg4p.tagName == 'A')
+          || (myg5p.tagName == 'A'))
+        {
           // spURLer! Make it obvious by changing the button text
           // For example, see '20140224 spURLer p23427839.png' which shows how Chrome
           // handles OTT:1315:10#p3427839
@@ -126,9 +135,11 @@ openallspoilers = {
           // Add 50 to the CSS's specified width
           buttons[i].style.width = (buttons[i].offsetWidth+50)+'px';
 
-          // We have to go up 1 more level to find the common ancestor of the
-          // actual content
-          myx = mygp.parentNode.getElementsByTagName('div')[1];
+          if (mygp.tagName == 'A') {
+            // We have to go up 1 more level to find the common ancestor of the
+            // actual content
+            myx = mygp.parentNode.getElementsByTagName('div')[1];
+          }
         };
 
         if (myx) {
