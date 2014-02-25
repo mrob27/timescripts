@@ -3,7 +3,7 @@
 // @name no-tinytext for OTT
 // @description Locate tiny and/or pale-colored text and make it readable
 // @author Robert Munafo (with help from azule)
-// @version 8162.47
+// @version 8207.75
 // @downloadURL http://mrob.com/time/scripts-beta/no-tinytext.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -34,7 +34,9 @@
 // np6294.73 The smallest sizes are still a bit too small for my liking.
 // np6317.70 Start at size 8 instead of size 9
 // np7611.06 Recognize colors 'white' and e.g. '#BFC'
-// np8162.47 Place checkboxes below the 'WHO IS ONLINE' bit
+// np8162.47 Place checkboxes above the page-footer, rather than below the pope's
+//   parent node
+// np8207.75 Add make_checkbox function; remove console.info calls
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
@@ -84,17 +86,7 @@ var gthres = 190;
 
 notinytext = {
 
-  // I'd like to know about cross-browser support for console.log(). Until
-  // then, this is my replacement.
-  //
-  log: function (msg) {
-    setTimeout(function() {
-      throw new Error(msg);
-    }, 0);
-  },
-
   findAncestorById: function(elem, idName) {
-    //- console.info('fABC ' + elem.id);
     if(new RegExp('\\b'+idName+'\\b').test(elem.id))
       return elem;
     else {
@@ -108,10 +100,8 @@ notinytext = {
   setChkVal: function(chk, val) {
     if (val == 0) {
       chk.checked=false;
-      console.info('setting checkbox false');
     } else {
       chk.checked=true;
-      console.info('setting checkbox true');
     }
   },
 
@@ -120,13 +110,12 @@ notinytext = {
     // If the option was just initialized, it will now become set.
     // This makes sense becuse if they've just installed the script
     // and click on the checkbox, they want to set the checkbox.
-    console.info('foo1 ' + nam + ' val is ' + optobj.val);
+
     if (optobj.val == 0) {
       optobj.val = 1;
     } else {
       optobj.val = 0;
     }
-    console.info('foo2 tog to ' + optobj.val);
     
     this.setChkVal(chk, optobj.val);
     chk.disabled = false;
@@ -134,6 +123,24 @@ notinytext = {
     /* Save the user's work in a way that will persist across page loads.
      * see http://wiki.greasespot.net/GM_setValue */
     GM_setValue(nam, JSON.stringify(optobj.val));
+  },
+
+  make_checkbox: function(nam, title, optobj, pdiv) {
+    // Make the checkbox for 'reveal light text'
+    var chk = document.createElement('input');
+    chk.type = 'checkbox';
+    chk.value = 'temp-' + nam;
+    chk.id = nam;
+
+    var lbl = document.createElement('label')
+    lbl.htmlFor = nam;
+    var lab_text = document.createTextNode(title);
+    lbl.appendChild(lab_text);
+
+    this.setChkVal(chk, optobj.val);
+    chk.addEventListener('click',
+                              this.opt_action.bind(this, chk, optobj, nam));
+    pdiv.appendChild(chk); pdiv.appendChild(lbl);
   },
 
   /* create_checkboxen will add a checkbox that changes an option */
@@ -153,71 +160,20 @@ notinytext = {
     opts_div.style.textAlign = 'left';
 
     // Make the checkbox for 'reveal light text'
-    var chk1 = document.createElement('input');
-    chk1.type = 'checkbox';
-    chk1.value = 'temp-opt1';
-    chk1.id = 'opt1';
-
-    var lbl1 = document.createElement('label')
-    lbl1.htmlFor = "opt1";
-    var lab_text = document.createTextNode('Reveal Light Text');
-    lbl1.appendChild(lab_text);
-
-    this.setChkVal(chk1, this.opt1.val);
-    chk1.addEventListener('click',
-                this.opt_action.bind(this, chk1, this.opt1, 'opt1'));
+    opts_div.appendChild(document.createTextNode("　　")); // CJK space, for indentation
+    this.make_checkbox('opt1', 'Reveal Light Text', this.opt1, opts_div);
 
     // Make the checkbox for 'highlight light text'
-    var chk4 = document.createElement('input');
-    chk4.type = 'checkbox';
-    chk4.value = 'temp-opt4';
-    chk4.id = 'opt4';
-    var lbl4 = document.createElement('label')
-    lbl4.htmlFor = "opt4";
-    var lab_text = document.createTextNode('Highlight Light Text');
-    lbl4.appendChild(lab_text);
-    this.setChkVal(chk4, this.opt4.val);
-    chk4.addEventListener('click',
-                this.opt_action.bind(this, chk4, this.opt4, 'opt4'));
+    opts_div.appendChild(document.createTextNode("　"));
+    this.make_checkbox('opt4', 'Highlight Light Text', this.opt4, opts_div);
 
     // Make the checkbox for 'embiggen tiny text'
-    var chk2 = document.createElement('input');
-    chk2.type = 'checkbox';
-    chk2.value = 'temp-opt2';
-    chk2.id = 'opt2';
-    
-    var lbl2 = document.createElement('label')
-    lbl2.htmlFor = "opt2";
-    var lab2_text = document.createTextNode('Embiggen TinyText');
-    lbl2.appendChild(lab2_text);
-    
-    this.setChkVal(chk2, this.opt2.val);
-    chk2.addEventListener('click',
-                this.opt_action.bind(this, chk2, this.opt2, 'opt2'));
+    opts_div.appendChild(document.createTextNode("　"));
+    this.make_checkbox('opt2', 'Embiggen TinyText', this.opt2, opts_div);
 
     // Make the checkbox for 'highlight tiny text'
-    var chk3 = document.createElement('input');
-    chk3.type = 'checkbox';
-    chk3.value = 'temp-opt3';
-    chk3.id = 'opt3';
-    
-    var lbl3 = document.createElement('label')
-    lbl3.htmlFor = "opt3";
-    var lab3_text = document.createTextNode('Highlight TinyText');
-    lbl3.appendChild(lab3_text);
-    
-    this.setChkVal(chk3, this.opt3.val);
-    chk3.addEventListener('click',
-                this.opt_action.bind(this, chk3, this.opt3, 'opt3'));
-
-    opts_div.appendChild(document.createTextNode("　　")); // CJK space, for indentation
-    opts_div.appendChild(chk1); opts_div.appendChild(lbl1);
     opts_div.appendChild(document.createTextNode("　"));
-    opts_div.appendChild(chk4); opts_div.appendChild(lbl4);
-    opts_div.appendChild(document.createTextNode("　"));
-    opts_div.appendChild(chk2); opts_div.appendChild(lbl2);
-    opts_div.appendChild(document.createTextNode("　"));
-    opts_div.appendChild(chk3); opts_div.appendChild(lbl3);
+    this.make_checkbox('opt3', 'Highlight TinyText', this.opt3, opts_div);
 
     container.appendChild(preDiv);
     container.appendChild(opts_div);
@@ -230,50 +186,35 @@ notinytext = {
     var i; var so; var sz;
 
     this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) }; 
-    //- this.log('init1 opt1 val ' + this.opt1.val);    
     if (typeof this.opt1 == 'undefined') {
       this.opt1 = { val: "0" }; 
-      console.info('init this.obj1 to ' + JSON.stringify(this.opt1));
       this.opt1.val = JSON.parse(GM_getValue('opt1', '0'));
     };
-    console.info('init2 opt1 val ' + this.opt1.val);
 
     this.opt2 = { val: JSON.parse(GM_getValue('opt2', '0')) }; 
-    //- this.log('init1 opt2 val ' + this.opt2.val);
     if (typeof this.opt2 == 'undefined') {
       this.opt2 = { val: "0" };
-      console.info('init this.obj2 to ' + JSON.stringify(this.opt2));
       this.opt2.val = JSON.parse(GM_getValue('opt2', '0'));
     };
-    console.info('init2 opt2 val ' + this.opt2.val);
 
     this.opt3 = { val: JSON.parse(GM_getValue('opt3', '0')) }; 
-    //- this.log('init1 opt3 val ' + this.opt3.val);
     if (typeof this.opt3 == 'undefined') {
       this.opt3 = { val: "0" };
-      console.info('init this.obj3 to ' + JSON.stringify(this.opt3));
       this.opt3.val = JSON.parse(GM_getValue('opt3', '0'));
     };
-    console.info('init2 opt3 val ' + this.opt3.val);
 
     this.opt4 = { val: JSON.parse(GM_getValue('opt4', '0')) }; 
-    //- this.log('init1 opt4 val ' + this.opt4.val);
     if (typeof this.opt4 == 'undefined') {
       this.opt4 = { val: "0" };
-      console.info('init this.obj4 to ' + JSON.stringify(this.opt4));
       this.opt4.val = JSON.parse(GM_getValue('opt4', '0'));
     };
-    console.info('init2 opt4 val ' + this.opt4.val);
 
     // Create the options checkboxes.
     var footer = document.getElementById("page-footer");
     var ft_par = footer.parentNode;
     ft_par.insertBefore(this.create_checkboxen(), footer);
 
-    //- this.log('convert started');
     for(i=0 ; i<spans.length ; i++) {
-      //- this.log(i + ' ' + spans[i].style.fontSize
-      //-            + ' ' + pat2.test(spans[i].style.fontSize));
       if (this.opt2.val || this.opt3.val) {
         if (pat3.test(spans[i].style.fontSize) )
         {
