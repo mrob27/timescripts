@@ -96,12 +96,108 @@ openallspoilers = {
     }, 0);
   },
 
+  // Set a checkbox to be on or off
+  setChkVal: function(chk, val) {
+    if (val == 0) {
+      chk.checked=false;
+    } else {
+      chk.checked=true;
+    }
+  },
+
+  /* opt_action will set or clear an option. */
+  opt_action: function(chk, optobj, nam) {
+    // If the option was just initialized, it will now become set.
+    // This makes sense becuse if they've just installed the script
+    // and click on the checkbox, they want to set the checkbox.
+
+    if (optobj.val == 0) {
+      optobj.val = 1;
+    } else {
+      optobj.val = 0;
+    }
+    
+    this.setChkVal(chk, optobj.val);
+    chk.disabled = false;
+    
+    /* Save the user's work in a way that will persist across page loads.
+     * see http://wiki.greasespot.net/GM_setValue */
+    GM_setValue(nam, JSON.stringify(optobj.val));
+  },
+
+  make_checkbox: function(nam, title, optobj, pdiv) {
+    // Make the checkbox for 'reveal light text'
+    var chk = document.createElement('input');
+    chk.type = 'checkbox';
+    chk.value = 'temp-' + nam;
+    chk.id = nam;
+
+    var lbl = document.createElement('label')
+    lbl.htmlFor = nam;
+    var lab_text = document.createTextNode(title);
+    lbl.appendChild(lab_text);
+
+    this.setChkVal(chk, optobj.val);
+    chk.addEventListener('click',
+                              this.opt_action.bind(this, chk, optobj, nam));
+    pdiv.appendChild(chk); pdiv.appendChild(lbl);
+  },
+
+  /* create_checkboxen will add a checkbox that changes an option */
+  create_checkboxen: function() {
+    var container = document.createElement('div');
+
+    var preDiv = document.createElement('div');
+    preDiv.style.marginTop = '1px';
+    preDiv.style.fontSize = '1.0em';
+    preDiv.style.fontWeight = 'bold';
+    preDiv.style.color = '#0B7';
+
+    var optstitle = document.createTextNode("Spoiler-Opener by Mrob27:");
+    preDiv.appendChild(optstitle);
+
+    var opts_div = document.createElement('div');
+    opts_div.style.textAlign = 'left';
+
+    // Make the checkbox for 'lavendar background'
+    opts_div.appendChild(document.createTextNode("　　"));
+    this.make_checkbox('opt1', 'Lavendar Background', this.opt1, opts_div);
+
+    // Make the checkbox for '> spURLer <' option
+    opts_div.appendChild(document.createTextNode("　"));
+    this.make_checkbox('opt2', 'Label SpURLer Buttons', this.opt2, opts_div);
+
+    container.appendChild(preDiv);
+    container.appendChild(opts_div);
+
+    return(container);
+  },
+
   convert: function() {
     var buttons = document.getElementsByTagName('input');
     var i;
-    //- this.log('convert started');
+
+    if (recalc == 0) {
+      // First time: initialize options, create the checkboxes.
+
+      this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) };
+      if (typeof this.opt1 == 'undefined') {
+          this.opt1 = { val: "0" };
+          this.opt1.val = JSON.parse(GM_getValue('opt1', '0'));
+      };
+
+      this.opt2 = { val: JSON.parse(GM_getValue('opt2', '0')) };
+      if (typeof this.opt2 == 'undefined') {
+          this.opt2 = { val: "0" };
+          this.opt2.val = JSON.parse(GM_getValue('opt2', '0'));
+      };
+
+      var footer = document.getElementById("page-footer");
+      var ft_par = footer.parentNode;
+      ft_par.insertBefore(this.create_checkboxen(), footer);
+    };
+
     for(i=0 ; i<buttons.length ; i++) {
-      //- this.log(i + ' ' + buttons[i].value);
       if (  (buttons[i].type == 'button')
          && ((buttons[i].value == 'Show') || (buttons[i].value == 'hide')) )
       {
@@ -131,9 +227,11 @@ openallspoilers = {
           // For example, see '20140224 spURLer p23427839.png' which shows how Chrome
           // handles OTT:1315:10#p3427839
           console.info('button ' + i + ' is a spURLer!');
-          buttons[i].value = ' > spURLer! < ';
-          // Add 50 to the CSS's specified width
-          buttons[i].style.width = (buttons[i].offsetWidth+50)+'px';
+          if (this.opt2.val) {
+            buttons[i].value = ' > spURLer! < ';
+            // Add 50 to the CSS's specified width
+            buttons[i].style.width = (buttons[i].offsetWidth+50)+'px';
+          };
 
           if (mygp.tagName == 'A') {
             // We have to go up 1 more level to find the common ancestor of the
@@ -151,7 +249,9 @@ openallspoilers = {
           if (recalc == 0) {
             // This is the first time: open the spoilers and change the button
             myz.display = '';   // remove 'none', making it displayable
-            myz.backgroundColor="#DDF";
+            if (this.opt1.val) {
+              myz.backgroundColor="#DDF";
+            };
             buttons[i].value = 'hide';
           }
 
@@ -219,41 +319,3 @@ if (window.addEventListener) {
 } else {
   openallspoilers.convert(openallspoilers);
 };
-
-// %%% Ask Pikrass if the "addEventListener('DOMContentLoaded',...)"
-// is needed for non-GreaseMonkey platforms/environments. acto AluisioASG,
-// *Monkey always runs the script after the DOM is built (HTML loaded and
-// converted to a hierarchical tree of objects).
-//
-// Pikrass' version also tests if we're reading or posting with:
-// if(location.href.indexOf('viewtopic') != -1)
-
-
-// The following is a LiveScript version by Aluísio Augusto Silva Gonçalves
-//
-// # Find the corresponding spoiler content to a given current spoiler button.
-// find-spoiler-content = (spoiler-button) ->
-//   eval-XPath '
-//     ancestor::*[@class="quotetitle"]
-//     /following-sibling::*[@class="quotecontent"]
-//     /div',
-//     XPathResult.FIRST_ORDERED_NODE_TYPE, spoiler-button
-//   .singleNodeValue
-// 
-// # Wrap the document's XPath evaluator to simplify the call.
-// eval-XPath = (xpath, result-type, context=document) ->
-//   document.evaluate xpath, context, null, result-type, null
-// 
-// 
-// snapshot = eval-XPath '
-//   //*[@class="quotetitle"]
-//   //*[.="Spoiler:"]
-//   /following-sibling::input[@type="button"]',
-//   XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE
-// for let i til snapshot.snapshotLength
-//   spoiler-button = snapshot.snapshotItem i
-//   if (find-spoiler-content spoiler-button)?
-//     that.style.display = ''
-//     spoiler-button.value = 'Hide'
-//   else
-//     console.error "Failed to find spoiler content node"
