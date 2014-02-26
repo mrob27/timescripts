@@ -3,7 +3,7 @@
 // @name blindposter for OTT
 // @description Hide the "TOPIC REVIEW" section, so you can make a blindpost without being spoiled by anything you might see there
 // @author Robert Munafo
-// @version 8001.35
+// @version 8248.58
 // @downloadURL http://mrob.com/time/scripts-beta/blindposter.user.js
 // @include http://forums.xkcd.com/posting.php*
 // @include http://fora.xkcd.com/posting.php*
@@ -22,6 +22,7 @@
 // np7979.02 Recognize and hide any 'ninja' posts
 // np7980.35 Do not hide my own post preview
 // np8001.35 Remove outdated comments
+// np8248.58 Do nothing unless we're posting to the OTT (t=101043)
 
 blindposter = {
   hideit: function(elem) {
@@ -77,14 +78,16 @@ blindposter = {
   }
 };
 
-// 3 cases for cross-platform, cross-browser: not necessary for this
-// application but I want this code to be useful elsewhere too!
-if (window.addEventListener) {
-  window.addEventListener('DOMContentLoaded', // was 'load',
-    blindposter.convert.bind(blindposter), false);
-} else if (window.attachEvent) {
-  window.attachEvent('onload',
-    blindposter.convert.bind(blindposter));
-} else {
-  blindposter.convert(blindposter);
+if (location.href.indexOf('t=101043') != -1) {
+  // 3 cases for cross-platform, cross-browser: not necessary for this
+  // application but I want this code to be useful elsewhere too!
+  if (window.addEventListener) {
+    window.addEventListener('DOMContentLoaded', // was 'load',
+      blindposter.convert.bind(blindposter), false);
+  } else if (window.attachEvent) {
+    window.attachEvent('onload',
+      blindposter.convert.bind(blindposter));
+  } else {
+    blindposter.convert(blindposter);
+  }
 };
