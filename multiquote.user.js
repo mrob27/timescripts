@@ -3,7 +3,7 @@
 // @name multiquote for OTT
 // @description Changes quote buttons behaviour to quote multiple messages
 // @author Pikrass and mrob27
-// @version 8227.61
+// @version 8233.07
 // @downloadURL http://mrob.com/time/scripts-beta/multiquote.user.js
 // @resource quote_waiting imgs/quote_waiting.png
 // @resource quote_ok imgs/quote_ok.png
@@ -17,10 +17,13 @@
 
 /*
 REVISION HISTORY
+ np1674.00 Version by Pikrass that was used as the basis of this version.
+
  np5330.00 Include the original post text in the editable area, so you
 can edit out the parts you don't want right away.
  np8227.61 Add checkboxes at bottom (one currently unused), add
 "quoter's name in blue" option
+ np8233.07 Second option enables the "mrob27 enhancement"
  */
 
 multiquote = {
@@ -99,7 +102,8 @@ multiquote = {
 
     // Make the checkbox for
     opts_div.appendChild(document.createTextNode("　"));
-    this.make_checkbox('opt2', 'Option TItle 2', this.opt2, opts_div);
+    this.make_checkbox('opt2', 'Include Quoted Text In Edit Area',
+                                                                this.opt2, opts_div);
 
     container.appendChild(preDiv);
     container.appendChild(opts_div);
@@ -107,9 +111,8 @@ multiquote = {
     return(container);
   },
 
-  add_option_controls: function() {
-    // Initialize options, create the checkboxes.
-
+  // Initialize options
+  init_options: function() {
     this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) };
     if (typeof this.opt1 == 'undefined') {
       this.opt1 = { val: "0" };
@@ -121,7 +124,10 @@ multiquote = {
       this.opt2 = { val: "0" };
       this.opt2.val = JSON.parse(GM_getValue('opt2', '0'));
     };
+  },
 
+  // Create the checkboxes.
+  add_option_controls: function() {
     var footer = document.getElementById("page-footer");
     var ft_par = footer.parentNode;
     ft_par.insertBefore(this.create_checkboxen(), footer);
@@ -130,6 +136,7 @@ multiquote = {
   convert: function() {
     this.init(); // loads saved quote data
 
+    this.init_options();
     this.add_option_controls();
 
     var buttons = document.getElementsByClassName('quote-icon');
@@ -164,7 +171,7 @@ multiquote = {
        editable after this HTTP request finishes. To avoid having another text
        box appear at an unpredictable time, it would need to be initially
        hidden and you'd have to click a Spoiler-button to make it visible. */
-    req.open('get', link.quoteUrl, false);
+    req.open('get', link.quoteUrl, (this.opt2.val == 0));
     req.send();
     link.style.backgroundImage = 'url("'+GM_getResourceURL('quote_waiting')+'")';
 
@@ -211,13 +218,17 @@ multiquote = {
 
     var area = document.createElement('textarea');
     area.className = 'multiquote-reply';
-    /* RPM 2013-10-27: Fill the reply with the quote-text, so that the user
-     * can remove unwanted text right away */
-    area.value = this.quotes[pId].quote.replace(/&quot;/gmi, '"')
-      .replace(/&#39;/g,"'").replace(/&#40;/g,'(').replace(/&#41;/g,')')
-      .replace(/&#46;/g,'.').replace(/&#58;/g,':');
+    if (this.opt2.val) {
+      /* RPM 2013-10-27: Fill the reply with the quote-text, so that the user
+       * can remove unwanted text right away */
+      area.value = this.quotes[pId].quote.replace(/&quot;/gmi, '"')
+        .replace(/&#39;/g,"'").replace(/&#40;/g,'(').replace(/&#41;/g,')')
+        .replace(/&#46;/g,'.').replace(/&#58;/g,':');
+      area.style.height = '300px'; /* 100px is Waaaaayyyy too small! */
+    } else {
+      area.style.height = '100px';
+    };
     area.style.width = '100%';
-    area.style.height = '300px'; /* 100px is Waaaaayyyy too small! */
     area.style.fontSize = '1.2em';
 
     var butDiv = document.createElement('div');
@@ -278,6 +289,7 @@ multiquote = {
 
   dumpQuotes: function() {
     this.init();
+    this.init_options();
 
     var tmpDiv = document.createElement('div');
     tmpDiv.innerHTML = this.aggregateQuotes();
@@ -306,9 +318,12 @@ multiquote = {
       if(s != '')
         s += "\n\n";
 
-      /* RPM 2013-10-27: Since we now put the quote text into the reply
-       * we n longer want to add it here. */
-      /* s += this.quotes[i].quote; */
+      if (this.opt2.val) {
+        /* RPM 2013-10-27: Since we now put the quote text into the reply
+         * we no longer want to add it here. */
+      } else {
+        s += this.quotes[i].quote;
+      };
 
       if(this.quotes[i].reply)
         s += "\n" + this.quotes[i].reply;
