@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name newpix-convertor for OTT
+// @name newpix-converter for OTT
 // @description Converts phpBB dates into the One Time Unit: the newpix. For this to work your date format must be: "D M d, Y g:i:s a e" without the quotes.
 // @author Mrob27, Pikrass, and Smithers
-// @version 8251.51
+// @version 8251.68
 // @downloadURL http://mrob.com/time/scripts-beta/newpix-convertor.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -20,8 +20,9 @@
 // np4200 Display date as both Heretical and Newpix
 // np7990.29 Color the 'Last edited by' various shades of pink/red based on how much time has passed between the original post and the most recent edit
 // np8251.51 Add options checkboxes for 'keep heretical date' and 'color Last edited notices'
+// np8251.68 Fix title of options <div>
 
-newpixConvertor = {
+newpixConverter = {
   // Change this according to your preference
   decimals: 2,
 
@@ -82,7 +83,7 @@ newpixConvertor = {
     preDiv.style.fontWeight = 'bold';
     preDiv.style.color = '#0B7';
 
-    var optstitle = document.createTextNode("Spoiler-Opener by Mrob27:");
+    var optstitle = document.createTextNode("Newpix-Convertor Options:");
     preDiv.appendChild(optstitle);
 
     var opts_div = document.createElement('div');
@@ -267,4 +268,4 @@ newpixConvertor = {
 };
 
 window.addEventListener('DOMContentLoaded',
-  newpixConvertor.convert.bind(newpixConvertor));
+  newpixConverter.convert.bind(newpixConverter));
