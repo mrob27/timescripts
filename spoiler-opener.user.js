@@ -3,7 +3,7 @@
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author Robert Munafo
-// @version 8201.06
+// @version 8233.28
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -35,13 +35,14 @@
 //   interval)
 // np5905.00 Run 3 more times instead of just 1, with exponentially increasing
 //   delays (this improves performance when the servers are really slow.)
-// np6002.91 Make the lavendar background a fair bit lighter so it doesn't
+// np6002.91 Make the lavender background a fair bit lighter so it doesn't
 //   interfere as much with any images, font colours, etc. that the author
 //   might have included.
 // np8198.89 If spoiler button is inside a link, change the button text to
 //   '> spURLer! < to make it obvious
 // np8201.06 Handle a few more cases of Spoiler nested within other tags which
 //   are nested in a URL.
+// np8233.28 Fix a typo ("lavendar")
 
 // A sample forum page is:
 //
@@ -159,9 +160,9 @@ openallspoilers = {
     var opts_div = document.createElement('div');
     opts_div.style.textAlign = 'left';
 
-    // Make the checkbox for 'lavendar background'
+    // Make the checkbox for 'lavender background'
     opts_div.appendChild(document.createTextNode("　　"));
-    this.make_checkbox('opt1', 'Lavendar Background', this.opt1, opts_div);
+    this.make_checkbox('opt1', 'Lavender Background', this.opt1, opts_div);
 
     // Make the checkbox for '> spURLer <' option
     opts_div.appendChild(document.createTextNode("　"));
