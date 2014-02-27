@@ -129,7 +129,7 @@ notinytext = {
     // Make the checkbox for 'reveal light text'
     var chk = document.createElement('input');
     chk.type = 'checkbox';
-    chk.value = 'temp-' + nam;
+    chk.value = 'nott-' + nam;
     chk.id = nam;
 
     var lbl = document.createElement('label')

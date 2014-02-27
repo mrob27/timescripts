@@ -15,6 +15,7 @@
 //
 // REVISION HISTORY:
 // np2895.59 first version, by Ondrej Mosnáček
+// np3254.62 re-posted in OTT:1323:25#p3429300
 //
 // np7661.48 Clean up formatting; add lots of comments
 
