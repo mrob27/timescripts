@@ -2,7 +2,7 @@
 // @name newpix-converter for OTT
 // @description Converts phpBB dates into the One Time Unit: the newpix. For this to work your date format must be: "D M d, Y g:i:s a e" without the quotes.
 // @author Mrob27, Pikrass, and Smithers
-// @version 8251.68
+// @version 8549.01
 // @downloadURL http://mrob.com/time/scripts-beta/newpix-convertor.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -21,6 +21,7 @@
 // np7990.29 Color the 'Last edited by' various shades of pink/red based on how much time has passed between the original post and the most recent edit
 // np8251.51 Add options checkboxes for 'keep heretical date' and 'color Last edited notices'
 // np8251.68 Fix title of options <div>
+// np8549.01 Go back to '1190' method of determining if we're in OTT
 
 newpixConverter = {
   // Change this according to your preference
@@ -181,8 +182,7 @@ newpixConverter = {
 
   convert: function() {
     // Check if we're on the One True Thread
-    if (location.href.indexOf('t=101043') == -1) return;
-    // if (document.title.indexOf('1190') == -1)  return;
+    if (document.title.indexOf('1190') == -1)  return;
 
     // Initialize options, create the checkboxes.
     this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) };
