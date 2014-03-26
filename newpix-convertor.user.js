@@ -182,7 +182,8 @@ newpixConverter = {
 
   convert: function() {
     // Check if we're on the One True Thread
-    if (document.title.indexOf('1190') == -1)  return;
+    if ( (location.href.indexOf('t=101043') == -1)
+      && (document.title.indexOf('1190') == -1) )  return;
 
     // Initialize options, create the checkboxes.
     this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) };
