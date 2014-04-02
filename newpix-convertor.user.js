@@ -2,7 +2,7 @@
 // @name newpix-converter for OTT
 // @description Converts phpBB dates into the One Time Unit: the newpix. For this to work your date format must be: "D M d, Y g:i:s a e" without the quotes.
 // @author Mrob27, Pikrass, and Smithers
-// @version 8549.01
+// @version 9035.92
 // @downloadURL http://mrob.com/time/scripts-beta/newpix-convertor.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -22,10 +22,15 @@
 // np8251.51 Add options checkboxes for 'keep heretical date' and 'color Last edited notices'
 // np8251.68 Fix title of options <div>
 // np8549.01 Go back to '1190' method of determining if we're in OTT
+// np9035.92 Add option to act in all threads (OTTers sometimes post elesewhere)
 
 newpixConverter = {
   // Change this according to your preference
   decimals: 2,
+
+  o_keep_heret  : { val: "0" },
+  o_spurler     : { val: "0" },
+  o_all_threads : { val: "0" },
 
   // Set a checkbox to be on or off
   setChkVal: function(chk, val) {
@@ -90,13 +95,20 @@ newpixConverter = {
     var opts_div = document.createElement('div');
     opts_div.style.textAlign = 'left';
 
-    // Make the checkbox for 'lavender background'
+    // Make the checkbox for 'Keep Heretical Date'
     opts_div.appendChild(document.createTextNode("　　"));
-    this.make_checkbox('opt1', 'Keep Heretical Date', this.opt1, opts_div);
+    this.make_checkbox('o_keep_heret', 'Keep Heretical Date',
+      this.o_keep_heret, opts_div);
 
     // Make the checkbox for '> spURLer <' option
     opts_div.appendChild(document.createTextNode("　"));
-    this.make_checkbox('opt2', 'Color "Last edited" notices', this.opt2, opts_div);
+    this.make_checkbox('o_spurler', 'Color "Last edited" notices',
+      this.o_spurler, opts_div);
+
+    // Make the checkbox for 'Act on All Threads' option
+    opts_div.appendChild(document.createTextNode("　"));
+    this.make_checkbox('o_all_threads', 'Act in All Threads',
+      this.o_all_threads, opts_div);
 
     container.appendChild(preDiv);
     container.appendChild(opts_div);
@@ -181,26 +193,35 @@ newpixConverter = {
   },
 
   convert: function() {
-    // Check if we're on the One True Thread
-    if ( (location.href.indexOf('t=101043') == -1)
-      && (document.title.indexOf('1190') == -1) )  return;
-
     // Initialize options, create the checkboxes.
-    this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) };
-    if (typeof this.opt1 == 'undefined') {
-      this.opt1 = { val: "0" };
-      this.opt1.val = JSON.parse(GM_getValue('opt1', '0'));
+    this.o_keep_heret = { val: JSON.parse(GM_getValue('o_keep_heret', '0')) };
+    if (typeof this.o_keep_heret == 'undefined') {
+      this.o_keep_heret = { val: "0" };
+      this.o_keep_heret.val = JSON.parse(GM_getValue('o_keep_heret', '0'));
     };
 
-    this.opt2 = { val: JSON.parse(GM_getValue('opt2', '0')) };
-    if (typeof this.opt2 == 'undefined') {
-      this.opt2 = { val: "0" };
-      this.opt2.val = JSON.parse(GM_getValue('opt2', '0'));
+    this.o_spurler = { val: JSON.parse(GM_getValue('o_spurler', '0')) };
+    if (typeof this.o_spurler == 'undefined') {
+      this.o_spurler = { val: "0" };
+      this.o_spurler.val = JSON.parse(GM_getValue('o_spurler', '0'));
+    };
+
+    this.o_all_threads = {val: JSON.parse(GM_getValue('o_all_threads', '0')) };
+    if (typeof this.o_all_threads == 'undefined') {
+      this.o_all_threads = { val: "0" };
+      this.o_all_threads.val = JSON.parse(GM_getValue('o_all_threads', '0'));
     };
 
     var footer = document.getElementById("page-footer");
     var ft_par = footer.parentNode;
     ft_par.insertBefore(this.create_checkboxen(), footer);
+
+    // Check if we're on the One True Thread or if the act on all threads
+    // option is selected.
+    if (this.o_all_threads.val == 0) {
+      if ( (location.href.indexOf('t=101043') == -1)
+        && (document.title.indexOf('1190') == -1) )  return;
+    }
 
     var i, j, npd;
     var newpix_dates = new Array();
@@ -210,7 +231,7 @@ newpixConverter = {
     var authors = document.getElementsByClassName('author');
     for (i = 0; i < authors.length; i++) {
       npd = this.hereticToNewpix(authors[i].lastChild.data.substr(3));
-      if (this.opt1.val == 0) {
+      if (this.o_keep_heret.val == 0) {
         authors[i].lastChild.data = ' ';
       } else {
         authors[i].lastChild.data += ' = ';
@@ -228,11 +249,11 @@ newpixConverter = {
       var comma = str.lastIndexOf(',');
       npd = this.hereticToNewpix(str.substr(4, comma-4));
       edits[i].lastChild.data = ' at ';
-      if (this.opt1.val) {
+      if (this.o_keep_heret.val) {
         edits[i].lastChild.data += (str.substr(4, comma-4) + ' = ');
       };
       edits[i].lastChild.data += (this.NewpixToString(npd) + str.substr(comma));
-      if (this.opt2.val) {
+      if (this.o_spurler.val) {
         // Change the color of the edited message based on how much later
         // it was edited.
         for(j=0; j<postnodes.length; j++) {
