@@ -3,13 +3,16 @@
 // @name We Love BANANA-Yada by mrob27 (with help from Eternal Density and words by BlitzGirl)
 // @description Replaces the phrase "I love BANANAS" with lines from the first "Boom-de-Yada"
 // @author Robert Munafo (inspired by Eternal Density and balthasar_s)
-// @version 9007.05
+// @version np9072.01
 // @downloadURL http://mrob.com/time/scripts-beta/we-love-banana-yada.user.js
-// @match *://*/*
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
 // @include http://echochamber.me/viewtopic.php*
 // ==/UserScript==
+
+// To test on a local HTML file, add @match *://*/* above, then go into
+// Chrome Settings > Extensions > Tampermonkey and check "Allow access to
+// file URLs"
 
 // REVISION HISTORY:
 //
@@ -20,6 +23,7 @@
 // np8979.50: Add yadas[] object and setupmap()
 // np8989.31: Update release to OTT: Now has 48 lines (both Boom-de-yadas) and JavaScript object structure (part of refactoring)
 // np9007.05: Remove all the text-scanning; instead we now scan the DOM for profiles and insert a title before whatever title is there, if any. This change makes it work on HTML generated before the beginning of BananaMadness.
+// np9072.01: Move fhorn and pelrigg to the bottom of song 2 to preserve the sequence of the first 48 lines.
 
 nanaParty = {
   incr : 0,
@@ -78,9 +82,7 @@ nanaParty = {
   "spamjam"    : "I (might) love waffles...",
   "Pikrass"    : "I love to make you scripts",
 
-  "Goggalor"   : "I love the whole Thread",
-     "fhorn"   : "I love the whole Thread",
-     "pelrigg" : "I love the whole Thread",
+  "Goggalor"   : "I love the whole Thread", // fhorn and pelrigg too, they're below
   "- 2.13"     : "And all its mysteries",
   "Sciscitor"  : "Boom de yada, boom de yada",
   "Earthling on Mars" : "Boom de yada, boom de yada",
@@ -94,6 +96,11 @@ nanaParty = {
   "Vytron"      : "The Future's pretty cool!",
   "- 2.22"      : "Boom de yada, boom de yada",
   "- 2.23"      : "ɐpɐʎ ǝp ɯooq 'ɐpɐʎ ǝp ɯooB",
+
+  // Extra people for item 2.12
+     "fhorn"   : "I love the whole Thread",
+     "pelrigg" : "I love the whole Thread",
+
 
   // I'm the author of this scriptmolpy, to I'll retcon myself in too
   "mrob27"      : "I love Time-Capsule-ing",
