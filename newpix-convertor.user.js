@@ -2,7 +2,7 @@
 // @name newpix-converter for OTT
 // @description Converts phpBB dates into the One Time Unit: the newpix. For this to work your date format must be: "D M d, Y g:i:s a e" without the quotes.
 // @author Mrob27, Pikrass, and Smithers
-// @version 9035.92
+// @version 9117.43
 // @downloadURL http://mrob.com/time/scripts-beta/newpix-convertor.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -23,6 +23,9 @@
 // np8251.68 Fix title of options <div>
 // np8549.01 Go back to '1190' method of determining if we're in OTT
 // np9035.92 Add option to act in all threads (OTTers sometimes post elesewhere)
+// np9117.43 Use cross-platform functions to load and save options settings.
+
+console.info("Newpix Converter: A 'GM_getValue is not supported' message following this one is benign and results from a runtime compatibility test.");
 
 newpixConverter = {
   // Change this according to your preference
@@ -31,6 +34,61 @@ newpixConverter = {
   o_keep_heret  : { val: "0" },
   o_spurler     : { val: "0" },
   o_all_threads : { val: "0" },
+
+
+  /* Chrome provides a bogus nonfunctional GM_getValue function,
+     so we have to do this stupid two-step test */
+  isGM: ((typeof GM_getValue != 'undefined')
+         && (typeof GM_getValue('a', 'b') != 'undefined')),
+
+  /* Use this instead of GM_getValue */
+  vget: function(key, def) {
+    var rv;
+    if (this.isGM) {
+      rv = GM_getValue(key, def);
+    } else {
+      rv = localStorage[key];
+    }
+    if (typeof rv === "undefined") {
+      rv = def;
+    }
+    return rv;
+  },
+
+  /* Use this instead of GM_setValue */
+  vstr: function(key, val) {
+    if (this.isGM) {
+      GM_setValue(key, val);
+    } else {
+      localStorage[key] = val;
+    }
+  },
+
+  /* Use this instead of JSON.stringify */
+  jsenc: function(obj) {
+    if (typeof obj === "undefined") {
+      return "";
+    }
+    try {
+      return JSON.stringify(obj);
+    } catch(e) {
+      return JSON.encode(obj);
+    }
+  },
+
+  /* Use this instead of JSON.parse */
+  jsdec: function(str) {
+    if (typeof str === "undefined") {
+      return 0;
+    }
+    try {
+      return JSON.parse(str);
+    } catch(e) {
+      return JSON.decode(str);
+    }
+  },
+
+
 
   // Set a checkbox to be on or off
   setChkVal: function(chk, val) {
@@ -58,7 +116,7 @@ newpixConverter = {
     
     /* Save the user's work in a way that will persist across page loads.
      * see http://wiki.greasespot.net/GM_setValue */
-    GM_setValue(nam, JSON.stringify(optobj.val));
+    this.vstr(nam, this.jsenc(optobj.val));
   },
 
   make_checkbox: function(nam, title, optobj, pdiv) {
@@ -100,7 +158,7 @@ newpixConverter = {
     this.make_checkbox('o_keep_heret', 'Keep Heretical Date',
       this.o_keep_heret, opts_div);
 
-    // Make the checkbox for '> spURLer <' option
+    // Make the checkbox for 'Color "last edited" Notices'
     opts_div.appendChild(document.createTextNode("　"));
     this.make_checkbox('o_spurler', 'Color "Last edited" notices',
       this.o_spurler, opts_div);
@@ -194,22 +252,22 @@ newpixConverter = {
 
   convert: function() {
     // Initialize options, create the checkboxes.
-    this.o_keep_heret = { val: JSON.parse(GM_getValue('o_keep_heret', '0')) };
+    this.o_keep_heret = { val: this.jsdec(this.vget('o_keep_heret', '0')) };
     if (typeof this.o_keep_heret == 'undefined') {
       this.o_keep_heret = { val: "0" };
-      this.o_keep_heret.val = JSON.parse(GM_getValue('o_keep_heret', '0'));
+      this.o_keep_heret.val = this.jsdec(this.vget('o_keep_heret', '0'));
     };
 
-    this.o_spurler = { val: JSON.parse(GM_getValue('o_spurler', '0')) };
+    this.o_spurler = { val: this.jsdec(this.vget('o_spurler', '0')) };
     if (typeof this.o_spurler == 'undefined') {
       this.o_spurler = { val: "0" };
-      this.o_spurler.val = JSON.parse(GM_getValue('o_spurler', '0'));
+      this.o_spurler.val = this.jsdec(this.vget('o_spurler', '0'));
     };
 
-    this.o_all_threads = {val: JSON.parse(GM_getValue('o_all_threads', '0')) };
+    this.o_all_threads = {val: this.jsdec(this.vget('o_all_threads', '0')) };
     if (typeof this.o_all_threads == 'undefined') {
       this.o_all_threads = { val: "0" };
-      this.o_all_threads.val = JSON.parse(GM_getValue('o_all_threads', '0'));
+      this.o_all_threads.val = this.jsdec(this.vget('o_all_threads', '0'));
     };
 
     var footer = document.getElementById("page-footer");
