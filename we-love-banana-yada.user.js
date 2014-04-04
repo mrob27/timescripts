@@ -1,9 +1,9 @@
 // ==UserScript==
 // @namespace mrob.com
-// @name We Love BANANA-Yada by mrob27 (with help from Eternal Density and words by BlitzGirl)
+// @name We Love BANANA-Yada for OTT
 // @description Replaces the phrase "I love BANANAS" with lines from the first "Boom-de-Yada"
-// @author Robert Munafo (inspired by Eternal Density and balthasar_s)
-// @version np9072.01
+// @author Robert Munafo (words by BlitzGirl and OTTers; script inspired by Eternal Density and balthasar_s)
+// @version 9095.72
 // @downloadURL http://mrob.com/time/scripts-beta/we-love-banana-yada.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -24,6 +24,9 @@
 // np8989.31: Update release to OTT: Now has 48 lines (both Boom-de-yadas) and JavaScript object structure (part of refactoring)
 // np9007.05: Remove all the text-scanning; instead we now scan the DOM for profiles and insert a title before whatever title is there, if any. This change makes it work on HTML generated before the beginning of BananaMadness.
 // np9072.01: Move fhorn and pelrigg to the bottom of song 2 to preserve the sequence of the first 48 lines.
+// np9095.72: Add functions vget, vstr, jse, jsd; and adapt the loading/storing of preferences to use these: it now works as a plain user script, and no longer requires being run within a GreaseMonkey environment.
+
+console.info("We Love BANA-na-Yada: A 'GM_getValue is not supported' message following this one is benign and results from a runtime compatibility test.");
 
 nanaParty = {
   incr : 0,
@@ -95,7 +98,7 @@ nanaParty = {
   "ucim"        : "I love the whole Thread",
   "Vytron"      : "The Future's pretty cool!",
   "- 2.22"      : "Boom de yada, boom de yada",
-  "- 2.23"      : "ɐpɐʎ ǝp ɯooq 'ɐpɐʎ ǝp ɯooB",
+  "charlie_grumbles" : "ɐpɐʎ ǝp ɯooq 'ɐpɐʎ ǝp ɯooB",
 
   // Extra people for item 2.12
      "fhorn"   : "I love the whole Thread",
@@ -246,6 +249,58 @@ right after <dt> containing the avatar and username. It becomes child
     }
   },
 
+  /* Chrome provides a bogus nonfunctional GM_getValue function,
+     so we have to do this stupid two-step test */
+  isGM: ((typeof GM_getValue != 'undefined')
+         && (typeof GM_getValue('a', 'b') != 'undefined')),
+
+  /* Use this instead of GM_getValue */
+  vget: function(key, def) {
+    var rv;
+    if (this.isGM) {
+      rv = GM_getValue(key, def);
+    } else {
+      rv = localStorage[key];
+    }
+    if (typeof rv === "undefined") {
+      rv = def;
+    }
+    return rv;
+  },
+
+  /* Use this instead of GM_setValue */
+  vstr: function(key, val) {
+    if (this.isGM) {
+      GM_setValue(key, val);
+    } else {
+      localStorage[key] = val;
+    }
+  },
+
+  /* Use this instead of JSON.stringify */
+  jse: function(obj) {
+    if (typeof obj === "undefined") {
+      return "";
+    }
+    try {
+      return JSON.stringify(obj);
+    } catch(e) {
+      return JSON.encode(obj);
+    }
+  },
+
+  /* Use this instead of JSON.parse */
+  jsd: function(str) {
+    if (typeof str === "undefined") {
+      return 0;
+    }
+    try {
+      return JSON.parse(str);
+    } catch(e) {
+      return JSON.decode(str);
+    }
+  },
+
   /* opt_action will set or clear an option. */
   opt_action: function(chk, optobj, nam) {
     // If the option was just initialized, it will now become set.
@@ -263,7 +318,7 @@ right after <dt> containing the avatar and username. It becomes child
     
     /* Save the user's work in a way that will persist across page loads.
      * see http://wiki.greasespot.net/GM_setValue */
-    GM_setValue(nam, JSON.stringify(optobj.val));
+    this.vstr(nam, this.jse(optobj.val));
   },
 
   make_checkbox: function(nam, title, optobj, pdiv) {
@@ -322,16 +377,16 @@ right after <dt> containing the avatar and username. It becomes child
     //   && (document.title.indexOf('1190') == -1) )  return;
 
     // Initialize options, create the checkboxes.
-    this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) };
-    if (typeof this.opt1 == 'undefined') {
+    this.opt1 = { val: this.jsd(this.vget('opt1', '0')) };
+    if (typeof this.opt1 === "undefined") {
       this.opt1 = { val: "0" };
-      this.opt1.val = JSON.parse(GM_getValue('opt1', '0'));
+      this.opt1.val = this.jsd(this.vget('opt1', '0'));
     };
 
-    this.opt2 = { val: JSON.parse(GM_getValue('opt2', '0')) };
-    if (typeof this.opt2 == 'undefined') {
+    this.opt2 = { val: this.jsd(this.vget('opt2', '0')) };
+    if (typeof this.opt2 === "undefined") {
       this.opt2 = { val: "0" };
-      this.opt2.val = JSON.parse(GM_getValue('opt2', '0'));
+      this.opt2.val = this.jsd(this.vget('opt2', '0'));
     };
 
     var footer = document.getElementById("page-footer");
@@ -344,7 +399,21 @@ right after <dt> containing the avatar and username. It becomes child
   xx_end : 0
 };
 
+// console.info('we-love-bananayada on ' + (nanaParty.isGM ? "GM" : "not-GM"));
+
 nanaParty.setupmap();
 
-window.addEventListener('DOMContentLoaded',
-                        nanaParty.bananayada.bind(nanaParty));
+/* A 1-second delay does not seem to be necessary: Script doesn't get run
+   until the HTML is parsed and a DOM created for its elements, and our
+   functionality does not depend on images having been loaded.
+setTimeout(nanaParty.bananayada.bind(nanaParty), 1000);
+*/
+
+nanaParty.bananayada();
+
+/* Not available when installed as a user script directly into Chrome
+   extensions
+  unsafeWindow.addEventListener('DOMContentLoaded',
+                             nanaParty.bananayada.bind(nanaParty));
+
+*/
