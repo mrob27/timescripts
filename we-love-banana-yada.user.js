@@ -1,9 +1,9 @@
 // ==UserScript==
 // @namespace mrob.com
-// @name We Love BANANA-Yada for OTT
+// @name We Love BANA-na-Yada for OTT
 // @description Replaces the phrase "I love BANANAS" with lines from the first "Boom-de-Yada"
 // @author Robert Munafo (words by BlitzGirl and OTTers; script inspired by Eternal Density and balthasar_s)
-// @version 9095.72
+// @version 9201.88
 // @downloadURL http://mrob.com/time/scripts-beta/we-love-banana-yada.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -25,15 +25,20 @@
 // np9007.05: Remove all the text-scanning; instead we now scan the DOM for profiles and insert a title before whatever title is there, if any. This change makes it work on HTML generated before the beginning of BananaMadness.
 // np9072.01: Move fhorn and pelrigg to the bottom of song 2 to preserve the sequence of the first 48 lines.
 // np9095.72: Add functions vget, vstr, jse, jsd; and adapt the loading/storing of preferences to use these: it now works as a plain user script, and no longer requires being run within a GreaseMonkey environment.
+// np9201.88: Implement "Use Usernames" and "BANANAS" options.
+//
+// added this line to test browser hard reload
 
 console.info("We Love BANA-na-Yada: A 'GM_getValue is not supported' message following this one is benign and results from a runtime compatibility test.");
 
 nanaParty = {
   incr : 0,
   NUM_LINES : 48,  // The first 48 array elements are the lines from the two Boom-de-Yadas by BlitzGirl
+  BANA_LINES : 24,
 
-  opt1 : { val: "0" },
-  opt2 : { val: "0" },
+  o_randomize : { val: "0" },
+  o_use_uname : { val: "0" },
+  o_banana :    { val: "0" },
 
   yadas : {
   // We Love the Thread of Time ( OTT:464:10#p3342732 )
@@ -100,6 +105,8 @@ nanaParty = {
   "- 2.22"      : "Boom de yada, boom de yada",
   "charlie_grumbles" : "ɐpɐʎ ǝp ɯooq 'ɐpɐʎ ǝp ɯooB",
 
+  // - - - - BEGINNING OF PERSONALIZED VERSES SECTION - - - -
+
   // Extra people for item 2.12
      "fhorn"   : "I love the whole Thread",
      "pelrigg" : "I love the whole Thread",
@@ -119,6 +126,37 @@ nanaParty = {
   "Tatiana"     : "I love redundameowps",     // by PM, newpix 8982
   // ZoomanSP   : // Random by user request, NP1842
 
+  // We Love BABABAS, by BlitzGirl, NP1841
+  "- 3.00"      : "I love BANANAS",
+  "- 3.01"      : "I love banana peels",
+  "- 3.02"      : "I love BANANAS",
+  "- 3.03"      : "I love banana meals",
+
+  "- 3.04"      : "I love the whole fruit",
+  "- 3.05"      : "And when it's sliced in half",
+  "- 3.06"      : "Doom ba Nana, Doom ba Nana",
+  "- 3.07"      : "Doom ba Nana, Doom ba Nana",
+
+  "- 3.08"      : "I love BANANAS",
+  "- 3.09"      : "I love banana chips",
+  "- 3.10"      : "I love BANANAS",
+  "- 3.11"      : "And our banana scripts",
+
+  "- 3.12"      : "I love the whole fruit",
+  "- 3.13"      : "And all its mysteries",
+  "- 3.14"      : "Doom ba Nana, Doom ba Nana",
+  "- 3.15"      : "Doom ba Nana, Doom ba Nana",
+
+  "- 3.16"      : "I love BANANAS",
+  "- 3.17"      : "I love banana splits",
+  "- 3.18"      : "I love BANANAS",
+  "- 3.19"      : "I love banana blitz",
+
+  "- 3.20"      : "I love the whole fruit",
+  "- 3.21"      : "Banana's pretty cool!",
+  "- 3.22"      : "Doom ba Nana, Doom ba Nana",
+  "- 3.23"      : "Doom ba Nana, Doom ba Nana",
+
   "- end"       : ""
   },
     
@@ -127,13 +165,15 @@ nanaParty = {
   ix_uname : [],
   nix : 0,
   keys: [],
-    
+  k_ix: [],
+  
   /* Fill in the ix_uname array */
   setupmap: function()
   {
     var i;
     for (var k in this.yadas) {
         this.keys.push(k);
+        this.k_ix[k] = this.nix;
         this.nix++;
     }
     for (i=0; i<this.nix; i++) {
@@ -142,30 +182,66 @@ nanaParty = {
     }
   },
 
-  nextline: function(sel)
+  verse_base: function()
+  {
+    if (this.o_banana.val) {
+      return this.k_ix['- 3.00'];
+    }
+    return 0;
+  },
+
+  verse_size: function()
+  {
+    if (this.o_banana.val) {
+      return this.BANA_LINES;
+    }
+    return this.NUM_LINES;
+  },
+
+  /* Return a random verse-line from either the standard verses
+     or "We Love BANANAS" depending on the bananas option */
+  randomyada: function()
   {
     var x, s;
-    if (this.opt1.val == 0) {
-      x = this.incr;
-    } else {
-      x = Math.floor(Math.random() * this.NUM_LINES);
-    }
-    this.incr = (this.incr+1) % this.NUM_LINES;
-    s = '' +
-      // x + ': ' + 
-      this.yadas[this.keys[x]];
+    x = this.verse_base() + Math.floor(Math.random() * this.verse_size());
+    s = this.yadas[this.keys[x]];
     return s;
   },
 
-  banana_transform: function (str)
+  /* Return the next verse in sequence, using either the standard verses
+     or "We Love BANANAS" depending on the bananas option */
+  nextline: function()
   {
-    if (str == "I love BANANAS") {
-      return (
-        'banana' + this.incr + ": " + 
-        this.nextline(0)
-      );
+    var x, s;
+    x = this.verse_base() + this.incr;;
+    this.incr = (this.incr+1) % this.verse_size();
+    s = this.yadas[this.keys[x]];
+    return s;
+  },
+
+  /* Given a post number (0 - 39) and a username, select a verse-line
+     based on all three options. */
+  select_line: function(n, uname) {
+    var rv;
+    if (this.o_use_uname.val) {
+      // Choose a line based on user's name
+      rv = this.yadas[uname];
+      if (typeof rv === "undefined") {
+        rv = // 'r1: ' + 
+             this.randomyada();
+      } else {
+        // rv = 'u: ' + rv;
+      }
+    } else {
+      if (this.o_randomize.val) {
+        rv = // 'r2: ' +
+             this.randomyada();
+      } else {
+        rv = // 's: ' +
+             this.nextline();
+      }
     }
-    return str;
+    return rv;
   },
 
 /*
@@ -216,10 +292,13 @@ right after <dt> containing the avatar and username. It becomes child
   // Scan the profiles, inserting (or changing) any found title.
   bananascanner: function() {
     var i, j, npd, node, s;
-    
+    var avnode, uname;
+
     // Scan profiles.
     var profiles = document.getElementsByClassName('postprofile');
     for (i = 0; i < profiles.length; i++) {
+      avnode = profiles[i].childNodes[1];
+      uname = avnode.childNodes[4].innerHTML;
       node = profiles[i].childNodes[3];
       // console.info('i=' + i + ' j=' + 3 + ' ' + node.outerHTML);
       // console.info('     ' + node.localName);
@@ -231,7 +310,7 @@ right after <dt> containing the avatar and username. It becomes child
         }
         s = ''
           // + i + ': '
-          + this.nextline(i) + '<br />'
+          + this.select_line(i, uname) + '<br />'
           + s
         ;
         node.innerHTML = s;
@@ -357,11 +436,15 @@ right after <dt> containing the avatar and username. It becomes child
 
     // Make the checkbox for random verse selection
     opts_div.appendChild(document.createTextNode("　　"));
-    this.make_checkbox('opt1', 'Randomize', this.opt1, opts_div);
+    this.make_checkbox('o_randomize', 'Randomize', this.o_randomize, opts_div);
 
-    // Make the checkbox for [redacted]
+    // Make the checkbox for 'Use Usernames'
     opts_div.appendChild(document.createTextNode("　"));
-    this.make_checkbox('opt2', 'Treeish', this.opt2, opts_div);
+    this.make_checkbox('o_use_uname', 'Use Usernames', this.o_use_uname, opts_div);
+
+    // Make the checkbox for 'Use Usernames'
+    opts_div.appendChild(document.createTextNode("　"));
+    this.make_checkbox('o_banana', 'BANANAS', this.o_banana, opts_div);
 
     container.appendChild(preDiv);
     container.appendChild(opts_div);
@@ -377,16 +460,22 @@ right after <dt> containing the avatar and username. It becomes child
     //   && (document.title.indexOf('1190') == -1) )  return;
 
     // Initialize options, create the checkboxes.
-    this.opt1 = { val: this.jsd(this.vget('opt1', '0')) };
-    if (typeof this.opt1 === "undefined") {
-      this.opt1 = { val: "0" };
-      this.opt1.val = this.jsd(this.vget('opt1', '0'));
+    this.o_randomize = { val: this.jsd(this.vget('o_randomize', '0')) };
+    if (typeof this.o_randomize === "undefined") {
+      this.o_randomize = { val: "0" };
+      this.o_randomize.val = this.jsd(this.vget('o_randomize', '0'));
     };
 
-    this.opt2 = { val: this.jsd(this.vget('opt2', '0')) };
-    if (typeof this.opt2 === "undefined") {
-      this.opt2 = { val: "0" };
-      this.opt2.val = this.jsd(this.vget('opt2', '0'));
+    this.o_use_uname = { val: this.jsd(this.vget('o_use_uname', '0')) };
+    if (typeof this.o_use_uname === "undefined") {
+      this.o_use_uname = { val: "0" };
+      this.o_use_uname.val = this.jsd(this.vget('o_use_uname', '0'));
+    };
+
+    this.o_banana = { val: this.jsd(this.vget('o_banana', '0')) };
+    if (typeof this.o_banana === "undefined") {
+      this.o_banana = { val: "0" };
+      this.o_banana.val = this.jsd(this.vget('o_banana', '0'));
     };
 
     var footer = document.getElementById("page-footer");
