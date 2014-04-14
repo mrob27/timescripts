@@ -3,7 +3,7 @@
 // @name We Love BANA-na-Yada for OTT
 // @description Replaces the phrase "I love BANANAS" with lines from the first "Boom-de-Yada"
 // @author Robert Munafo (words by BlitzGirl and OTTers; script inspired by Eternal Density and balthasar_s)
-// @version 9201.88
+// @version 9361.14
 // @downloadURL http://mrob.com/time/scripts-beta/we-love-banana-yada.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -26,8 +26,8 @@
 // np9072.01: Move fhorn and pelrigg to the bottom of song 2 to preserve the sequence of the first 48 lines.
 // np9095.72: Add functions vget, vstr, jse, jsd; and adapt the loading/storing of preferences to use these: it now works as a plain user script, and no longer requires being run within a GreaseMonkey environment.
 // np9201.88: Implement "Use Usernames" and "BANANAS" options.
-//
-// added this line to test browser hard reload
+// np9224.91: Detect username when there is no avatar
+// np9361.14: Add 'Post Numbers' option.
 
 console.info("We Love BANA-na-Yada: A 'GM_getValue is not supported' message following this one is benign and results from a runtime compatibility test.");
 
@@ -39,6 +39,7 @@ nanaParty = {
   o_randomize : { val: "0" },
   o_use_uname : { val: "0" },
   o_banana :    { val: "0" },
+  o_numbers :   { val: "0" },
 
   yadas : {
   // We Love the Thread of Time ( OTT:464:10#p3342732 )
@@ -51,7 +52,7 @@ nanaParty = {
   "cmyk"       : "I love the whole thread",
   "KarMann"    : "and all its hatted folks",
   "StratPlayer": "Boom de yada, boom de yada",
-  "azule"      : "Boom de yada, boom de yada",
+  "- 1.07"     : "Boom de yada, boom de yada",// azule's verse is at 2.01
 
   "tman2nd"    : "I love sigcouragement",
   "- 1.09"     : "the semencoffeesea¹  (¹ BIG)",
@@ -76,7 +77,7 @@ nanaParty = {
   // We Love the Thread of Time, Too! ( OTT:707:34#p3365539 )
   //
   "- 2.00"     : "I love to journey",
-  "- 2.01"     : "I love our beesnakes too",// azule already has one
+  "azule"      : "I love our beesnakes too",
   "edfel"      : "I love Time-mapping",
   "Valarya"    : "I love to cupcake you!",
 
@@ -126,7 +127,9 @@ nanaParty = {
   "Tatiana"     : "I love redundameowps",     // by PM, newpix 8982
   // ZoomanSP   : // Random by user request, NP1842
 
-  // We Love BABABAS, by BlitzGirl, NP1841
+  // - - - - BANANA VERSES FROM FURIOUS DOODLING 2014 - - - -
+
+  // We Love BANANAS, by BlitzGirl, NP1841
   "- 3.00"      : "I love BANANAS",
   "- 3.01"      : "I love banana peels",
   "- 3.02"      : "I love BANANAS",
@@ -241,6 +244,9 @@ nanaParty = {
              this.nextline();
       }
     }
+    if (this.o_numbers.val) {
+      rv = rv + ' (' + n + ')';
+    }
     return rv;
   },
 
@@ -287,18 +293,40 @@ The only difference is the addition of a "<dd>Title goes here</dd>" element
 right after <dt> containing the avatar and username. It becomes child
 3, replacing the '&nbsp;' that would normally be at that position.
 
+To identify the username, we look inside that first element, the <dt>. Here
+there are also two possibilities. Those above represent users with an avatar.
+If the user does not have an avatar, the <dt> section looks like:
+
+    <dt>
+      <a href="./memberlist.php?mode=viewprofile&u=456&sid=5aed...">
+        jimbobmacdoodle
+      </a>
+    </dt>
+
 */
 
   // Scan the profiles, inserting (or changing) any found title.
   bananascanner: function() {
     var i, j, npd, node, s;
-    var avnode, uname;
+    var avnode, uname, ch4;
 
     // Scan profiles.
     var profiles = document.getElementsByClassName('postprofile');
     for (i = 0; i < profiles.length; i++) {
+      // Get the first node, which contains the avatar and/or username
       avnode = profiles[i].childNodes[1];
-      uname = avnode.childNodes[4].innerHTML;
+      // 4th child is usually the username
+      ch4 = avnode.childNodes[4];
+      if (typeof ch4 === 'undefined') {
+        // There is no avatar; username will be child[1]
+        ch4 = avnode.childNodes[1];
+      }
+      if (typeof ch4 === 'undefined') {
+        // Still undefined, so just forget about trying to find the username
+        uname = '';
+      } else {
+        uname = ch4.innerHTML;
+      }
       node = profiles[i].childNodes[3];
       // console.info('i=' + i + ' j=' + 3 + ' ' + node.outerHTML);
       // console.info('     ' + node.localName);
@@ -446,6 +474,10 @@ right after <dt> containing the avatar and username. It becomes child
     opts_div.appendChild(document.createTextNode("　"));
     this.make_checkbox('o_banana', 'BANANAS', this.o_banana, opts_div);
 
+    // Make the checkbox for 'Numbers'
+    opts_div.appendChild(document.createTextNode("　"));
+    this.make_checkbox('o_numbers', 'Numbers', this.o_numbers, opts_div);
+
     container.appendChild(preDiv);
     container.appendChild(opts_div);
 
@@ -476,6 +508,12 @@ right after <dt> containing the avatar and username. It becomes child
     if (typeof this.o_banana === "undefined") {
       this.o_banana = { val: "0" };
       this.o_banana.val = this.jsd(this.vget('o_banana', '0'));
+    };
+
+    this.o_numbers = { val: this.jsd(this.vget('o_numbers', '0')) };
+    if (typeof this.o_numbers === "undefined") {
+      this.o_numbers = { val: "0" };
+      this.o_numbers.val = this.jsd(this.vget('o_numbers', '0'));
     };
 
     var footer = document.getElementById("page-footer");
