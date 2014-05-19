@@ -3,7 +3,7 @@
 // @name sig-contrast for OTT
 // @description  Hides signatures and/or make them easily distinguishable
 // @author Robert Munafo
-// @version 8270.66
+// @version 10078.16
 // @downloadURL http://mrob.com/time/scripts-beta/sig-contrast.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -16,14 +16,14 @@
 // np7858.45 first version, based mainly on no-tinytext
 // np8162.47 Place checkboxes below the 'WHO IS ONLINE' bit
 // np8270.66 Change title of one option
+// np10078.16 Remove some console.info statements.
 
 sig_contrast = {
 
   findAncestorById: function(elem, idName) {
-    //- console.info('fABC ' + elem.id);
-    if(new RegExp('\\b'+idName+'\\b').test(elem.id))
+    if (new RegExp('\\b'+idName+'\\b').test(elem.id)) {
       return elem;
-    else {
+    } else {
       if(elem != document.body)
         return this.findAncestorById(elem.parentNode, idName);
       return null;
@@ -86,11 +86,11 @@ sig_contrast = {
 
     // Make the checkbox for 'Green background'
     opts_div.appendChild(document.createTextNode("　　"));
-    this.make_checkbox('opt1', 'Green background', this.opt1, opts_div);
+    this.make_checkbox('o_green_bkg', 'Green background', this.o_green_bkg, opts_div);
 
     // Make the checkbox for 'Hidden'
     opts_div.appendChild(document.createTextNode("　"));
-    this.make_checkbox('opt2', 'Hide Signatures', this.opt2, opts_div);
+    this.make_checkbox('o_hide_sigs', 'Hide Signatures', this.o_hide_sigs, opts_div);
 
     container.appendChild(preDiv);
     container.appendChild(opts_div);
@@ -103,21 +103,17 @@ sig_contrast = {
     var sigs = document.getElementsByClassName('signature');
     var i; var so; var sz;
 
-    this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) }; 
-    if (typeof this.opt1 == 'undefined') {
-      this.opt1 = { val: "0" }; 
-      console.info('init this.obj1 to ' + JSON.stringify(this.opt1));
-      this.opt1.val = JSON.parse(GM_getValue('opt1', '0'));
+    this.o_green_bkg = { val: JSON.parse(GM_getValue('o_green_bkg', '0')) }; 
+    if (typeof this.o_green_bkg == 'undefined') {
+      this.o_green_bkg = { val: "0" }; 
+      this.o_green_bkg.val = JSON.parse(GM_getValue('o_green_bkg', '0'));
     };
-    console.info('init2 opt1 val ' + this.opt1.val);
 
-    this.opt2 = { val: JSON.parse(GM_getValue('opt2', '0')) }; 
-    if (typeof this.opt2 == 'undefined') {
-      this.opt2 = { val: "0" };
-      console.info('init this.obj2 to ' + JSON.stringify(this.opt2));
-      this.opt2.val = JSON.parse(GM_getValue('opt2', '0'));
+    this.o_hide_sigs = { val: JSON.parse(GM_getValue('o_hide_sigs', '0')) }; 
+    if (typeof this.o_hide_sigs == 'undefined') {
+      this.o_hide_sigs = { val: "0" };
+      this.o_hide_sigs.val = JSON.parse(GM_getValue('o_hide_sigs', '0'));
     };
-    console.info('init2 opt2 val ' + this.opt2.val);
 
     // Create the options checkboxes.
     var footer = document.getElementById("page-footer");
@@ -125,10 +121,10 @@ sig_contrast = {
     ft_par.insertBefore(this.create_checkboxen(), footer);
 
     for(i=0 ; i<sigs.length ; i++) {
-      if (this.opt1.val) {
+      if (this.o_green_bkg.val) {
         sigs[i].style.backgroundColor = '#CEC';
       }
-      if (this.opt2.val) {
+      if (this.o_hide_sigs.val) {
         sigs[i].style.display = 'none';
       }
     }
