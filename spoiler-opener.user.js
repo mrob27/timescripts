@@ -3,7 +3,7 @@
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author Robert Munafo
-// @version 8233.28
+// @version 10050.85
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -43,6 +43,7 @@
 // np8201.06 Handle a few more cases of Spoiler nested within other tags which
 //   are nested in a URL.
 // np8233.28 Fix a typo ("lavendar")
+// np10050.85 Add 'Zero Margins' option.
 
 // A sample forum page is:
 //
@@ -162,11 +163,15 @@ openallspoilers = {
 
     // Make the checkbox for 'lavender background'
     opts_div.appendChild(document.createTextNode("　　"));
-    this.make_checkbox('opt1', 'Lavender Background', this.opt1, opts_div);
+    this.make_checkbox('o_lavender', 'Lavender Background', this.o_lavender, opts_div);
 
     // Make the checkbox for '> spURLer <' option
     opts_div.appendChild(document.createTextNode("　"));
-    this.make_checkbox('opt2', 'Label SpURLer Buttons', this.opt2, opts_div);
+    this.make_checkbox('o_lbl_spurlers', 'Label SpURLer Buttons', this.o_lbl_spurlers, opts_div);
+
+    // Make the checkbox for 'Zero margins' option
+    opts_div.appendChild(document.createTextNode("　"));
+    this.make_checkbox('o_0_margins', 'Zero Margins', this.o_0_margins, opts_div);
 
     container.appendChild(preDiv);
     container.appendChild(opts_div);
@@ -181,21 +186,34 @@ openallspoilers = {
     if (recalc == 0) {
       // First time: initialize options, create the checkboxes.
 
-      this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) };
-      if (typeof this.opt1 == 'undefined') {
-          this.opt1 = { val: "0" };
-          this.opt1.val = JSON.parse(GM_getValue('opt1', '0'));
+      this.o_lavender = { val: JSON.parse(GM_getValue('o_lavender', '0')) };
+      if (typeof this.o_lavender == 'undefined') {
+          this.o_lavender = { val: "0" };
+          this.o_lavender.val = JSON.parse(GM_getValue('o_lavender', '0'));
       };
 
-      this.opt2 = { val: JSON.parse(GM_getValue('opt2', '0')) };
-      if (typeof this.opt2 == 'undefined') {
-          this.opt2 = { val: "0" };
-          this.opt2.val = JSON.parse(GM_getValue('opt2', '0'));
+      this.o_lbl_spurlers = { val: JSON.parse(GM_getValue('o_lbl_spurlers', '0')) };
+      if (typeof this.o_lbl_spurlers == 'undefined') {
+          this.o_lbl_spurlers = { val: "0" };
+          this.o_lbl_spurlers.val = JSON.parse(GM_getValue('o_lbl_spurlers', '0'));
+      };
+
+      this.o_0_margins = { val: JSON.parse(GM_getValue('o_0_margins', '0')) };
+      if (typeof this.o_0_margins == 'undefined') {
+          this.o_0_margins = { val: "0" };
+          this.o_0_margins.val = JSON.parse(GM_getValue('o_0_margins', '0'));
       };
 
       var footer = document.getElementById("page-footer");
       var ft_par = footer.parentNode;
       ft_par.insertBefore(this.create_checkboxen(), footer);
+
+      // As a service to our readers, we also eliminate that superfluous
+      // 30-pixel margin.
+      if (this.o_0_margins.val) {
+        footer = document.getElementById("wrap");
+        footer.style.padding="0";
+      }
     };
 
     for(i=0 ; i<buttons.length ; i++) {
@@ -228,7 +246,7 @@ openallspoilers = {
           // For example, see '20140224 spURLer p23427839.png' which shows how Chrome
           // handles OTT:1315:10#p3427839
           console.info('button ' + i + ' is a spURLer!');
-          if (this.opt2.val) {
+          if (this.o_lbl_spurlers.val) {
             buttons[i].value = ' > spURLer! < ';
             // Add 50 to the CSS's specified width
             buttons[i].style.width = (buttons[i].offsetWidth+50)+'px';
@@ -250,7 +268,7 @@ openallspoilers = {
           if (recalc == 0) {
             // This is the first time: open the spoilers and change the button
             myz.display = '';   // remove 'none', making it displayable
-            if (this.opt1.val) {
+            if (this.o_lavender.val) {
               myz.backgroundColor="#DDF";
             };
             buttons[i].value = 'hide';
