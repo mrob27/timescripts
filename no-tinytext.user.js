@@ -2,8 +2,8 @@
 // @namespace mrob.com
 // @name no-tinytext for OTT
 // @description Locate tiny and/or pale-colored text and make it readable
-// @author Robert Munafo (with help from azule)
-// @version 8207.75
+// @author Robert Munafo (with help from azule and balthasar_s)
+// @version 10197.50
 // @downloadURL http://mrob.com/time/scripts-beta/no-tinytext.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -34,14 +34,20 @@
 // np6294.73 The smallest sizes are still a bit too small for my liking.
 // np6317.70 Start at size 8 instead of size 9
 // np7611.06 Recognize colors 'white' and e.g. '#BFC'
-// np8162.47 Place checkboxes above the page-footer, rather than below the pope's
-//   parent node
+// np8162.47 Place checkboxes above the page-footer, rather than below the
+//   pope's parent node
 // np8207.75 Add make_checkbox function; remove console.info calls
+// np10050.10 Convert newlines to spaces for alt-text. increase size limit from
+//   59 to 65.
+// np10051.18 Rename the opts variables.
+// np10068.40 Convert <br> to space plus \n, which makes better-looking alt
+//   text (but probably only in some browsers)
+// np10197.50 Add getInnerText()
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
 //
-//   http://forums.xkcd.com/viewtopic.php?p=3448128#p3448128
+//   fora.xkcd.com/viewtopic.php?p=3448128#p3448128
 //
 // In the HTML served up by echochamber, tinytext appears within items like:
 //
@@ -50,7 +56,20 @@
 // </span>
 //
 // I have trouble reading sizes below about 50%.
-
+//
+// Here is a post that has a series of lines (footnotes) in a small size:
+//
+//   fora.xkcd.com/viewtopic.php?p=3342149#p3342149
+//
+// It is useful for testing anything that deals with multiple lines inside a
+// single [size] tag, such as the getInnerText() function that creates
+// the title text.
+//
+// Here is another that has a spoiler inside white text. We currently do not
+// handle it properly, only part of the text is noticed and changed.
+//
+//   fora.xkcd.com/viewtopic.php?p=3465549#p3465549
+//
 var pat1 = new RegExp('^[0-9]\%$');   // Match '0%' through '9%'
 var pat2 = new RegExp('^[0-5][0-9]\%$');   // Match '00%' through '59%'
 var pat3 = new RegExp('^[0-9]+\%$');   // Match any number followed by '%'
@@ -60,11 +79,11 @@ var pat4 = new RegExp('^[0-9]+');   // Match just a number at the beginning
 // A sample post containing font colours deliberately set to be as unreadable
 // as possible:
 //
-//    forums.xkcd.com/viewtopic.php?p=3340789#p3340789
+//    fora.xkcd.com/viewtopic.php?p=3340789#p3340789
 //
 // And another with a gradation from white to gray:
 //
-//    forums.xkcd.com/viewtopic.php?p=3341004#p3341004
+//    fora.xkcd.com/viewtopic.php?p=3341004#p3341004
 //
 // Regardless of the HTML, the color will appear to us as a string in
 // the syntax 'rgb(123, 234, 210)' or possibly '#80BFFF'
@@ -72,7 +91,7 @@ var pat4 = new RegExp('^[0-9]+');   // Match just a number at the beginning
 // This matches e.g. 'rgb(123, 234, 210)'
 var pc1 = new
    RegExp('rgb\\([12][0-9][0-9], [12][0-9][0-9], [12][0-9][0-9]\\)');
-// This matches the same thing but savee the three numbers, for use
+// This matches the same thing but saves the three numbers, for use
 // with .match()
 var pc2 = new
    RegExp('rgb\\(([12][0-9][0-9]), ([12][0-9][0-9]), ([12][0-9][0-9])\\)');
@@ -85,6 +104,29 @@ var pc5 = new RegExp('white');
 var gthres = 190;
 
 notinytext = {
+  /* <br> and <br /> are ignored in alt-text. This causes connecting
+   * the last word in a line with the first word in the next one. We
+   * don't want this, so we convert <br> to a space plus a newline. */
+  getInnerText: function(elem)
+  {
+    var text = elem.innerHTML
+                  .replace(/<br\s*\/?>/gi,"\n")  // <br>, <br/>, <br />
+                  .replace(/(<([^>]+)>)/gi, ""); // <foo bar="baz">
+    return text;
+
+    /* Old version of getInnerText, using a more roundabout method but
+     * not dependent on regexps.
+     *
+     * We temporarily change the contents (via its innerHTML property)
+     * then get it in text format via the textContent property; then
+     * we restore the original unaltered html. */
+    // console.info("e.ih == '" + elem.innerHTML + "'");
+    // ihtml = elem.innerHTML;
+    // elem.innerHTML = ihtml.replace(/<br\s*\/?>/g, ' \n');
+    // var text = elem.textContent;
+    // elem.innerHTML = ihtml;
+    // return text;
+  },
 
   findAncestorById: function(elem, idName) {
     if(new RegExp('\\b'+idName+'\\b').test(elem.id))
@@ -161,19 +203,19 @@ notinytext = {
 
     // Make the checkbox for 'reveal light text'
     opts_div.appendChild(document.createTextNode("　　")); // CJK space, for indentation
-    this.make_checkbox('opt1', 'Reveal Light Text', this.opt1, opts_div);
+    this.make_checkbox('o_reveal_light', 'Reveal Light Text', this.o_reveal_light, opts_div);
 
     // Make the checkbox for 'highlight light text'
     opts_div.appendChild(document.createTextNode("　"));
-    this.make_checkbox('opt4', 'Highlight Light Text', this.opt4, opts_div);
+    this.make_checkbox('o_hgl_light', 'Highlight Light Text', this.o_hgl_light, opts_div);
 
     // Make the checkbox for 'embiggen tiny text'
     opts_div.appendChild(document.createTextNode("　"));
-    this.make_checkbox('opt2', 'Embiggen TinyText', this.opt2, opts_div);
+    this.make_checkbox('o_embiggen', 'Embiggen TinyText', this.o_embiggen, opts_div);
 
     // Make the checkbox for 'highlight tiny text'
     opts_div.appendChild(document.createTextNode("　"));
-    this.make_checkbox('opt3', 'Highlight TinyText', this.opt3, opts_div);
+    this.make_checkbox('o_hgl_tiny', 'Highlight TinyText', this.o_hgl_tiny, opts_div);
 
     container.appendChild(preDiv);
     container.appendChild(opts_div);
@@ -185,28 +227,28 @@ notinytext = {
     var spans = document.getElementsByTagName('span');
     var i; var so; var sz;
 
-    this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) }; 
-    if (typeof this.opt1 == 'undefined') {
-      this.opt1 = { val: "0" }; 
-      this.opt1.val = JSON.parse(GM_getValue('opt1', '0'));
+    this.o_reveal_light = { val: JSON.parse(GM_getValue('o_reveal_light', '0')) }; 
+    if (typeof this.o_reveal_light == 'undefined') {
+      this.o_reveal_light = { val: "0" }; 
+      this.o_reveal_light.val = JSON.parse(GM_getValue('o_reveal_light', '0'));
     };
 
-    this.opt2 = { val: JSON.parse(GM_getValue('opt2', '0')) }; 
-    if (typeof this.opt2 == 'undefined') {
-      this.opt2 = { val: "0" };
-      this.opt2.val = JSON.parse(GM_getValue('opt2', '0'));
+    this.o_embiggen = { val: JSON.parse(GM_getValue('o_embiggen', '0')) }; 
+    if (typeof this.o_embiggen == 'undefined') {
+      this.o_embiggen = { val: "0" };
+      this.o_embiggen.val = JSON.parse(GM_getValue('o_embiggen', '0'));
     };
 
-    this.opt3 = { val: JSON.parse(GM_getValue('opt3', '0')) }; 
-    if (typeof this.opt3 == 'undefined') {
-      this.opt3 = { val: "0" };
-      this.opt3.val = JSON.parse(GM_getValue('opt3', '0'));
+    this.o_hgl_tiny = { val: JSON.parse(GM_getValue('o_hgl_tiny', '0')) }; 
+    if (typeof this.o_hgl_tiny == 'undefined') {
+      this.o_hgl_tiny = { val: "0" };
+      this.o_hgl_tiny.val = JSON.parse(GM_getValue('o_hgl_tiny', '0'));
     };
 
-    this.opt4 = { val: JSON.parse(GM_getValue('opt4', '0')) }; 
-    if (typeof this.opt4 == 'undefined') {
-      this.opt4 = { val: "0" };
-      this.opt4.val = JSON.parse(GM_getValue('opt4', '0'));
+    this.o_hgl_light = { val: JSON.parse(GM_getValue('o_hgl_light', '0')) }; 
+    if (typeof this.o_hgl_light == 'undefined') {
+      this.o_hgl_light = { val: "0" };
+      this.o_hgl_light.val = JSON.parse(GM_getValue('o_hgl_light', '0'));
     };
 
     // Create the options checkboxes.
@@ -215,7 +257,7 @@ notinytext = {
     ft_par.insertBefore(this.create_checkboxen(), footer);
 
     for(i=0 ; i<spans.length ; i++) {
-      if (this.opt2.val || this.opt3.val) {
+      if (this.o_embiggen.val || this.o_hgl_tiny.val) {
         if (pat3.test(spans[i].style.fontSize) )
         {
           // Get so (size original) by extracting the number before '%'
@@ -223,7 +265,7 @@ notinytext = {
 
           // mrob27's method of revealing tinytext: compute a new size
           // for the really small sizes.
-          if (this.opt2.val) {
+          if (this.o_embiggen.val) {
             sz = so;
             if (so < 100) {
               // 0->8, 50->10, 100->12
@@ -236,40 +278,46 @@ notinytext = {
           };
 
           // np5993.51: azule's method of revealing tinytext
-          if (this.opt3.val) {
+          if (this.o_hgl_tiny.val) {
             if (so < 20) {
               spans[i].style.outline = "1px dotted red";
             };
-            if (so < 60) {
-              spans[i].setAttribute('title', spans[i].textContent);
+            // For some screens and eyes, size 65 and smaller is too small
+            // to read, so we add titletext (also called "alt text" or
+            // "hovertext")
+            if (so <= 65) {
+              spans[i].setAttribute('title', notinytext.getInnerText(spans[i]));
             };
           };
         }
       }
 
-      if (this.opt1.val || this.opt4.val) {
+      if (this.o_reveal_light.val || this.o_hgl_light.val) {
         // Fix text that has a very light colour by changing the
         // background to black
         so = 0;
-        if ( pc2.test(spans[i].style.color) )
-        {
+        if (spans[i].style.color === '') {
+        } else if ( pc2.test(spans[i].style.color) ) {
           if ((RegExp.$1 > gthres) && (RegExp.$2 > gthres)
            && (RegExp.$3 > gthres))
           {
             so = 1;
           }
-        };
         // Test color again using '#80BFFF' syntax
-        if ( pc3.test(spans[i].style.color) ) { so = 1; };
-        if ( pc4.test(spans[i].style.color) ) { so = 1; };
-        if ( pc5.test(spans[i].style.color) ) { so = 1; };
+        } else if ( pc3.test(spans[i].style.color) ) {
+          so = 1;
+        } else if ( pc4.test(spans[i].style.color) ) {
+          so = 1;
+        } else if ( pc5.test(spans[i].style.color) ) {
+          so = 1;
+        }
         if (so) {
-          if (this.opt1.val) {
+          if (this.o_reveal_light.val) {
             spans[i].style.backgroundColor = '#000';
           } else {
             spans[i].style.outline = "1px dotted red";
-            spans[i].setAttribute('title', spans[i].textContent);
           }
+          spans[i].setAttribute('title', notinytext.getInnerText(spans[i]));
         }
       }
     }
