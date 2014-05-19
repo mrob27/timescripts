@@ -118,6 +118,7 @@ nanaParty = {
 
   // On NP1841 (newpix 8975.14) I solicited boom-de-yada lines from any
   // OTTers who wanted to be included
+  "AluisioASG"  : "I love chirpingmustard (.com)",  // by email, newpix 9484
   "ergman"      : "I love spur of the Mome",  // NP1842
   "Exodies"     : "I love to misconstrue",    // by PM, newpix 8979
   "ggh"         : "I love the molpish vibes", // NP1841
