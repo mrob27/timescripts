@@ -2,18 +2,14 @@
 // @namespace mrob.com
 // @name blindposter for OTT
 // @description Hide the "TOPIC REVIEW" section, so you can make a blindpost without being spoiled by anything you might see there
-// @author Robert Munafo
-// @version 8248.58
+// @author Robert Munafo and Balthasar Szczepański
+// @version 9924.26
 // @downloadURL http://mrob.com/time/scripts-beta/blindposter.user.js
 // @include http://forums.xkcd.com/posting.php*
 // @include http://fora.xkcd.com/posting.php*
 // @include http://echochamber.me/posting.php*
 // ==/UserScript==
 
-// NOTE: I could probably improve what it's doing to hide ninja posts. Right
-// now, when the ninja posts are hidden the preview of my own post is also
-// hidden.
-//
 // REVISION HISTORY:
 //
 // np7936.14 First version
@@ -23,6 +19,9 @@
 // np7980.35 Do not hide my own post preview
 // np8001.35 Remove outdated comments
 // np8248.58 Do nothing unless we're posting to the OTT (t=101043)
+// np9748.14 Try to detect the page you get from hitting the quote button
+//   (which stupidly does not contain 'f=101043')
+// np9924.26 Prevent previevninjas from appearing
 
 blindposter = {
   hideit: function(elem) {
@@ -75,10 +74,31 @@ blindposter = {
         this.hideit(inners[i]);
       }
     };
+
+    /* Ordinarily, if another person makes a post while this post was being
+       edited, the forum gives you a page that encourages you to look at
+       those posts and click Submit again. But since we're hiding the preview
+       of those other posts, the step becomes pointless. Here we prevent that
+       extra step. From Balthasar:
+          if the form fields topic_cur_post_id and lastclick are not sent, the
+       fora will not know which ninjaposts to show, and won't show any. */
+    inners = document.getElementsByName('topic_cur_post_id');
+    for(i=0 ; i<inners.length ; i++) {
+      if(   inners[i].nodeName == 'INPUT'){
+            inners[i].parentNode.removeChild(inners[i]);
+         }
+    };
+    inners = document.getElementsByName('lastclick');
+    for(i=0 ; i<inners.length ; i++) {
+      if(   inners[i].nodeName == 'INPUT'){
+            inners[i].parentNode.removeChild(inners[i]);
+         }
+    };
   }
 };
 
-if (location.href.indexOf('t=101043') != -1) {
+if (    (location.href.indexOf('t=101043') != -1)
+     || (location.href.indexOf('quote&f=7') != -1) ) {
   // 3 cases for cross-platform, cross-browser: not necessary for this
   // application but I want this code to be useful elsewhere too!
   if (window.addEventListener) {
