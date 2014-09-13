@@ -1,16 +1,17 @@
 // ==UserScript==
-// @namespace mrob.com
-// @name no-tinytext for OTT
-// @description Locate tiny and/or pale-colored text and make it readable
-// @author Robert Munafo (with help from azule and balthasar_s)
-// @version 10197.50
-// @downloadURL http://mrob.com/time/scripts-beta/no-tinytext.user.js
-// @include http://forums.xkcd.com/viewtopic.php*
-// @include http://fora.xkcd.com/viewtopic.php*
-// @include http://echochamber.me/viewtopic.php*
-// @include http://forums.xkcd.com/posting.php*
-// @include http://fora.xkcd.com/posting.php*
-// @include http://echochamber.me/posting.php*
+// @namespace    http://mrob.com/time/scripts-beta
+// @name         no-tinytext for OTT
+// @description  Locate tiny and/or pale-colored text and make it readable
+// @author       Robert Munafo (with help from azule and balthasar_s)
+// @version      10966.67
+// @downloadURL  http://mrob.com/time/scripts-beta/no-tinytext.user.js
+// @include      http://forums.xkcd.com/viewtopic.php*
+// @include      http://fora.xkcd.com/viewtopic.php*
+// @include      http://echochamber.me/viewtopic.php*
+// @include      http://forums.xkcd.com/posting.php*
+// @include      http://fora.xkcd.com/posting.php*
+// @include      http://echochamber.me/posting.php*
+// @include      http://1190.bicyclesonthemoon.dnsd.info/ott/view*
 // ==/UserScript==
 
 // REVISION HISTORY:
@@ -43,6 +44,7 @@
 // np10068.40 Convert <br> to space plus \n, which makes better-looking alt
 //   text (but probably only in some browsers)
 // np10197.50 Add getInnerText()
+// np10966.67: Work on the balthamirror (1190.bicyclesonthemoon.dnsd.info)
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
