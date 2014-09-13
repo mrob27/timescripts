@@ -1,13 +1,14 @@
 // ==UserScript==
-// @namespace mrob.com
+// @namespace http://mrob.com/time/scripts-beta
 // @name sig-contrast for OTT
 // @description  Hides signatures and/or make them easily distinguishable
 // @author Robert Munafo
-// @version 10078.16
+// @version 10966.67
 // @downloadURL http://mrob.com/time/scripts-beta/sig-contrast.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
 // @include http://echochamber.me/viewtopic.php*
+// @include http://1190.bicyclesonthemoon.dnsd.info/ott/view*
 // @run-at     document-end
 // @copyright  2014, Robert Munafo
 // ==/UserScript==
@@ -17,6 +18,7 @@
 // np8162.47 Place checkboxes below the 'WHO IS ONLINE' bit
 // np8270.66 Change title of one option
 // np10078.16 Remove some console.info statements.
+// np10966.67: Work on the balthamirror (1190.bicyclesonthemoon.dnsd.info)
 
 sig_contrast = {
 
