@@ -1,13 +1,14 @@
 // ==UserScript==
-// @namespace mrob.com
+// @namespace http://mrob.com/time/scripts-beta
 // @name We Love BANA-na-Yada for OTT
 // @description Replaces the phrase "I love BANANAS" with lines from the first "Boom-de-Yada"
 // @author Robert Munafo (words by BlitzGirl and OTTers; script inspired by Eternal Density and balthasar_s)
-// @version 9361.14
+// @version 10966.67
 // @downloadURL http://mrob.com/time/scripts-beta/we-love-banana-yada.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
 // @include http://echochamber.me/viewtopic.php*
+// @include http://1190.bicyclesonthemoon.dnsd.info/ott/view*
 // ==/UserScript==
 
 // To test on a local HTML file, add @match *://*/* above, then go into
@@ -28,6 +29,7 @@
 // np9201.88: Implement "Use Usernames" and "BANANAS" options.
 // np9224.91: Detect username when there is no avatar
 // np9361.14: Add 'Post Numbers' option.
+// np10966.67: Work on the balthamirror (1190.bicyclesonthemoon.dnsd.info)
 
 console.info("We Love BANA-na-Yada: A 'GM_getValue is not supported' message following this one is benign and results from a runtime compatibility test.");
 
@@ -104,7 +106,7 @@ nanaParty = {
   "ucim"        : "I love the whole Thread",
   "Vytron"      : "The Future's pretty cool!",
   "- 2.22"      : "Boom de yada, boom de yada",
-  "charlie_grumbles" : "ɐpɐʎ ǝp ɯooq 'ɐpɐʎ ǝp ɯooB",
+  "charlie_grumbles" : "ɐpɐʎ ǝp ɯooq 'ɐpɐʎ ǝp ɯoo𐐒",
 
   // - - - - BEGINNING OF PERSONALIZED VERSES SECTION - - - -
 
