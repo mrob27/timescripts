@@ -1,8 +1,9 @@
 // ==UserScript==
+// @namespace http://mrob.com/time/scripts-beta
 // @name newpix-converter for OTT
 // @description Converts phpBB dates into the One Time Unit: the newpix. For this to work your date format must be: "D M d, Y g:i:s a e" without the quotes.
 // @author Mrob27, Pikrass, and Smithers
-// @version 9117.43
+// @version 10966.67
 // @downloadURL http://mrob.com/time/scripts-beta/newpix-convertor.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
@@ -10,6 +11,7 @@
 // @include http://forums.xkcd.com/posting.php*
 // @include http://fora.xkcd.com/posting.php*
 // @include http://echochamber.me/posting.php*
+// @include http://1190.bicyclesonthemoon.dnsd.info/ott/view*
 // ==/UserScript==
 
 // REVISION HISTORY
@@ -24,6 +26,7 @@
 // np8549.01 Go back to '1190' method of determining if we're in OTT
 // np9035.92 Add option to act in all threads (OTTers sometimes post elesewhere)
 // np9117.43 Use cross-platform functions to load and save options settings.
+// np10966.67 Work on the balthamirror (1190.bicyclesonthemoon.dnsd.info)
 
 console.info("Newpix Converter: A 'GM_getValue is not supported' message following this one is benign and results from a runtime compatibility test.");
 
