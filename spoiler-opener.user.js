@@ -3,18 +3,13 @@
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author Robert Munafo
-// @version 12165.61
+// @version 13196.35
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
-// @include http://forums.xkcd.com/viewtopic.php*
-// @include http://fora.xkcd.com/viewtopic.php*
-// @include http://echochamber.me/viewtopic.php*
-// @include http://forums.xkcd.com/posting.php*
-// @include http://fora.xkcd.com/posting.php*
-// @include http://echochamber.me/posting.php*
-// @include http://forums.xkcd.com/search.php*
-// @include http://fora.xkcd.com/search.php*
-// @include http://echochamber.me/search.php*
-// @include http://1190.bicyclesonthemoon.dnsd.info/ott/view*
+// @include http://forums.xkcd.com/*
+// @include http://echochamber.me/*
+// @include http://fora.xkcd.com/*
+// @include http://1190.bicyclesonthemoon.dnsd.info/ott*
+// @include http://moonbase.chirpingmustard.com/ott*
 // ==/UserScript==
 
 // REVISION HISTORY:
@@ -56,6 +51,10 @@
 //   changes by some other means.
 // np11641.26 Neaten up the code a little
 // np12165.61 Try harder to change spURLer buttons' text
+// np13078.01 Work when viewing PMs
+// np13115.92 Broaden balthamirror match pattern
+// np13128.24 Add moonbase.chirpingmustard.com
+// np13196.35 Slightly broader match pattern for the two balthasar sites
 
 // A sample forum page is:
 //
