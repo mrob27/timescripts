@@ -1,5 +1,5 @@
 // ==UserScript==
-// @namespace mrob.com
+// @namespace http://mrob.com/time/scripts-beta
 // @name Facebook-no-sidebar
 // @description Remove sidebar in Facebook
 // @author Robert Munafo
@@ -20,7 +20,7 @@
 var ttd;
 var del;
 
-openallspoilers = {
+fbnochat = {
 
   // I'd like to know about cross-browser support for console.log(). Until
   // then, this is my replacement.
@@ -44,7 +44,7 @@ openallspoilers = {
     // runs one more time with an interval of 2000.
     if (ttd > 0) {
       recalc = 1;
-      setTimeout(openallspoilers.convert.bind(openallspoilers), del);
+      setTimeout(fbnochat.convert.bind(fbnochat), del);
       ttd -= 1;
       // Go to the next-higher delay interval
       if         (del <= 1011) { del = 9111;     }
@@ -64,10 +64,10 @@ ttd = 3; del = 1011;
 // application but I want this code to be useful elsewhere too!
 if (window.addEventListener) {
   window.addEventListener('DOMContentLoaded', // was 'load',
-    openallspoilers.convert.bind(openallspoilers), false);
+    fbnochat.convert.bind(fbnochat), false);
 } else if (window.attachEvent) {
   window.attachEvent('onload',
-    openallspoilers.convert.bind(openallspoilers));
+    fbnochat.convert.bind(fbnochat));
 } else {
-  openallspoilers.convert(openallspoilers);
+  fbnochat.convert(fbnochat);
 };
