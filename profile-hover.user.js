@@ -1,13 +1,14 @@
 // ==UserScript==
-// @namespace mrob.com
+// @namespace http://mrob.com/time/scripts-beta
 // @name profile-hover for OTT
 // @description  Makes the profile info stay on screen when you scroll through a post.
 // @author Ondrej Mosnáček and Robert Munafo
-// @version 7661.48
+// @version 10966.67
 // @downloadURL http://mrob.com/time/scripts-beta/profile-hover.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
 // @include http://echochamber.me/viewtopic.php*
+// @include http://1190.bicyclesonthemoon.dnsd.info/ott/view*
 // @require    http://zeptojs.com/zepto.min.js
 // @run-at     document-end
 // @copyright  2013+, Ondrej Mosnáček
@@ -18,6 +19,7 @@
 // np3254.62 re-posted in OTT:1323:25#p3429300
 //
 // np7661.48 Clean up formatting; add lots of comments
+// np10966.67 Work on the balthamirror (1190.bicyclesonthemoon.dnsd.info)
 
 /* Get every <div class="post"> and extract the <div class="postbody"> and
    <div class="postprofile">, and put all into an array that we can walk

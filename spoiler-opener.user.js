@@ -1,16 +1,15 @@
 // ==UserScript==
-// @namespace mrob.com
+// @namespace http://mrob.com/time/scripts-beta
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author Robert Munafo
-// @version 10050.85
+// @version 13196.35
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
-// @include http://forums.xkcd.com/viewtopic.php*
-// @include http://fora.xkcd.com/viewtopic.php*
-// @include http://echochamber.me/viewtopic.php*
-// @include http://forums.xkcd.com/posting.php*
-// @include http://fora.xkcd.com/posting.php*
-// @include http://echochamber.me/posting.php*
+// @include http://forums.xkcd.com/*
+// @include http://echochamber.me/*
+// @include http://fora.xkcd.com/*
+// @include http://1190.bicyclesonthemoon.dnsd.info/ott*
+// @include http://moonbase.chirpingmustard.com/ott*
 // ==/UserScript==
 
 // REVISION HISTORY:
@@ -44,6 +43,18 @@
 //   are nested in a URL.
 // np8233.28 Fix a typo ("lavendar")
 // np10050.85 Add 'Zero Margins' option.
+// np10937.15 Work on search.php pages.
+// np10966.08 If possible, identify href target in URL and scroll to it
+// np10966.67 Work on the balthamirror (1190.bicyclesonthemoon.dnsd.info)
+// np11640.04 Enforce scrolling to the user's target location as long as
+//   the target location keeps changing, but until document.body.scrollTop
+//   changes by some other means.
+// np11641.26 Neaten up the code a little
+// np12165.61 Try harder to change spURLer buttons' text
+// np13078.01 Work when viewing PMs
+// np13115.92 Broaden balthamirror match pattern
+// np13128.24 Add moonbase.chirpingmustard.com
+// np13196.35 Slightly broader match pattern for the two balthasar sites
 
 // A sample forum page is:
 //
@@ -82,10 +93,6 @@
 //
 // Therefore, we can open all spoilers by finding all buttons labeled "Show"
 // and running the "this.parentNode. ... .style.display = '';" on each one.
-
-var ttd;
-var del;
-var recalc;
 
 openallspoilers = {
 
@@ -183,37 +190,35 @@ openallspoilers = {
     var buttons = document.getElementsByTagName('input');
     var i;
 
-    if (recalc == 0) {
-      // First time: initialize options, create the checkboxes.
+    // First time: initialize options, create the checkboxes.
 
-      this.o_lavender = { val: JSON.parse(GM_getValue('o_lavender', '0')) };
-      if (typeof this.o_lavender == 'undefined') {
-          this.o_lavender = { val: "0" };
-          this.o_lavender.val = JSON.parse(GM_getValue('o_lavender', '0'));
-      };
+    this.o_lavender = { val: JSON.parse(GM_getValue('o_lavender', '0')) };
+    if (typeof this.o_lavender == 'undefined') {
+        this.o_lavender = { val: "0" };
+        this.o_lavender.val = JSON.parse(GM_getValue('o_lavender', '0'));
+    };
 
-      this.o_lbl_spurlers = { val: JSON.parse(GM_getValue('o_lbl_spurlers', '0')) };
-      if (typeof this.o_lbl_spurlers == 'undefined') {
-          this.o_lbl_spurlers = { val: "0" };
-          this.o_lbl_spurlers.val = JSON.parse(GM_getValue('o_lbl_spurlers', '0'));
-      };
+    this.o_lbl_spurlers = { val: JSON.parse(GM_getValue('o_lbl_spurlers', '0')) };
+    if (typeof this.o_lbl_spurlers == 'undefined') {
+        this.o_lbl_spurlers = { val: "0" };
+        this.o_lbl_spurlers.val = JSON.parse(GM_getValue('o_lbl_spurlers', '0'));
+    };
 
-      this.o_0_margins = { val: JSON.parse(GM_getValue('o_0_margins', '0')) };
-      if (typeof this.o_0_margins == 'undefined') {
-          this.o_0_margins = { val: "0" };
-          this.o_0_margins.val = JSON.parse(GM_getValue('o_0_margins', '0'));
-      };
+    this.o_0_margins = { val: JSON.parse(GM_getValue('o_0_margins', '0')) };
+    if (typeof this.o_0_margins == 'undefined') {
+        this.o_0_margins = { val: "0" };
+        this.o_0_margins.val = JSON.parse(GM_getValue('o_0_margins', '0'));
+    };
 
-      var footer = document.getElementById("page-footer");
-      var ft_par = footer.parentNode;
-      ft_par.insertBefore(this.create_checkboxen(), footer);
+    var footer = document.getElementById("page-footer");
+    var ft_par = footer.parentNode;
+    ft_par.insertBefore(this.create_checkboxen(), footer);
 
-      // As a service to our readers, we also eliminate that superfluous
-      // 30-pixel margin.
-      if (this.o_0_margins.val) {
-        footer = document.getElementById("wrap");
-        footer.style.padding="0";
-      }
+    // As a service to our readers, we also eliminate that superfluous
+    // 30-pixel margin.
+    if (this.o_0_margins.val) {
+      footer = document.getElementById("wrap");
+      footer.style.padding="0";
     };
 
     for(i=0 ; i<buttons.length ; i++) {
@@ -223,6 +228,8 @@ openallspoilers = {
         var myp =
           buttons[i]       // <input type="button" value="Show"  ...
           .parentNode;     // <div class="quotetitle">
+        var btext = 'hide';
+        var bwid = 100;
 
         var mygp = myp.parentNode;  // <div style="margin:20px; margin-top:5px">
                                     // or <a href="..." class="postlink">
@@ -238,6 +245,8 @@ openallspoilers = {
           mygp
           .getElementsByTagName('div')[1]; // <div class="quotecontent">
 
+        bwid = buttons[i].offsetWidth;
+
         if ( (mygp.tagName == 'A') || (myggp.tagName == 'A')
           || (myg3p.tagName == 'A') || (myg4p.tagName == 'A')
           || (myg5p.tagName == 'A'))
@@ -247,9 +256,11 @@ openallspoilers = {
           // handles OTT:1315:10#p3427839
           console.info('button ' + i + ' is a spURLer!');
           if (this.o_lbl_spurlers.val) {
-            buttons[i].value = ' > spURLer! < ';
+            btext = ' > spURLer! < ';
+            buttons[i].value = btext;
             // Add 50 to the CSS's specified width
-            buttons[i].style.width = (buttons[i].offsetWidth+50)+'px';
+            bwid += 50;
+            buttons[i].style.width = bwid+'px';
           };
 
           if (mygp.tagName == 'A') {
@@ -265,14 +276,13 @@ openallspoilers = {
             .getElementsByTagName('div')[0] // <div style="display: none;">
             .style;
 
-          if (recalc == 0) {
-            // This is the first time: open the spoilers and change the button
-            myz.display = '';   // remove 'none', making it displayable
-            if (this.o_lavender.val) {
-              myz.backgroundColor="#DDF";
-            };
-            buttons[i].value = 'hide';
-          }
+          // This is the first time: open the spoilers and change the button
+          myz.display = '';   // remove 'none', making it displayable
+          if (this.o_lavender.val) {
+            myz.backgroundColor="#DDF";
+          };
+          buttons[i].value = btext;
+          buttons[i].style.width = bwid+'px';
 
           // The following does not show an accurate height if the spoiler
           // contains images, but it at least works when it contains text.
@@ -298,34 +308,21 @@ openallspoilers = {
         }
       }
     }
-
-    // Because myx.clientHeight is sometimes not updated properly (e.g.
-    // Chrome v29 when myx contains newly-loaded images) the global 'ttd'
-    // will be set if we need to wait a while and re-run this function.
-    if (ttd > 0) {
-      recalc = 1;
-      setTimeout(openallspoilers.convert.bind(openallspoilers), del);
-      ttd -= 1;
-      // Go to the next-higher delay interval
-      if (del <= 1011) {
-        del = 9111;
-      } else if (del <= 9111) {
-        del = 100235;
-      } else if (del <= 100235) {
-        del = 1303071;
-      } else if (del <= 1303071) {
-        del = 19546083;
-      };
-    }
   }
 };
 
-// Make it run itself a few more times, because 'load', 'onload', and
-// 'DOMContentLoaded' events all fail to wait long enough for the
-// myx.clientHeight property to be correct if myx contains newly-loaded
-// images, and because images sometimes take a ch*rping long time to load.
-ttd = 3; del = 1011;
-recalc = 0;
+var get_tloc = function() {
+  var h1 = location.href.split("#")[1];
+  if (typeof h1 === 'string') {
+    if (h1 !== '') {
+      var target = document.getElementById(h1);
+      if (target) {
+        return target.offsetTop;
+      }
+    }
+  }
+  return 0;
+};
 
 // 3 cases for cross-platform, cross-browser: not necessary for this
 // application but I want this code to be useful elsewhere too!
@@ -338,3 +335,57 @@ if (window.addEventListener) {
 } else {
   openallspoilers.convert(openallspoilers);
 };
+
+var old_tloc = get_tloc();
+var old_dst = document.body.scrollTop;
+
+// Because myx.clientHeight is sometimes not updated properly (e.g.
+// Chrome v29 when myx contains newly-loaded images) the global 'ttd'
+// will be set if we need to wait a while and re-run this function.
+var mont = 1000;
+
+// Make it run itself a few more times, because 'load', 'onload', and
+// 'DOMContentLoaded' events all fail to wait long enough for the
+// myx.clientHeight property to be correct if myx contains newly-loaded
+// images, and because images sometimes take a ch*rping long time to load.
+var ttd = 10;
+
+var old_msg = '';
+var msg = function(s)
+{
+  if (s !== old_msg) {
+    console.info(s);
+    old_msg = s;
+  };
+};
+
+var mon = function() {
+  var t2 = get_tloc();
+  var d2 = document.body.scrollTop;
+  msg('dst = ' + d2 + ', tgtloc = ' + t2);
+
+  if (mont > 0) {
+    /* Because of opening all the spoilers, we're usually not on the message
+     * that we want to be on. If there is a hash in the URL, we'll try to
+     * locate the message and scroll to it. */
+    if ((d2 == old_dst) && (d2 != t2)) {
+      document.body.scrollTop = t2;
+      msg('set dst to ' + t2);
+      d2 = t2;
+      old_dst = t2;
+    }
+    if ((ttd <=0) && (d2 != old_dst)) {
+      msg('dst = ' + d2 + ', old = ' + old_dst + ': stopping.');
+      mont = 0;
+    };
+
+    ttd--;
+    mont--;
+    setTimeout(mon, 100);
+  };
+    
+  old_tloc = t2;
+  old_dst = d2;
+};
+
+setTimeout(mon, 100);
