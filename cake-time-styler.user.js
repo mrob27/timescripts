@@ -1,5 +1,5 @@
 // ==UserScript==
-// @namespace time.aasg.name
+// @namespace http://mrob.com/time/scripts-beta
 // @name cake-time-styler for OTT
 // @version 6459.51
 // @description Restyle the post count of people nearby Cake Time
