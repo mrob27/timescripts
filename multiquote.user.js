@@ -1,5 +1,5 @@
 // ==UserScript==
-// @namespace mrob.com
+// @namespace http://mrob.com/time/scripts-beta
 // @name multiquote for OTT
 // @description Changes quote buttons behaviour to quote multiple messages
 // @author Pikrass and mrob27
@@ -98,12 +98,12 @@ multiquote = {
 
     // Make the checkbox for
     opts_div.appendChild(document.createTextNode("　　"));
-    this.make_checkbox('opt1', 'Highlight Quoted Name in Blue', this.opt1, opts_div);
+    this.make_checkbox('o_hil_blue', 'Highlight Quoted Name in Blue', this.o_hil_blue, opts_div);
 
     // Make the checkbox for
     opts_div.appendChild(document.createTextNode("　"));
-    this.make_checkbox('opt2', 'Include Quoted Text In Edit Area',
-                                                                this.opt2, opts_div);
+    this.make_checkbox('o_incl_quoted', 'Include Quoted Text In Edit Area',
+                                                                this.o_incl_quoted, opts_div);
 
     container.appendChild(preDiv);
     container.appendChild(opts_div);
@@ -113,16 +113,16 @@ multiquote = {
 
   // Initialize options
   init_options: function() {
-    this.opt1 = { val: JSON.parse(GM_getValue('opt1', '0')) };
-    if (typeof this.opt1 == 'undefined') {
-      this.opt1 = { val: "0" };
-      this.opt1.val = JSON.parse(GM_getValue('opt1', '0'));
+    this.o_hil_blue = { val: JSON.parse(GM_getValue('o_hil_blue', '0')) };
+    if (typeof this.o_hil_blue == 'undefined') {
+      this.o_hil_blue = { val: "0" };
+      this.o_hil_blue.val = JSON.parse(GM_getValue('o_hil_blue', '0'));
     };
 
-    this.opt2 = { val: JSON.parse(GM_getValue('opt2', '0')) };
-    if (typeof this.opt2 == 'undefined') {
-      this.opt2 = { val: "0" };
-      this.opt2.val = JSON.parse(GM_getValue('opt2', '0'));
+    this.o_incl_quoted = { val: JSON.parse(GM_getValue('o_incl_quoted', '0')) };
+    if (typeof this.o_incl_quoted == 'undefined') {
+      this.o_incl_quoted = { val: "0" };
+      this.o_incl_quoted.val = JSON.parse(GM_getValue('o_incl_quoted', '0'));
     };
   },
 
@@ -171,7 +171,7 @@ multiquote = {
        editable after this HTTP request finishes. To avoid having another text
        box appear at an unpredictable time, it would need to be initially
        hidden and you'd have to click a Spoiler-button to make it visible. */
-    req.open('get', link.quoteUrl, (this.opt2.val == 0));
+    req.open('get', link.quoteUrl, (this.o_incl_quoted.val == 0));
     req.send();
     link.style.backgroundImage = 'url("'+GM_getResourceURL('quote_waiting')+'")';
 
@@ -187,7 +187,7 @@ multiquote = {
     var end = req.responseText.indexOf('</textarea>', beg);
     var str = req.responseText.substring(beg, end);
 
-    if (this.opt1.val) {
+    if (this.o_hil_blue.val) {
       str = str.replace(/(\[quote=&quot;)([^&]+)(&quot;\])/,
                         "$1\[color=#00C]$2\[/color]$3");
       // console.info("s2 is '" + str + "'");
@@ -218,7 +218,7 @@ multiquote = {
 
     var area = document.createElement('textarea');
     area.className = 'multiquote-reply';
-    if (this.opt2.val) {
+    if (this.o_incl_quoted.val) {
       /* RPM 2013-10-27: Fill the reply with the quote-text, so that the user
        * can remove unwanted text right away */
       area.value = this.quotes[pId].quote.replace(/&quot;/gmi, '"')
@@ -249,7 +249,8 @@ multiquote = {
     div.appendChild(container);
   },
 
-  showReplyArea: function(link, div) {
+  showReplyArea: function(link, div)
+  {
     div.lastChild.style.display = '';
 
     link.removeEventListener('click', link.eventListener);
@@ -257,7 +258,8 @@ multiquote = {
     link.addEventListener('click', link.eventListener, false);
   },
 
-  hideReplyArea: function(link, div) {
+  hideReplyArea: function(link, div)
+  {
     div.lastChild.style.display = 'none';
 
     link.removeEventListener('click', link.eventListener);
@@ -265,7 +267,8 @@ multiquote = {
     link.addEventListener('click', link.eventListener, false);
   },
 
-  onAreaChange: function(area, but) {
+  onAreaChange: function(area, but)
+  {
     but.value = 'Save';
     but.disabled = false;
   },
@@ -273,7 +276,8 @@ multiquote = {
   /* addReply is called when the user clicks the "Save" button;
    * it saves the contents of the textarea into this.quotes[num].reply
    * note that 'num' is eqivalent to 'pId' seen in makeReplyArea */
-  addReply: function(area, num, but) {
+  addReply: function(area, num, but)
+  {
     if(typeof this.quotes[num] == 'undefined') {
       this.quotes[num] = {}; // This is *absolutely* thread-safe :D
     }
@@ -287,7 +291,8 @@ multiquote = {
     but.disabled = true;
   },
 
-  dumpQuotes: function() {
+  dumpQuotes: function()
+  {
     this.init();
     this.init_options();
 
@@ -306,27 +311,31 @@ multiquote = {
     saveButton.addEventListener('click', this.flush.bind(this));
   },
 
-  flush: function() {
+  flush: function()
+  {
     this.quotes = {};
     GM_deleteValue('quotes');
   },
 
-  aggregateQuotes: function() {
+  aggregateQuotes: function()
+  {
     var s = '';
     var i;
-    for(i in this.quotes) {
-      if(s != '')
+    for (i in this.quotes) {
+      if (s != '') {
         s += "\n\n";
+      }
 
-      if (this.opt2.val) {
+      if (this.o_incl_quoted.val) {
         /* RPM 2013-10-27: Since we now put the quote text into the reply
          * we no longer want to add it here. */
       } else {
         s += this.quotes[i].quote;
       };
 
-      if(this.quotes[i].reply)
+      if (this.quotes[i].reply) {
         s += "\n" + this.quotes[i].reply;
+      }
     }
 
     return s;
