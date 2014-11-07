@@ -1,4 +1,5 @@
 // ==UserScript==
+// @namespace http://mrob.com/time/scripts-beta
 // @name frame-linker for OTT
 // @copyright 2013+, Aluisio Augusto Silva Goncalves
 // @copyright 2014, Robert Munafo (mrob27)
