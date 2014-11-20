@@ -3,7 +3,7 @@
 // @name Facebook-no-sidebar
 // @description Remove sidebar in Facebook
 // @author Robert Munafo
-// @version 6754.08
+// @version 20141119.1122
 // @downloadURL http://mrob.com/time/scripts-beta/facebook-no-sidebar.user.js
 // @include http://*.facebook.com/*
 // @include https://*.facebook.com/*
@@ -13,15 +13,15 @@
 
 // REVISION HISTORY:
 //
-// np6753.56 First version
-// np6753.85 Match https domains, and 'pagelet_rhc_ticker' ID
-// np6754.08 Fix syntax errors.
+// 20131226.1233 First version
+// 20131226.1251 Match https domains, and 'pagelet_rhc_ticker' ID
+// 20131226.1304 Fix syntax errors.
+// 20141119.1122 Add debugging messages.
 
 var ttd;
 var del;
 
 fbnochat = {
-
   // I'd like to know about cross-browser support for console.log(). Until
   // then, this is my replacement.
   //
@@ -32,13 +32,22 @@ fbnochat = {
   },
 
   convert: function() {
+    console.info("fbnochat checking...");
     var sidebar = document.getElementById("pagelet_sidebar");
-    if (sidebar) { sidebar.style.display="none"; }
+    console.info("pagelet_sidebar: " + sidebar);
+    if (sidebar) {
+      console.info("sb.sty.disp='" + sidebar.style.display + "'");
+      sidebar.style.display="none";
+    }
 
     // Matching 'pagelet_rhc_ticker' from a similar script by Eyal
     // Shahar (@eyalshahar)
     sidebar = document.getElementById('pagelet_rhc_ticker');
-    if(sidebar) { sidebar.style.display="none"; }
+    console.info("pagelet_rhc_ticker: " + sidebar);
+    if (sidebar) {
+      console.info("sb.sty.disp='" + sidebar.style.display + "'");
+      sidebar.style.display="none";
+    }
 
     // Run myself again a couple more times. Eyal Shahar's version just
     // runs one more time with an interval of 2000.
@@ -47,10 +56,15 @@ fbnochat = {
       setTimeout(fbnochat.convert.bind(fbnochat), del);
       ttd -= 1;
       // Go to the next-higher delay interval
-      if         (del <= 1011) { del = 9111;     }
-      else if    (del <= 9111) { del = 100235;   }
-      else if  (del <= 100235) { del = 1303071;  }
-      else if (del <= 1303071) { del = 19546083; }
+      if (del <= 1011) {
+        del = 2011;
+      } else if (del <= 2011) {
+        del = 3111; 
+      } else if  (del <= 3111) {
+        del = 9111;
+      } else if (del <= 9111) {
+        del = 100235;
+      };
     }
   }
 };
@@ -64,10 +78,10 @@ ttd = 3; del = 1011;
 // application but I want this code to be useful elsewhere too!
 if (window.addEventListener) {
   window.addEventListener('DOMContentLoaded', // was 'load',
-    fbnochat.convert.bind(fbnochat), false);
+              fbnochat.convert.bind(fbnochat), false);
 } else if (window.attachEvent) {
   window.attachEvent('onload',
-    fbnochat.convert.bind(fbnochat));
+             fbnochat.convert.bind(fbnochat));
 } else {
   fbnochat.convert(fbnochat);
 };
