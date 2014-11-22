@@ -22,17 +22,8 @@ var ttd;
 var del;
 
 fbnochat = {
-  // I'd like to know about cross-browser support for console.log(). Until
-  // then, this is my replacement.
-  //
-  log: function (msg) {
-    setTimeout(function() {
-      throw new Error(msg);
-    }, 0);
-  },
-
   convert: function() {
-    console.info("fbnochat checking...");
+    console.info("fbnochat checking (ttd " + ttd + ")...");
     var sidebar = document.getElementById("pagelet_sidebar");
     console.info("pagelet_sidebar: " + sidebar);
     if (sidebar) {
