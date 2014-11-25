@@ -3,12 +3,12 @@
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author Robert Munafo
-// @version 13196.35
+// @version 14757.49
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
 // @include http://forums.xkcd.com/*
 // @include http://echochamber.me/*
 // @include http://fora.xkcd.com/*
-// @include http://1190.bicyclesonthemoon.dnsd.info/ott*
+// @include http://1190.bicyclesonthemoon.info/ott*
 // @include http://moonbase.chirpingmustard.com/ott*
 // ==/UserScript==
 
@@ -55,6 +55,7 @@
 // np13115.92 Broaden balthamirror match pattern
 // np13128.24 Add moonbase.chirpingmustard.com
 // np13196.35 Slightly broader match pattern for the two balthasar sites
+// np14757.49 Remove 'dnsd' from bicyclesonthemoon hostname
 
 // A sample forum page is:
 //

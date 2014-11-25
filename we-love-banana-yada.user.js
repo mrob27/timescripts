@@ -3,12 +3,12 @@
 // @name We Love BANA-na-Yada for OTT
 // @description Replaces the phrase "I love BANANAS" with lines from the first "Boom-de-Yada"
 // @author Robert Munafo (words by BlitzGirl and OTTers; script inspired by Eternal Density and balthasar_s)
-// @version 10966.67
+// @version 14757.49
 // @downloadURL http://mrob.com/time/scripts-beta/we-love-banana-yada.user.js
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
 // @include http://echochamber.me/viewtopic.php*
-// @include http://1190.bicyclesonthemoon.dnsd.info/ott/view*
+// @include http://1190.bicyclesonthemoon.info/ott/view*
 // ==/UserScript==
 
 // To test on a local HTML file, add @match *://*/* above, then go into
@@ -30,6 +30,7 @@
 // np9224.91: Detect username when there is no avatar
 // np9361.14: Add 'Post Numbers' option.
 // np10966.67: Work on the balthamirror (1190.bicyclesonthemoon.dnsd.info)
+// np14757.49 Remove 'dnsd' from bicyclesonthemoon hostname
 
 console.info("We Love BANA-na-Yada: A 'GM_getValue is not supported' message following this one is benign and results from a runtime compatibility test.");
 
