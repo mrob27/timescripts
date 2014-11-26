@@ -3,8 +3,9 @@
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author Robert Munafo
-// @version 14757.49
+// @version 14771.07
 // @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
+// @include http://www.forums.xkcd.com/*
 // @include http://forums.xkcd.com/*
 // @include http://echochamber.me/*
 // @include http://fora.xkcd.com/*
@@ -56,6 +57,7 @@
 // np13128.24 Add moonbase.chirpingmustard.com
 // np13196.35 Slightly broader match pattern for the two balthasar sites
 // np14757.49 Remove 'dnsd' from bicyclesonthemoon hostname
+// np14771.07 Add www.forums.xkcd.com
 
 // A sample forum page is:
 //
