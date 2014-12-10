@@ -35,6 +35,12 @@ nobell = {
           ancs[i].style.display="none";
         }
       }
+      lab = ancs[i].getAttribute("aria-haspopup");
+      if (lab) {
+        if (lab === "true") {
+          ancs[i].style.display="none";
+        }
+      }
     }
 
     // Run myself again a couple more times. Eyal Shahar's version just
@@ -44,10 +50,15 @@ nobell = {
       setTimeout(nobell.convert.bind(nobell), del);
       ttd -= 1;
       // Go to the next-higher delay interval
-      if         (del <= 1011) { del = 9111;     }
-      else if    (del <= 9111) { del = 100235;   }
-      else if  (del <= 100235) { del = 1303071;  }
-      else if (del <= 1303071) { del = 19546083; }
+      if (del <= 1011) {
+        del = 9111;
+      } else if (del <= 9111) {
+        del = 100235;
+      } else if (del <= 100235) {
+        del = 1303071;
+      } else if (del <= 1303071) {
+        del = 19546083;
+      }
     }
   }
 };
