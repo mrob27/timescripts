@@ -22,6 +22,8 @@
 //   also cause the random Timeframe to appear.
 // 6459.51 add xkcd color names to comments (from the survey results at
 //   http://xkcd.com/color/rgb/ )
+// 17421.01 add 9111 to the sequence of postcounts resulting in a *Time* frame avatar.
+//
 (function(){
   var a,b,c,d;
   a="101043",
@@ -58,7 +60,7 @@
                                   water blue */
         /* If post count is 1190, or a few other values special to mrob27,
            replace their avatar with a random frame of Time */
-        (27===d||143===d||1011===d||1190===d)
+        (27===d||143===d||1011===d||1190===d||9111===d)
            &&(f=c('ancestor::*[@class="postprofile"]//img[@alt="User avatar"]',
                     XPathResult.FIRST_ORDERED_NODE_TYPE,a),
               f.src="http://xkcd.mscha.org/frame/random")},
