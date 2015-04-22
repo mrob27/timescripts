@@ -1,0 +1,168 @@
+/* @namespace url('http://www.w3.org/1999/xhtml');
+
+@-moz-document
+  url-prefix('http://forums.xkcd.com/viewtopic.php'),
+  url-prefix('http://fora.xkcd.com/viewtopic.php'),
+  url-prefix('http://echochamber.me/viewtopic.php'),
+  url-prefix('http://www.forums.xkcd.com/viewtopic.php'),
+  url-prefix('http://www.echochamber.me/viewtopic.php')
+{ */
+
+/* Clean theme for the phpBB forums, to be used over the "prosilver"
+ * (not "prosilver_left") theme.
+ * based on 'Dark' theme by Aluísio Augusto Silva Gonçalves. */
+
+.headerbar {
+  display: none !important;
+}
+
+body {
+  background-color: #e8e8f0;
+}
+
+#wrap {
+  padding: 0;
+}
+
+#page-body a {
+  color: #006 !important;
+}
+
+#page-body label {
+  color: #060 !important;
+}
+
+#page-body strong,
+#page-body em {
+  color: #000 !important;
+}
+
+/* Hide blank round corners. */
+span.corners-top,
+span.corners-bottom,
+span.corners-top span,
+span.corners-bottom span {
+  background-image: none !important;
+}
+
+.post {
+/* Set post background color and disable inter-post margin. */
+  background-color: #fff !important;
+  border-top: 1px solid #888;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.post blockquote,
+.post .attachbox {
+  background-color: rgba(240,240,255,0.50) !important;
+  color: #000 !important;
+}
+
+.post .signature {
+  background-color: rgba(230,255,230,0.5) !important;
+}
+
+.post.bg1,
+.post.bg2 {
+/* Disable post background colors.
+  background-color: transparent !important; */
+}
+
+.post .postprofile,
+.post .postbody,
+.post .content {
+  font-family: "Cambria", "Averia Serif", "Rockwell", "Lucida Bright", "Times", serif;
+  color: #000 !important;
+}
+
+/* These are the little boxed numbers used to navigate to adjacent pages */
+.pagination span a {
+  background-color: #FFF !important;
+  color: #000;
+  font-weight: bold !important;
+}
+
+.pagination span strong {
+  background-color: #EEF !important;
+}
+
+/* Move the icons bar to the right. */
+.profile-icons {
+  border-right: 0 !important;
+  /* float: right !important; */
+}
+
+.edit-icon,
+.delete-icon,
+.report-icon,
+.quote-icon {
+  margin: 0 3px !important;
+  background-repeat: no-repeat !important;
+/* Remove the background image for the action's link. */
+}
+
+.edit-icon a,
+.delete-icon a,
+.report-icon a,
+.quote-icon a {
+  background: none !important;
+}
+
+
+/* Set the icons for each action.
+.edit-icon {
+  background-image: url("http://time.aasg.name/forum-theme/edit.png") !important;
+  width: 20px !important;
+}
+.delete-icon {
+  background-image: url("http://time.aasg.name/forum-theme/delete.png") !important;
+  width: 22px !important;
+}
+.quote-icon {
+  background-image: url("http://time.aasg.name/forum-theme/quote.png") !important;
+  width: 20px !important;
+}
+.report-icon {
+  background-image: url("http://time.aasg.name/forum-theme/report.png") !important;
+  width: 22px !important;
+}
+*/
+
+a.top {
+/* Remove the “back to top” link.  It's still there, but you can't
+	 * see it anymore.
+	 */
+  background: none !important;
+}
+
+/* Remove the quote icon. */
+.post blockquote {
+  background-image: none !important;
+}
+
+/* Add a quotation mark after the citation or before the quote. */
+.post blockquote div > cite::after
+/* , .post blockquote.uncited div::before */
+{
+  content: ' “' !important;
+  display: inline !important;
+  font-size: 150% !important;
+}
+
+.post blockquote cite {
+  margin-left: auto !important;
+}
+
+.post blockquote.uncited {
+  padding-top: 5px !important;
+}
+
+/* Add a horizontal scroll-bar to any post that has wide images, very long
+   words, or anything else that cannot be seen without a very wide monitor */
+.content {
+  overflow: auto !important;
+}
+
+/* } */
+
