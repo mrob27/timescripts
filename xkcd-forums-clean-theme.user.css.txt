@@ -63,10 +63,10 @@ span.corners-bottom span {
   background-color: rgba(230,255,230,0.5) !important;
 }
 
-.post.bg1,
-.post.bg2 {
-/* Disable post background colors.
-  background-color: transparent !important; */
+.post.bg1, .post.bg2
+{
+  /* Disable post background colors. */
+  background-color: #fff !important;
 }
 
 .post .postprofile,
