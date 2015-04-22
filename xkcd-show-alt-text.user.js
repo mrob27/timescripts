@@ -8,9 +8,11 @@
 // @include     http://xkcd.com/*
 // @include     http://www.xkcd.com/*
 // @include     http://what-if.xkcd.com/*
+// @include     http://www.xkcd.net/*
 // @include     https://xkcd.com/*
 // @include     https://www.xkcd.com/*
 // @include     https://what-if.xkcd.com/*
+// @include     https://www.xkcd.net/*
 // ==/UserScript==
 
 // REVISION HISTORY:
@@ -18,6 +20,7 @@
 // np11052.88: First version.
 // np11618.09: Work on https URLs
 // np11882.18: Add "www.xkcd.com"
+// np15884.13: Add "www.xkcd.net"
 
 showAltText = function (D)
 {
