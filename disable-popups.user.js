@@ -7,6 +7,9 @@
 // @downloadURL http://mrob.com/time/scripts-beta/disable-popups.user.js
 // @run-at document-start
 // ==/UserScript==
+//
+// Source:
+//   superuser.com/questions/455863/how-can-i-disable-javascript-popups-alerts-in-chrome
 
 addJS_Node (null, null, overrideSelectNativeJS_Functions);
 
@@ -16,8 +19,8 @@ function overrideSelectNativeJS_Functions ()
     console.log ('alert(' . message . ')'); }
   window.confirm = function confirm (message) {
     console.log ('confirm(' . message . ')'); }
-  window.prompt = function prompt (message) {
-    console.log ('prompt(' . message . ')'); }
+  window.prompt = function prompt (message, defmsg) {
+    console.log ('prompt(' . message . ', ' . defmsg . ')'); }
 }
 
 function addJS_Node (text, s_URL, funcToRun) {
