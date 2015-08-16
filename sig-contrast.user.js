@@ -1,16 +1,18 @@
 // ==UserScript==
-// @namespace http://mrob.com/time/scripts-beta
-// @name sig-contrast for OTT
+// @namespace    http://mrob.com/time/scripts-beta
+// @name         sig-contrast for OTT
 // @description  Hides signatures and/or make them easily distinguishable
-// @author Robert Munafo
-// @version 14757.49
-// @downloadURL http://mrob.com/time/scripts-beta/sig-contrast.user.js
-// @include http://forums.xkcd.com/viewtopic.php*
-// @include http://fora.xkcd.com/viewtopic.php*
-// @include http://echochamber.me/viewtopic.php*
-// @include http://1190.bicyclesonthemoon.info/ott/view*
-// @run-at     document-end
-// @copyright  2014, Robert Munafo
+// @author       Robert Munafo
+// @version      21083.61
+// @downloadURL  http://mrob.com/time/scripts-beta/sig-contrast.user.js
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @include      http://forums.xkcd.com/viewtopic.php*
+// @include      http://fora.xkcd.com/viewtopic.php*
+// @include      http://echochamber.me/viewtopic.php*
+// @include      http://1190.bicyclesonthemoon.info/ott/view*
+// @run-at       document-end
+// @copyright    2014, Robert Munafo
 // ==/UserScript==
 //
 // REVISION HISTORY:
@@ -20,6 +22,7 @@
 // np10078.16 Remove some console.info statements.
 // np10966.67: Work on the balthamirror (1190.bicyclesonthemoon.dnsd.info)
 // np14757.49 Remove 'dnsd' from bicyclesonthemoon hostname
+// np21083.61 Add @grant and @run-at requests
 
 sig_contrast = {
 
@@ -125,7 +128,7 @@ sig_contrast = {
 
     for(i=0 ; i<sigs.length ; i++) {
       if (this.o_green_bkg.val) {
-        sigs[i].style.backgroundColor = '#CEC';
+        sigs[i].style.backgroundColor = '#E6FFE6';
       }
       if (this.o_hide_sigs.val) {
         sigs[i].style.display = 'none';
