@@ -1,17 +1,20 @@
 // ==UserScript==
-// @namespace http://mrob.com/time/scripts-beta
-// @name newpix-converter for OTT
-// @description Converts phpBB dates into the One Time Unit: the newpix. For this to work your date format must be: "D M d, Y g:i:s a e" without the quotes.
-// @author Mrob27, Pikrass, and Smithers
-// @version 14757.49
-// @downloadURL http://mrob.com/time/scripts-beta/newpix-convertor.user.js
-// @include http://forums.xkcd.com/viewtopic.php*
-// @include http://fora.xkcd.com/viewtopic.php*
-// @include http://echochamber.me/viewtopic.php*
-// @include http://forums.xkcd.com/posting.php*
-// @include http://fora.xkcd.com/posting.php*
-// @include http://echochamber.me/posting.php*
-// @include http://1190.bicyclesonthemoon.info/ott/view*
+// @namespace    http://mrob.com/time/scripts-beta
+// @name         newpix-converter for OTT
+// @description  Converts phpBB dates into the One Time Unit: the newpix. For this to work your date format must be: "D M d, Y g:i:s a e" without the quotes.
+// @author       Mrob27, Pikrass, and Smithers
+// @version      21083.61
+// @downloadURL  http://mrob.com/time/scripts-beta/newpix-convertor.user.js
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @include      http://forums.xkcd.com/viewtopic.php*
+// @include      http://fora.xkcd.com/viewtopic.php*
+// @include      http://echochamber.me/viewtopic.php*
+// @include      http://forums.xkcd.com/posting.php*
+// @include      http://fora.xkcd.com/posting.php*
+// @include      http://echochamber.me/posting.php*
+// @include      http://1190.bicyclesonthemoon.info/ott/view*
+// @run-at       document-end
 // ==/UserScript==
 
 // REVISION HISTORY
@@ -28,6 +31,7 @@
 // np9117.43 Use cross-platform functions to load and save options settings.
 // np10966.67 Work on the balthamirror (1190.bicyclesonthemoon.dnsd.info)
 // np14757.49 Remove 'dnsd' from bicyclesonthemoon hostname
+// np21083.61 Add @grant and @run-at requests
 
 console.info("Newpix Converter: A 'GM_getValue is not supported' message following this one is benign and results from a runtime compatibility test.");
 
