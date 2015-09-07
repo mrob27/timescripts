@@ -1,19 +1,22 @@
 // ==UserScript==
-// @namespace http://mrob.com/time/scripts-beta
-// @name wikia-no-sidebar
-// @description Remove sidebar in Wikia pages
-// @author Robert Munafo
-// @version 11951.41
-// @downloadURL http://mrob.com/time/scripts-beta/wikia-no-sidebar.user.js
-// @include http://*.wikia.com/*
-// @include https://*.wikia.com/*
-// @match http://*.wikia.com/*
-// @match https://*.wikia.com/*
+// @namespace    http://mrob.com/time/scripts-beta
+// @name         wikia-no-sidebar
+// @description  Remove sidebar in Wikia pages
+// @author       Robert Munafo
+// @version      21630.77
+// @downloadURL  http://mrob.com/time/scripts-beta/wikia-no-sidebar.user.js
+// @include      http://*.wikia.com/*
+// @include      https://*.wikia.com/*
+// @match        http://*.wikia.com/*
+// @match        https://*.wikia.com/*
+// @run-at       document-end
 // ==/UserScript==
 
 // REVISION HISTORY:
 //
 // np11951.41 First version (based on facebok-no-sidebar)
+// np21628.30 balthasar_s: set width of WikiaMainContent
+// np21630.77 Also modify width of "WikiaArticle", and add "@run-at document-end"
 
 var ttd;
 var del;
@@ -33,8 +36,16 @@ wiknosb = {
     var sidebar = document.getElementById("WikiaMainContentContainer");
     if (sidebar) { sidebar.style.marginRight="0px"; }
 
+    //I had to add this to make it work for me again.
+    //Because it had "width: calc(100% - 320px);". - balthasar_s
+    sidebar = document.getElementById("WikiaMainContent");
+    if (sidebar) { sidebar.style.width="100%"; }
+
+    sidebar = document.getElementById("WikiaArticle");
+    if (sidebar) { sidebar.style.width="100%"; }
+
     sidebar = document.getElementById('WikiaRail');
-    if(sidebar) { sidebar.style.display="none"; }
+    if (sidebar) { sidebar.style.display="none"; }
 
     // Run myself again a couple more times. Eyal Shahar's version just
     // runs one more time with an interval of 2000.
