@@ -373,8 +373,8 @@ var mon = function() {
 
   if (mont > 0) {
     /* Because of opening all the spoilers, we're usually not on the message
-     * that we want to be on. If there is a hash in the URL, we'll try to
-     * locate the message and scroll to it. */
+     * that we want to be on. If there is a hash ("fragment") in the URL,
+     * we'll try to locate it and scroll to it. */
     if ((d2 == old_dst) && (d2 != t2)) {
       document.body.scrollTop = t2;
       msg('set dst to ' + t2);
