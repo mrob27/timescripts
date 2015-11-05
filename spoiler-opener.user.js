@@ -2,15 +2,18 @@
 // @namespace http://mrob.com/time/scripts-beta
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
-// @author Robert Munafo
-// @version 14771.07
-// @downloadURL http://mrob.com/time/scripts-beta/spoiler-opener.user.js
-// @include http://www.forums.xkcd.com/*
-// @include http://forums.xkcd.com/*
-// @include http://echochamber.me/*
-// @include http://fora.xkcd.com/*
-// @include http://1190.bicyclesonthemoon.info/ott*
-// @include http://moonbase.chirpingmustard.com/ott*
+// @author       Robert Munafo
+// @version      21083.61
+// @downloadURL  http://mrob.com/time/scripts-beta/spoiler-opener.user.js
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @include      http://www.forums.xkcd.com/*
+// @include      http://forums.xkcd.com/*
+// @include      http://echochamber.me/*
+// @include      http://fora.xkcd.com/*
+// @include      http://1190.bicyclesonthemoon.info/ott*
+// @include      http://moonbase.chirpingmustard.com/ott*
+// @run-at       document-end
 // ==/UserScript==
 
 // REVISION HISTORY:
@@ -58,6 +61,7 @@
 // np13196.35 Slightly broader match pattern for the two balthasar sites
 // np14757.49 Remove 'dnsd' from bicyclesonthemoon hostname
 // np14771.07 Add www.forums.xkcd.com
+// np21083.61 Add @grant and @run-at requests
 
 // A sample forum page is:
 //
@@ -369,8 +373,8 @@ var mon = function() {
 
   if (mont > 0) {
     /* Because of opening all the spoilers, we're usually not on the message
-     * that we want to be on. If there is a hash in the URL, we'll try to
-     * locate the message and scroll to it. */
+     * that we want to be on. If there is a hash ("fragment") in the URL,
+     * we'll try to locate it and scroll to it. */
     if ((d2 == old_dst) && (d2 != t2)) {
       document.body.scrollTop = t2;
       msg('set dst to ' + t2);

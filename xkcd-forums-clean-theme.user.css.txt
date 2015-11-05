@@ -13,11 +13,20 @@
  * based on 'Dark' theme by Aluísio Augusto Silva Gonçalves. */
 
 .headerbar {
+    height: 2px;
+   /*  display: none !important; */
+}
+
+#site-description {
   display: none !important;
 }
 
+#search-box {
+  margin: 0px !important;
+}
+
 body {
-  background-color: #e8e8f0;
+  background-color: #fff;
 }
 
 #wrap {

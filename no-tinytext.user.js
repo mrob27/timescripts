@@ -3,13 +3,16 @@
 // @name         no-tinytext for OTT
 // @description  Locate tiny and/or pale-colored text and make it readable
 // @author       Robert Munafo (with help from azule and balthasar_s)
-// @version      14757.49
+// @version      21083.61
 // @downloadURL  http://mrob.com/time/scripts-beta/no-tinytext.user.js
+// @grant        GM_getValue
+// @grant        GM_setValue
 // @include      http://forums.xkcd.com/*
 // @include      http://www.forums.xkcd.com/*
 // @include      http://fora.xkcd.com/*
 // @include      http://echochamber.me/*
 // @include      http://1190.bicyclesonthemoon.info/ott/view*
+// @run-at       document-end
 // ==/UserScript==
 
 // REVISION HISTORY:
@@ -46,6 +49,7 @@
 // np13032.30: Work on www.forums.xkcd.com
 // np13095.60: Broaden the match patterns so it works in PMs
 // np14757.49 Remove 'dnsd' from bicyclesonthemoon hostname
+// np21083.61 Add @grant and @run-at requests
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
