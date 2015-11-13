@@ -19,6 +19,13 @@
 // REVISION HISTORY
 // 20131119 Original (broken) version.from userscripts.org/scripts/review/160271
 // 20140811 Simplify, eliminate switch (we might add it back later) and make it work by deleting the $ object (since the Window.soundManager object is no longer accessible).
+//
+// NOTES
+// 20151112: A single track can be played by going to a URL like this:
+//    https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/\
+//      tracks/228822054&amp;auto_play=false&amp;hide_related=false&amp;\
+//      show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;\
+//      visual=true
 var soundcloud_kill_autoplay = function()
 {
   var init, initInterval, playlist;
