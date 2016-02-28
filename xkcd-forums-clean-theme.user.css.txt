@@ -12,6 +12,10 @@
  * (not "prosilver_left") theme.
  * based on 'Dark' theme by Aluísio Augusto Silva Gonçalves. */
 
+a:visited {
+    color: #C0C !important;
+}
+
 .headerbar {
     height: 2px;
    /*  display: none !important; */
@@ -34,7 +38,7 @@ body {
 }
 
 #page-body a {
-  color: #006 !important;
+  color: #006;
 }
 
 #page-body label {
