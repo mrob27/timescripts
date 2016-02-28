@@ -9,6 +9,7 @@
 // @include https://*.facebook.com/*
 // @match http://*.facebook.com/*
 // @match https://*.facebook.com/*
+// @run-at       document-end
 // ==/UserScript==
 
 // REVISION HISTORY:
