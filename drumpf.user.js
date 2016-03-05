@@ -14,7 +14,13 @@
 
 function leopardize(str)
 {
-  return str.replace(/trump/g,"drumpf")
+  return str
+    .replace(/drumpf/g,"drümpf")
+    .replace(/Drumpf/g,"Drümpf")
+    .replace(/DRUMPF/g,"DRÜMPF")
+    .replace(/d[Rr][Uu][Mm][Pp][Ff]/g,"drümpf")
+    .replace(/D[Rr][Uu][Mm][Pp][Ff]/g,"Drümpf")
+    .replace(/trump/g,"drumpf")
     .replace(/Trump/g,"Drumpf")
     .replace(/TRUMP/g,"DRUMPF")
     .replace(/t[Rr][Uu][Mm][Pp]/g,"drumpf")
