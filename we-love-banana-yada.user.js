@@ -4,7 +4,7 @@
 // @description  Replaces the phrase "I love BANANAS" with lines from the first "Boom-de-Yada"
 // @author       Robert Munafo (words by BlitzGirl and OTTers; script inspired by Eternal Density and balthasar_s)
 // @version      21083.61
-// @downloadURL  http://mrob.com/time/scripts-beta/we-love-banana-yada.user.js
+// @downloadURL  http://mrob.com/time/scripts-beta/we-love-banana-yada.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @include      http://forums.xkcd.com/viewtopic.php*

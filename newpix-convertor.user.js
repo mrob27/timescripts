@@ -4,7 +4,7 @@
 // @description  Converts phpBB dates into the One Time Unit: the newpix. For this to work your date format must be: "D M d, Y g:i:s a e" without the quotes.
 // @author       Mrob27, Pikrass, and Smithers
 // @version      21083.61
-// @downloadURL  http://mrob.com/time/scripts-beta/newpix-convertor.user.js
+// @downloadURL  http://mrob.com/time/scripts-beta/newpix-convertor.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @include      http://forums.xkcd.com/viewtopic.php*

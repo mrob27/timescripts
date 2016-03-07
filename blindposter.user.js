@@ -4,7 +4,7 @@
 // @description Hide the "TOPIC REVIEW" section, so you can make a blindpost without being spoiled by anything you might see there
 // @author Robert Munafo and Balthasar Szczepański
 // @version 9924.26
-// @downloadURL http://mrob.com/time/scripts-beta/blindposter.user.js
+// @downloadURL http://mrob.com/time/scripts-beta/blindposter.user.js.txt
 // @include http://forums.xkcd.com/posting.php*
 // @include http://fora.xkcd.com/posting.php*
 // @include http://echochamber.me/posting.php*

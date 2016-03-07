@@ -3,7 +3,7 @@
 // @namespace       http://mrob.com/time/scripts-beta
 // @description     Inserts AUTOMOME output in the xkcd fora.
 // @version         12258.49
-// @downloadURL     http://mrob.com/time/scripts-beta/automomeify.user.js
+// @downloadURL     http://mrob.com/time/scripts-beta/automomeify.user.js.txt
 // @include         http://forums.xkcd.com/*
 // @include         http://www.forums.xkcd.com/*
 // @include         http://fora.xkcd.com/*

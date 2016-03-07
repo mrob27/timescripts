@@ -1,18 +1,18 @@
 // ==UserScript==
-// @namespace http://mrob.com/time/scripts-beta
-// @name multiquote for OTT
+// @namespace   http://mrob.com/time/scripts-beta
+// @name        multiquote for OTT
 // @description Changes quote buttons behaviour to quote multiple messages
-// @author Pikrass and mrob27
-// @version 8233.07
-// @downloadURL http://mrob.com/time/scripts-beta/multiquote.user.js
+// @author      Pikrass and mrob27
+// @version     8233.07
+// @downloadURL http://mrob.com/time/scripts-beta/multiquote.user.js.txt
 // @resource quote_waiting imgs/quote_waiting.png
 // @resource quote_ok imgs/quote_ok.png
-// @include http://forums.xkcd.com/viewtopic.php*
-// @include http://fora.xkcd.com/viewtopic.php*
-// @include http://echochamber.me/viewtopic.php*
-// @include http://forums.xkcd.com/posting.php*
-// @include http://fora.xkcd.com/posting.php*
-// @include http://echochamber.me/posting.php*
+// @include     http://forums.xkcd.com/viewtopic.php*
+// @include     http://fora.xkcd.com/viewtopic.php*
+// @include     http://echochamber.me/viewtopic.php*
+// @include     http://forums.xkcd.com/posting.php*
+// @include     http://fora.xkcd.com/posting.php*
+// @include     http://echochamber.me/posting.php*
 // ==/UserScript==
 
 /*

@@ -5,7 +5,7 @@
 // @version 6026.68
 // @description Automatically reports a blitzer's location on the OTT to AluisioASG's database
 // @author Aluísio Augusto Silva Gonçalves <aasg@chirpingmustard.com>
-// @downloadURL http://mrob.com/time/scripts-beta/blitzer-tracker.user.js
+// @downloadURL http://mrob.com/time/scripts-beta/blitzer-tracker.user.js.txt
 // @match http://forums.xkcd.com/viewtopic.php*
 // @match http://fora.xkcd.com/viewtopic.php*
 // @match http://echochamber.me/viewtopic.php*

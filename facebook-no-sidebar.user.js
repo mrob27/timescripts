@@ -4,7 +4,7 @@
 // @description Remove sidebar in Facebook
 // @author Robert Munafo
 // @version 20141119.1122
-// @downloadURL http://mrob.com/time/scripts-beta/facebook-no-sidebar.user.js
+// @downloadURL http://mrob.com/time/scripts-beta/facebook-no-sidebar.user.js.txt
 // @include http://*.facebook.com/*
 // @include https://*.facebook.com/*
 // @match http://*.facebook.com/*

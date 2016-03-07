@@ -4,7 +4,7 @@
 // @description Replaces "Trump", "trump", etc. with "Drumpf", "drumpf" etc.
 // @author John Oliver
 // @version 20160301
-// @downloadURL http://mrob.com/time/scripts-beta/drumpf.user.js
+// @downloadURL http://mrob.com/time/scripts-beta/drumpf.user.js.txt
 // @match *://*/*
 // ==/UserScript==
 

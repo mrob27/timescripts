@@ -4,7 +4,7 @@
 // @description  Hides signatures and/or make them easily distinguishable
 // @author       Robert Munafo
 // @version      21083.61
-// @downloadURL  http://mrob.com/time/scripts-beta/sig-contrast.user.js
+// @downloadURL  http://mrob.com/time/scripts-beta/sig-contrast.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @include      http://forums.xkcd.com/viewtopic.php*

@@ -1,17 +1,17 @@
 // ==UserScript==
-// @namespace http://mrob.com/time/scripts-beta
-// @name profile-hover for OTT
-// @description  Makes the profile info stay on screen when you scroll through a post.
-// @author Ondrej Mosnáček and Robert Munafo
-// @version 14757.49
-// @downloadURL http://mrob.com/time/scripts-beta/profile-hover.user.js
-// @include http://forums.xkcd.com/viewtopic.php*
-// @include http://fora.xkcd.com/viewtopic.php*
-// @include http://echochamber.me/viewtopic.php*
-// @include http://1190.bicyclesonthemoon.info/ott/view*
-// @require    http://zeptojs.com/zepto.min.js
-// @run-at     document-end
-// @copyright  2013+, Ondrej Mosnáček
+// @namespace   http://mrob.com/time/scripts-beta
+// @name        profile-hover for OTT
+// @description Makes the profile info stay on screen when you scroll through a post.
+// @author      Ondrej Mosnáček and Robert Munafo
+// @version     14757.49
+// @downloadURL http://mrob.com/time/scripts-beta/profile-hover.user.js.txt
+// @include     http://forums.xkcd.com/viewtopic.php*
+// @include     http://fora.xkcd.com/viewtopic.php*
+// @include     http://echochamber.me/viewtopic.php*
+// @include     http://1190.bicyclesonthemoon.info/ott/view*
+// @require     http://zeptojs.com/zepto.min.js
+// @run-at      document-end
+// @copyright   2013+, Ondrej Mosnáček
 // ==/UserScript==
 //
 // REVISION HISTORY:

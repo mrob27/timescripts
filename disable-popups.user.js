@@ -4,7 +4,7 @@
 // @description Disable JavaScript Alert, Confirm and Prompt on all sites
 // @author Robert Munafo
 // @version 18597.51
-// @downloadURL http://mrob.com/time/scripts-beta/disable-popups.user.js
+// @downloadURL http://mrob.com/time/scripts-beta/disable-popups.user.js.txt
 // @run-at document-start
 // ==/UserScript==
 //

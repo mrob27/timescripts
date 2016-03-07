@@ -4,7 +4,7 @@
 // @description Open All Spoilers on (Re)Load
 // @author       Robert Munafo
 // @version      21083.61
-// @downloadURL  http://mrob.com/time/scripts-beta/spoiler-opener.user.js
+// @downloadURL  http://mrob.com/time/scripts-beta/spoiler-opener.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @include      http://www.forums.xkcd.com/*

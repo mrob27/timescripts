@@ -3,7 +3,7 @@
 // @name        soundcloud-kill-autoplay
 // @version     20140811
 // @author      Robert Munafo (inspired by Andreas J. Schwarz)
-// @downloadURL http://mrob.com/time/scripts-beta/soundcloud-kill-autoplay.user.js
+// @downloadURL http://mrob.com/time/scripts-beta/soundcloud-kill-autoplay.user.js.txt
 // @include     https://soundcloud.com/*
 // ==/UserScript==
 //

@@ -1,11 +1,11 @@
 // ==UserScript==
-// @namespace mrob.com
-// @name XKCD 1288 substitutions by mrob27
+// @namespace   mrob.com
+// @name        XKCD 1288 substitutions by mrob27
 // @description See xkcd.com/1288
-// @author Robert Munafo (derived from code by Eternal Density)
-// @version 9529.72
-// @downloadURL http://mrob.com/time/scripts-beta/xkcd-1288.user.js
-// @match *://*/*
+// @author      Robert Munafo (derived from code by Eternal Density)
+// @version     9529.72
+// @downloadURL http://mrob.com/time/scripts-beta/xkcd-1288.user.js.txt
+// @match       *://*/*
 // ==/UserScript==
 
 // REVISION HISTORY:

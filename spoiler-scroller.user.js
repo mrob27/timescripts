@@ -1,15 +1,14 @@
-/*!
 // ==UserScript==
-// @namespace time.aasg.name
-// @name Spoiler Scroller
-// @version 6462.69
+// @namespace   http://mrob.com/time/scripts-beta
+// @name        Spoiler Scroller
+// @version     6462.69
 // @description Scroll appropriately when a spoiler is closed (for use with 'Clever Spoilers' by Pikrass)
-// @author Aluísio Augusto Silva Gonçalves <aasg@chirpingmustard.com>
-// @downloadURL http://mrob.com/time/scripts-beta/spoiler-scroller.user.js
-// @match http://forums.xkcd.com/viewtopic.php*
-// @match http://fora.xkcd.com/viewtopic.php*
-// @match http://echochamber.me/viewtopic.php*
-// @grant none
+// @author      Aluísio Augusto Silva Gonçalves
+// @downloadURL http://mrob.com/time/scripts-beta/spoiler-scroller.user.js.txt
+// @match       http://forums.xkcd.com/viewtopic.php*
+// @match       http://fora.xkcd.com/viewtopic.php*
+// @match       http://echochamber.me/viewtopic.php*
+// @grant       none
 // ==/UserScript==
 
 // BUGS

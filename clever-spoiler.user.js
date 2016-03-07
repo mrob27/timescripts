@@ -1,12 +1,13 @@
 // ==UserScript==
-// @name Clever spoiler
-// @description Enhances phpBB's spoiler tags on the OTF
-// @author Pikrass
-// @version 1672
-// @include http://forums.xkcd.com/viewtopic.php*
-// @include http://fora.xkcd.com/viewtopic.php*
-// @include http://forums.xkcd.com/posting.php*
-// @include http://fora.xkcd.com/posting.php*
+// @name         Clever spoiler
+// @description  Enhances phpBB's spoiler tags on the OTF
+// @author       Pikrass
+// @version      1672
+// @downloadURL  http://mrob.com/time/scripts-beta/clever-spoiler.user.js.txt
+// @include      http://forums.xkcd.com/viewtopic.php*
+// @include      http://fora.xkcd.com/viewtopic.php*
+// @include      http://forums.xkcd.com/posting.php*
+// @include      http://fora.xkcd.com/posting.php*
 // ==/UserScript==
 
 var cleverSpoiler = {

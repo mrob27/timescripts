@@ -5,7 +5,7 @@
 // @copyright 2014, Robert Munafo (mrob27)
 // @description Detects frame references on the xkcd 1190 forums thread, formatted like 'M#2440a', and replaces them with links for the viewers of the various frame numbering standards.
 // @version 8026.18
-// @downloadURL http://mrob.com/time/scripts-beta/frame-linker.user.js
+// @downloadURL http://mrob.com/time/scripts-beta/frame-linker.user.js.txt
 // @include http://forums.xkcd.com/viewtopic.php*
 // @include http://fora.xkcd.com/viewtopic.php*
 // @include http://echochamber.me/viewtopic.php*

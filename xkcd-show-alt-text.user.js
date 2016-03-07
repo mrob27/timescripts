@@ -4,7 +4,7 @@
 // @description Adds a text node below every image that has mouseover text.
 // @author      Robert Munafo
 // @version     11882.18
-// @downloadURL http://mrob.com/time/scripts-beta/xkcd-show-alt-text.user.js
+// @downloadURL http://mrob.com/time/scripts-beta/xkcd-show-alt-text.user.js.txt
 // @include     http://xkcd.com/*
 // @include     http://www.xkcd.com/*
 // @include     http://what-if.xkcd.com/*

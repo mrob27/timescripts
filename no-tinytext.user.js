@@ -4,7 +4,7 @@
 // @description  Locate tiny and/or pale-colored text and make it readable
 // @author       Robert Munafo (with help from azule and balthasar_s)
 // @version      21083.61
-// @downloadURL  http://mrob.com/time/scripts-beta/no-tinytext.user.js
+// @downloadURL  http://mrob.com/time/scripts-beta/no-tinytext.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @include      http://forums.xkcd.com/*

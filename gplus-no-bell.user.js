@@ -1,14 +1,14 @@
 // ==UserScript==
-// @namespace http://mrob.com/time/scripts-beta
-// @name Gplus-no-bell
+// @namespace   http://mrob.com/time/scripts-beta
+// @name        Gplus-no-bell
 // @description Attempt to remove G+ "bell" from Google title bar
-// @author Robert Munafo
-// @version 20141018.0014
-// @downloadURL http://mrob.com/time/scripts-beta/gplus-no-bell.user.js
-// @include http://*.google.com/*
-// @include https://*.google.com/*
-// @match http://*.google.com/*
-// @match https://*.google.com/*
+// @author      Robert Munafo
+// @version     20141018.0014
+// @downloadURL http://mrob.com/time/scripts-beta/gplus-no-bell.user.js.txt
+// @include     http://*.google.com/*
+// @include     https://*.google.com/*
+// @match       http://*.google.com/*
+// @match       https://*.google.com/*
 // ==/UserScript==
 
 // REVISION HISTORY:

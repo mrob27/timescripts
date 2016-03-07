@@ -4,7 +4,7 @@
 // @description  Remove sidebar in Wikia pages
 // @author       Robert Munafo
 // @version      21630.77
-// @downloadURL  http://mrob.com/time/scripts-beta/wikia-no-sidebar.user.js
+// @downloadURL  http://mrob.com/time/scripts-beta/wikia-no-sidebar.user.js.txt
 // @include      http://*.wikia.com/*
 // @include      https://*.wikia.com/*
 // @match        http://*.wikia.com/*

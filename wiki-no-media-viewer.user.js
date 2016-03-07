@@ -4,7 +4,7 @@
 // @description  Disable Wikipedia's "Media Viewer", even when not logged in
 // @author       Robert Munafo
 // @version      11570.26
-// @downloadURL  http://mrob.com/time/scripts-beta/wiki-no-media-viewer.user.js
+// @downloadURL  http://mrob.com/time/scripts-beta/wiki-no-media-viewer.user.js.txt
 // @include      http://*.wikipedia.org/*
 // @include      https://*.wikipedia.org/*
 // @include      http://*.wikimedia.org/*
