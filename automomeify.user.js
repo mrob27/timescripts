@@ -83,7 +83,7 @@ function get_memes ()
   if (memes.length == 0) {
     var req = new GM_xmlhttpRequest ({
       method: "GET",
-      url: /* "http://automome.penguindevelopment.org/automome-web.py?n=32" */
+           /* "http://automome.penguindevelopment.org/automome-web.py?n=32" */
       url:    "http://mrob.com/time/automome/butan.php?n=32",
       onload: function (resp)
       {
@@ -170,12 +170,13 @@ function automomeify (detect)
       }
 
       var m = memes.pop();
-      console.info("got '" + m + "'");
 
       /* Discard any that are too long for a subject line */
       while (m.length > max_title_length && memes.length > 0) {
         m = memes.pop();
       }
+
+      console.info("got '" + m + "'");
 
       if (m.length < max_title_length) {
         subj.value = m;
