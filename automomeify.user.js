@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name            AUTOMOMEify for OTT
 // @namespace       http://mrob.com/time/scripts-beta
-// @description     Inserts AUTOMOME output in the xkcd fora.
-// @version         12258.49
+// @description     Inserts automeme output in the xkcd fora.
+// @version         26307.28
 // @downloadURL     http://mrob.com/time/scripts-beta/automomeify.user.js.txt
 // @include         http://forums.xkcd.com/*
 // @include         http://www.forums.xkcd.com/*
@@ -14,7 +14,7 @@
 // @grant           GM_xmlhttpRequest
 // ==/UserScript==
 
-/* AUTOMOMEify version 10252.58
+/* AUTOMOMEify version 26307.28
  * Copyright (C) 2014 Penguin Development and Robert Munafo (mrob27)
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -43,6 +43,8 @@ REVISION HISTORY
 userscripts. More needs to be done as this version does not make nice HTML
 memes, it just substitutes plain text.
  np12258.49 Maximum title langth is actually 60 characters.
+ np26307.28 Use mrob.com URL because @Link's version is randomly
+doubling letters without my consent.
 
  */
 
@@ -81,7 +83,8 @@ function get_memes ()
   if (memes.length == 0) {
     var req = new GM_xmlhttpRequest ({
       method: "GET",
-      url:    "http://automome.penguindevelopment.org/automome-web.py?n=32",
+      url: /* "http://automome.penguindevelopment.org/automome-web.py?n=32" */
+      url:    "http://mrob.com/time/automome/butan.php?n=32",
       onload: function (resp)
       {
         memes = memes.concat(resp.responseText.trim().split ("\n"));
@@ -167,6 +170,7 @@ function automomeify (detect)
       }
 
       var m = memes.pop();
+      console.info("got '" + m + "'");
 
       /* Discard any that are too long for a subject line */
       while (m.length > max_title_length && memes.length > 0) {
