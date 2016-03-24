@@ -12,6 +12,10 @@
  * (not "prosilver_left") theme.
  * based on 'Dark' theme by Aluísio Augusto Silva Gonçalves. */
 
+sub { vertical-align: sub !important; }
+
+sup { vertical-align: super !important; }
+
 a:visited {
     color: #C0C !important;
 }
