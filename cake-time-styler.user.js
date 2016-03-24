@@ -69,15 +69,17 @@
             f.src="http://xkcd.mscha.org/frame/random")
   },
 
-  b(function(){
-    var a,b,e,f;
-    for(a=c('//*[@class="postprofile"]//*[.="Posts:"]',
-        XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE), b=0, e=a.snapshotLength;
-        e>b;
-        ++b)
-    {
-      f=b;
-      d(a.snapshotItem(f).nextSibling.nextSibling)
+  b(
+    function(){
+      var a,b,e,f;
+      for(a=c('//*[@class="postprofile"]//*[.="Posts:"]',
+          XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE), b=0, e=a.snapshotLength;
+          e>b;
+          ++b)
+      {
+        f=b;
+        d(a.snapshotItem(f).nextSibling.nextSibling)
+      }
     }
   )
 }).call(this);
