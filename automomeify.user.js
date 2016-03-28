@@ -2,7 +2,7 @@
 // @name            AUTOMOMEify for OTT
 // @namespace       http://mrob.com/time/scripts-beta
 // @description     Inserts automeme output in the xkcd fora.
-// @version         26493.87
+// @version         26494.20
 // @downloadURL     http://mrob.com/time/scripts-beta/automomeify.user.js.txt
 // @include         http://forums.xkcd.com/*
 // @include         http://www.forums.xkcd.com/*
@@ -14,7 +14,7 @@
 // @grant           GM_xmlhttpRequest
 // ==/UserScript==
 
-/* AUTOMOMEify version 26493.87
+/* AUTOMOMEify version 26494.20
  * Copyright (C) 2014 Penguin Development and Robert Munafo (mrob27)
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -46,6 +46,10 @@ memes, it just substitutes plain text.
  np26307.28 Use mrob.com URL because @Link's version is randomly
 doubling letters without my consent.
  np26493.87 Start subject lines with "1190: Time: "
+ np26494.20 Use Link's much more thorough tests to find out if we're
+on any OTT-related page; this makes the meme-in-subject thing work
+when posting a reply via the "quote" button, in addition to when
+making an original comment with the Post Reply button.
 
  */
 
@@ -89,7 +93,7 @@ function get_memes ()
       onload: function (resp)
       {
         memes = memes.concat(resp.responseText.trim().split ("\n"));
-        console.info('got ' + memes.length + ' memes');
+        // console.info('got ' + memes.length + ' memes');
         automomeify(false);
       }
     });
@@ -155,12 +159,35 @@ var max_title_length = 64 - 4 - 12;
  * can proceed to momeify. */
 function automomeify (detect)
 {
-  if (document.location.href.indexOf ("posting.php?mode=reply&f=7&t=101043") != -1)
+  /* Check if we're in the OTT. */
+  var body = document.getElementById("page-body");
+  if (!body)
+    return false;
+  var inTime = false;
+  for (var i = 0; i < body.childNodes.length; i++)
   {
-    /* We we in the initial "Compose Post" page. Here we want to fetch
-     * a random meme and automatically paste it into the Subect field.
-     * If desired, the user may change it to something else. */
+    var node = body.childNodes[i];
+    /* Check for h2.topic-title or h2.posting-title, and see if it contains
+     * '1190: "Time"'.  Then we are in the OTT, or in a thread that pretends
+     * to be the OTT. */
+    if (node.nodeName == "H2" && (node.className == "topic-title" ||
+        node.className == "posting-title") &&
+        node.innerHTML.indexOf("1190: \"Time\"") != -1)
+    {
+      inTime = true;
+      break;
+    }
+  }
+  if (!inTime)
+    return false;
+
+  if (document.location.href.indexOf ("posting.php") != -1)
+  {
+    /* We we in the "Compose Post" or "Post a Reply" page (but not post
+     * preview). We want to fetch a random meme and automatically paste
+     * it into the Subject field. The user may edit it to something else. */
     var subj = document.getElementById ("subject");
+    // console.info("subj.value is '" + subj.value + "'");
     /* Test for the generic subject; if it's anything else we should
      * leave it alone. */
     if (subj.value == "Re: 1190: \"Time\"") {
@@ -180,7 +207,7 @@ function automomeify (detect)
         m = memes.pop();
       }
 
-      console.info("got '" + m + "'");
+      // console.info("got '" + m + "'");
 
       if (m.length < max_title_length) {
         subj.value = "1190: Time: " + m;
