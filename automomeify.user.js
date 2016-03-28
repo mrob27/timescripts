@@ -2,7 +2,7 @@
 // @name            AUTOMOMEify for OTT
 // @namespace       http://mrob.com/time/scripts-beta
 // @description     Inserts automeme output in the xkcd fora.
-// @version         26307.28
+// @version         26493.87
 // @downloadURL     http://mrob.com/time/scripts-beta/automomeify.user.js.txt
 // @include         http://forums.xkcd.com/*
 // @include         http://www.forums.xkcd.com/*
@@ -14,7 +14,7 @@
 // @grant           GM_xmlhttpRequest
 // ==/UserScript==
 
-/* AUTOMOMEify version 26307.28
+/* AUTOMOMEify version 26493.87
  * Copyright (C) 2014 Penguin Development and Robert Munafo (mrob27)
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -45,6 +45,7 @@ memes, it just substitutes plain text.
  np12258.49 Maximum title langth is actually 60 characters.
  np26307.28 Use mrob.com URL because @Link's version is randomly
 doubling letters without my consent.
+ np26493.87 Start subject lines with "1190: Time: "
 
  */
 
@@ -143,7 +144,10 @@ function changeTextNodes(node)
   }
 };
 
-var max_title_length = 60; /* NOT 64 even though the posting page lets you type that many */
+/* Maximum length for the title "subject" of a post. The posting page
+ * lets you type 64 characters, but silently truncates it to 60; we
+ * need 12 for "1190: Time: " */
+var max_title_length = 64 - 4 - 12;
 
 /* If the 'detect' flag is true, determine whether there is any
  * AUTOMOMEing to do on this page, and return true or false. If
@@ -179,7 +183,7 @@ function automomeify (detect)
       console.info("got '" + m + "'");
 
       if (m.length < max_title_length) {
-        subj.value = m;
+        subj.value = "1190: Time: " + m;
       } else {
         if (detect) {
           return true;
