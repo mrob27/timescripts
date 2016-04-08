@@ -132,10 +132,10 @@ openallspoilers = {
     } else {
       optobj.val = 0;
     }
-    
+
     this.setChkVal(chk, optobj.val);
     chk.disabled = false;
-    
+
     /* Save the user's work in a way that will persist across page loads.
      * see http://wiki.greasespot.net/GM_setValue */
     GM_setValue(nam, JSON.stringify(optobj.val));
@@ -148,7 +148,7 @@ openallspoilers = {
     chk.value = 'temp-' + nam;
     chk.id = nam;
 
-    var lbl = document.createElement('label')
+    var lbl = document.createElement('label');
     lbl.htmlFor = nam;
     var lab_text = document.createTextNode(title);
     lbl.appendChild(lab_text);
@@ -390,7 +390,7 @@ var mon = function() {
     mont--;
     setTimeout(mon, 100);
   };
-    
+
   old_tloc = t2;
   old_dst = d2;
 };
