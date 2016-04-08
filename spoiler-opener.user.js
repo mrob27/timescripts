@@ -3,7 +3,7 @@
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author       Robert Munafo
-// @version      21083.61
+// @version      26758.29
 // @downloadURL  http://mrob.com/time/scripts-beta/spoiler-opener.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -62,6 +62,7 @@
 // np14757.49 Remove 'dnsd' from bicyclesonthemoon hostname
 // np14771.07 Add www.forums.xkcd.com
 // np21083.61 Add @grant and @run-at requests
+// np26758.29 Add a semicolon
 
 // A sample forum page is:
 //
