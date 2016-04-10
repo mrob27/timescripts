@@ -3,7 +3,7 @@
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author       Robert Munafo
-// @version      26808.56
+// @version      26828.73
 // @downloadURL  http://mrob.com/time/scripts-beta/spoiler-opener.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -64,6 +64,7 @@
 // np21083.61 Add @grant and @run-at requests
 // np26758.29 Add a semicolon
 // np26808.56 Always call convert() explicitly
+// np26828.73 Zero margins option works once again
 
 // A sample forum page is:
 //
@@ -220,6 +221,7 @@ openallspoilers = {
     if (this.o_0_margins.val) {
       footer = document.getElementById("wrap");
       footer.style.padding="0";
+      footer.style.margin="0";
     };
 
     for(i=0 ; i<buttons.length ; i++) {
