@@ -3,7 +3,7 @@
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author       Robert Munafo
-// @version      26758.29
+// @version      26808.56
 // @downloadURL  http://mrob.com/time/scripts-beta/spoiler-opener.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -63,6 +63,7 @@
 // np14771.07 Add www.forums.xkcd.com
 // np21083.61 Add @grant and @run-at requests
 // np26758.29 Add a semicolon
+// np26808.56 Always call convert() explicitly
 
 // A sample forum page is:
 //
@@ -103,15 +104,6 @@
 // and running the "this.parentNode. ... .style.display = '';" on each one.
 
 openallspoilers = {
-
-  // I'd like to know about cross-browser support for console.log(). Until
-  // then, this is my replacement.
-  //
-  log: function (msg) {
-    setTimeout(function() {
-      throw new Error(msg);
-    }, 0);
-  },
 
   // Set a checkbox to be on or off
   setChkVal: function(chk, val) {
@@ -197,6 +189,7 @@ openallspoilers = {
   convert: function() {
     var buttons = document.getElementsByTagName('input');
     var i;
+    // console.info("Found " + buttons.length + " buttons.");
 
     // First time: initialize options, create the checkboxes.
 
@@ -340,9 +333,11 @@ if (window.addEventListener) {
 } else if (window.attachEvent) {
   window.attachEvent('onload',
     openallspoilers.convert.bind(openallspoilers));
-} else {
-  openallspoilers.convert(openallspoilers);
-};
+}
+// We also need to just run it explicitly, particularly on versions of
+// Tampermonkey for Chorome starting about 201604.
+openallspoilers.convert(openallspoilers);
+
 
 var old_tloc = get_tloc();
 var old_dst = document.body.scrollTop;
@@ -364,7 +359,7 @@ var msg = function(s)
   if (s !== old_msg) {
     console.info(s);
     old_msg = s;
-  };
+  }
 };
 
 var mon = function() {
@@ -385,12 +380,12 @@ var mon = function() {
     if ((ttd <=0) && (d2 != old_dst)) {
       msg('dst = ' + d2 + ', old = ' + old_dst + ': stopping.');
       mont = 0;
-    };
+    }
 
     ttd--;
     mont--;
     setTimeout(mon, 100);
-  };
+  }
 
   old_tloc = t2;
   old_dst = d2;
