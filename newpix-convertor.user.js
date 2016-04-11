@@ -3,7 +3,7 @@
 // @name         newpix-converter for OTT
 // @description  Converts phpBB dates into the One Time Unit: the newpix. For this to work your date format must be: "D M d, Y g:i:s a e" without the quotes.
 // @author       Mrob27, Pikrass, and Smithers
-// @version      21083.61
+// @version      26836.20
 // @downloadURL  http://mrob.com/time/scripts-beta/newpix-convertor.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -32,6 +32,7 @@
 // np10966.67 Work on the balthamirror (1190.bicyclesonthemoon.dnsd.info)
 // np14757.49 Remove 'dnsd' from bicyclesonthemoon hostname
 // np21083.61 Add @grant and @run-at requests
+// np26836.20 Clean up syntax (semicolons, == vs. ===, etc.)
 
 console.info("Newpix Converter: A 'GM_getValue is not supported' message following this one is benign and results from a runtime compatibility test.");
 
@@ -100,7 +101,7 @@ newpixConverter = {
 
   // Set a checkbox to be on or off
   setChkVal: function(chk, val) {
-    if (val == 0) {
+    if (val === 0) {
       chk.checked=false;
     } else {
       chk.checked=true;
@@ -113,15 +114,15 @@ newpixConverter = {
     // This makes sense becuse if they've just installed the script
     // and click on the checkbox, they want to set the checkbox.
 
-    if (optobj.val == 0) {
+    if (optobj.val === 0) {
       optobj.val = 1;
     } else {
       optobj.val = 0;
     }
-    
+
     this.setChkVal(chk, optobj.val);
     chk.disabled = false;
-    
+
     /* Save the user's work in a way that will persist across page loads.
      * see http://wiki.greasespot.net/GM_setValue */
     this.vstr(nam, this.jsenc(optobj.val));
@@ -134,7 +135,7 @@ newpixConverter = {
     chk.value = 'npcv-' + nam;
     chk.id = nam;
 
-    var lbl = document.createElement('label')
+    var lbl = document.createElement('label');
     lbl.htmlFor = nam;
     var lab_text = document.createTextNode(title);
     lbl.appendChild(lab_text);
@@ -189,9 +190,9 @@ newpixConverter = {
 
     var reg = /UTC (-|\+) (\d+)(?::(\d{2}))? hour/;
     var m = text.match(reg);
-    if(m != null) {
+    if (m !== null) {
       offset.np = (m[1] == '+' ? parseInt(m[2]) : -parseInt(m[2]));
-      if(m[3] != undefined) {
+      if(m[3] !== undefined) {
         offset.fnp = (m[1] == '+' ? parseInt(m[3]) : -parseInt(m[3]));
       }
     }
@@ -264,19 +265,19 @@ newpixConverter = {
     if (typeof this.o_keep_heret == 'undefined') {
       this.o_keep_heret = { val: "0" };
       this.o_keep_heret.val = this.jsdec(this.vget('o_keep_heret', '0'));
-    };
+    }
 
     this.o_spurler = { val: this.jsdec(this.vget('o_spurler', '0')) };
     if (typeof this.o_spurler == 'undefined') {
       this.o_spurler = { val: "0" };
       this.o_spurler.val = this.jsdec(this.vget('o_spurler', '0'));
-    };
+    }
 
     this.o_all_threads = {val: this.jsdec(this.vget('o_all_threads', '0')) };
     if (typeof this.o_all_threads == 'undefined') {
       this.o_all_threads = { val: "0" };
       this.o_all_threads.val = this.jsdec(this.vget('o_all_threads', '0'));
-    };
+    }
 
     var footer = document.getElementById("page-footer");
     var ft_par = footer.parentNode;
@@ -284,7 +285,7 @@ newpixConverter = {
 
     // Check if we're on the One True Thread or if the act on all threads
     // option is selected.
-    if (this.o_all_threads.val == 0) {
+    if (this.o_all_threads.val === 0) {
       if ( (location.href.indexOf('t=101043') == -1)
         && (document.title.indexOf('1190') == -1) )  return;
     }
@@ -292,16 +293,16 @@ newpixConverter = {
     var i, j, npd;
     var newpix_dates = new Array();
     var postnodes = new Array();
- 
+
     // Convert original post times.
     var authors = document.getElementsByClassName('author');
     for (i = 0; i < authors.length; i++) {
       npd = this.hereticToNewpix(authors[i].lastChild.data.substr(3));
-      if (this.o_keep_heret.val == 0) {
+      if (this.o_keep_heret.val === 0) {
         authors[i].lastChild.data = ' ';
       } else {
         authors[i].lastChild.data += ' = ';
-      };
+      }
       authors[i].lastChild.data += this.NewpixToString(npd);
       newpix_dates[i] = npd;
       postnodes[i] = authors[i].parentNode;
@@ -317,7 +318,7 @@ newpixConverter = {
       edits[i].lastChild.data = ' at ';
       if (this.o_keep_heret.val) {
         edits[i].lastChild.data += (str.substr(4, comma-4) + ' = ');
-      };
+      }
       edits[i].lastChild.data += (this.NewpixToString(npd) + str.substr(comma));
       if (this.o_spurler.val) {
         // Change the color of the edited message based on how much later

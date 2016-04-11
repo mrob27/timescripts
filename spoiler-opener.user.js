@@ -3,7 +3,7 @@
 // @name spoiler-opener for OTT
 // @description Open All Spoilers on (Re)Load
 // @author       Robert Munafo
-// @version      26828.73
+// @version      26836.23
 // @downloadURL  http://mrob.com/time/scripts-beta/spoiler-opener.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -65,6 +65,7 @@
 // np26758.29 Add a semicolon
 // np26808.56 Always call convert() explicitly
 // np26828.73 Zero margins option works once again
+// np26836.23 Create checkboxes only once.
 
 // A sample forum page is:
 //
@@ -103,6 +104,8 @@
 //
 // Therefore, we can open all spoilers by finding all buttons labeled "Show"
 // and running the "this.parentNode. ... .style.display = '';" on each one.
+
+var cckb = 1;
 
 openallspoilers = {
 
@@ -198,23 +201,26 @@ openallspoilers = {
     if (typeof this.o_lavender == 'undefined') {
         this.o_lavender = { val: "0" };
         this.o_lavender.val = JSON.parse(GM_getValue('o_lavender', '0'));
-    };
+    }
 
     this.o_lbl_spurlers = { val: JSON.parse(GM_getValue('o_lbl_spurlers', '0')) };
     if (typeof this.o_lbl_spurlers == 'undefined') {
         this.o_lbl_spurlers = { val: "0" };
         this.o_lbl_spurlers.val = JSON.parse(GM_getValue('o_lbl_spurlers', '0'));
-    };
+    }
 
     this.o_0_margins = { val: JSON.parse(GM_getValue('o_0_margins', '0')) };
     if (typeof this.o_0_margins == 'undefined') {
         this.o_0_margins = { val: "0" };
         this.o_0_margins.val = JSON.parse(GM_getValue('o_0_margins', '0'));
-    };
+    }
 
     var footer = document.getElementById("page-footer");
     var ft_par = footer.parentNode;
-    ft_par.insertBefore(this.create_checkboxen(), footer);
+    if (cckb !== 0) {
+      ft_par.insertBefore(this.create_checkboxen(), footer);
+      cckb = 0;
+    }
 
     // As a service to our readers, we also eliminate that superfluous
     // 30-pixel margin.
