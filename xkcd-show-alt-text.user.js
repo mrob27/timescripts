@@ -3,7 +3,7 @@
 // @name Show alt text on xkcd and What If pages
 // @description Adds a text node below every image that has mouseover text.
 // @author      Robert Munafo
-// @version     11882.18
+// @version     26979.94
 // @downloadURL http://mrob.com/time/scripts-beta/xkcd-show-alt-text.user.js.txt
 // @include     http://xkcd.com/*
 // @include     http://www.xkcd.com/*
@@ -21,12 +21,13 @@
 // np11618.09: Work on https URLs
 // np11882.18: Add "www.xkcd.com"
 // np15884.13: Add "www.xkcd.net"
+// np26979.94: Add ", f" to prevent pedantic error message
 
 showAltText = function (D)
 {
   var i, f, j, e;
 
-  for (i=0; f=D.images[i]; ++i) {
+  for (i=0; f=D.images[i], f; ++i) {
     if (f.title != "") {
       var x = D.createElement("div"),
           s = x.style;
