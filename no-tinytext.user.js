@@ -3,7 +3,7 @@
 // @name         no-tinytext for OTT
 // @description  Locate tiny and/or pale-colored text and make it readable
 // @author       Robert Munafo (with help from azule and balthasar_s)
-// @version      21083.61
+// @version      27097.25
 // @downloadURL  http://mrob.com/time/scripts-beta/no-tinytext.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -50,6 +50,7 @@
 // np13095.60: Broaden the match patterns so it works in PMs
 // np14757.49 Remove 'dnsd' from bicyclesonthemoon hostname
 // np21083.61 Add @grant and @run-at requests
+// np27097.25 Fix syntax errors; guarantee run at least once.
 
 // A sample forum post containing a variety of sizes, including Vytron's
 // nested super-size hack, is here:
@@ -110,6 +111,8 @@ var pc5 = new RegExp('white');
 // Maximum brightness we'll accept
 var gthres = 190;
 
+var needrun = 1;
+
 notinytext = {
   /* <br> and <br /> are ignored in alt-text. This causes connecting
    * the last word in a line with the first word in the next one. We
@@ -147,7 +150,7 @@ notinytext = {
 
   // Set a checkbox to be on or off
   setChkVal: function(chk, val) {
-    if (val == 0) {
+    if (val === 0) {
       chk.checked=false;
     } else {
       chk.checked=true;
@@ -160,15 +163,15 @@ notinytext = {
     // This makes sense becuse if they've just installed the script
     // and click on the checkbox, they want to set the checkbox.
 
-    if (optobj.val == 0) {
+    if (optobj.val === 0) {
       optobj.val = 1;
     } else {
       optobj.val = 0;
     }
-    
+
     this.setChkVal(chk, optobj.val);
     chk.disabled = false;
-    
+
     /* Save the user's work in a way that will persist across page loads.
      * see http://wiki.greasespot.net/GM_setValue */
     GM_setValue(nam, JSON.stringify(optobj.val));
@@ -181,7 +184,7 @@ notinytext = {
     chk.value = 'nott-' + nam;
     chk.id = nam;
 
-    var lbl = document.createElement('label')
+    var lbl = document.createElement('label');
     lbl.htmlFor = nam;
     var lab_text = document.createTextNode(title);
     lbl.appendChild(lab_text);
@@ -201,8 +204,8 @@ notinytext = {
     preDiv.style.fontSize = '1.0em';
     preDiv.style.fontWeight = 'bold';
     preDiv.style.color = '#0B7';
-    
-    var optstitle = document.createTextNode("Blitzenhelfern by Mrob27:");
+
+    var optstitle = document.createTextNode("No-tinytext (or lighttext) by Mrob27:");
     preDiv.appendChild(optstitle);
 
     var opts_div = document.createElement('div');
@@ -234,29 +237,34 @@ notinytext = {
     var spans = document.getElementsByTagName('span');
     var i; var so; var sz;
 
-    this.o_reveal_light = { val: JSON.parse(GM_getValue('o_reveal_light', '0')) }; 
-    if (typeof this.o_reveal_light == 'undefined') {
-      this.o_reveal_light = { val: "0" }; 
-      this.o_reveal_light.val = JSON.parse(GM_getValue('o_reveal_light', '0'));
-    };
+    if (needrun === 0) {
+      return(0);
+    }
+    needrun = 0;
 
-    this.o_embiggen = { val: JSON.parse(GM_getValue('o_embiggen', '0')) }; 
+    this.o_reveal_light = { val: JSON.parse(GM_getValue('o_reveal_light', '0')) };
+    if (typeof this.o_reveal_light == 'undefined') {
+      this.o_reveal_light = { val: "0" };
+      this.o_reveal_light.val = JSON.parse(GM_getValue('o_reveal_light', '0'));
+    }
+
+    this.o_embiggen = { val: JSON.parse(GM_getValue('o_embiggen', '0')) };
     if (typeof this.o_embiggen == 'undefined') {
       this.o_embiggen = { val: "0" };
       this.o_embiggen.val = JSON.parse(GM_getValue('o_embiggen', '0'));
-    };
+    }
 
-    this.o_hgl_tiny = { val: JSON.parse(GM_getValue('o_hgl_tiny', '0')) }; 
+    this.o_hgl_tiny = { val: JSON.parse(GM_getValue('o_hgl_tiny', '0')) };
     if (typeof this.o_hgl_tiny == 'undefined') {
       this.o_hgl_tiny = { val: "0" };
       this.o_hgl_tiny.val = JSON.parse(GM_getValue('o_hgl_tiny', '0'));
-    };
+    }
 
-    this.o_hgl_light = { val: JSON.parse(GM_getValue('o_hgl_light', '0')) }; 
+    this.o_hgl_light = { val: JSON.parse(GM_getValue('o_hgl_light', '0')) };
     if (typeof this.o_hgl_light == 'undefined') {
       this.o_hgl_light = { val: "0" };
       this.o_hgl_light.val = JSON.parse(GM_getValue('o_hgl_light', '0'));
-    };
+    }
 
     // Create the options checkboxes.
     var footer = document.getElementById("page-footer");
@@ -282,20 +290,20 @@ notinytext = {
               sz = 2 + (so / 10);
             }
             spans[i].style.fontSize = sz + "px";
-          };
+          }
 
           // np5993.51: azule's method of revealing tinytext
           if (this.o_hgl_tiny.val) {
             if (so < 20) {
               spans[i].style.outline = "1px dotted red";
-            };
+            }
             // For some screens and eyes, size 65 and smaller is too small
             // to read, so we add titletext (also called "alt text" or
             // "hovertext")
             if (so <= 65) {
               spans[i].setAttribute('title', notinytext.getInnerText(spans[i]));
-            };
-          };
+            }
+          }
         }
       }
 
@@ -305,8 +313,7 @@ notinytext = {
         so = 0;
         if (spans[i].style.color === '') {
         } else if ( pc2.test(spans[i].style.color) ) {
-          if ((RegExp.$1 > gthres) && (RegExp.$2 > gthres)
-           && (RegExp.$3 > gthres))
+          if ((RegExp.$1 > gthres) && (RegExp.$2 > gthres) && (RegExp.$3 > gthres))
           {
             so = 1;
           }
@@ -339,6 +346,7 @@ if (window.addEventListener) {
 } else if (window.attachEvent) {
   window.attachEvent('onload',
     notinytext.convert.bind(notinytext));
-} else {
-  notinytext.convert(notinytext);
-};
+}
+
+// but make sure it runs at east once
+notinytext.convert(notinytext);
