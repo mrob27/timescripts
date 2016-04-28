@@ -6,7 +6,7 @@ This is a collection of small stylesheets for very specific tasks.
 
 
 /* ---------------------------------------------------------------------------
-    reddit hide buttons
+    Reddit hide buttons and show visited links
     www.reddit.com
  */
 
@@ -16,3 +16,27 @@ This is a collection of small stylesheets for very specific tasks.
 .buttons {
     display: none !important;
 }
+
+a:visited {
+    color: purple !important;
+}
+
+/* ---------------------------------------------------------------------------
+    google groups
+    google.com
+ */
+
+tr.IVILX2C-p-M {
+    background-color: #ccf !important;
+}
+
+/* ---------------------------------------------------------------------------
+    TVTropes - Everything Readable Always
+    tvtropes.org
+ */
+
+a:link { color: #00F !important; }
+a:visited { color: #80F !important; }
+span.spoiler { color: black !important; background: white !important; border-color: white !important; }
+span.spoiler:hover { color: black !important; }
+
