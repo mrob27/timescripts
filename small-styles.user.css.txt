@@ -1,0 +1,18 @@
+/*      small-styles.user.css.txt
+
+This is a collection of small stylesheets for very specific tasks.
+
+ */
+
+
+/* ---------------------------------------------------------------------------
+    reddit hide buttons
+    www.reddit.com
+ */
+
+.flat-list {
+    display: none !important;
+}
+.buttons {
+    display: none !important;
+}
