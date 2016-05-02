@@ -6,19 +6,34 @@ This is a collection of small stylesheets for very specific tasks.
 
 
 /* ---------------------------------------------------------------------------
-    Reddit hide buttons and show visited links
+    Make Reddit readable
     www.reddit.com
  */
 
+/* hide useless button-bar beneath each post */
 .flat-list {
     display: none !important;
 }
 .buttons {
     display: none !important;
 }
-
-a:visited {
-    color: purple !important;
+/* Everything should be black on white */
+* {
+  color: black !important;
+  background-color: white !important;
+}
+/* make links obvious, and visited links need to look different */
+a:link { color: #00F !important; }
+a:visited { color: #808 !important; }
+a:hover { color: #40C !important; }
+/* Defeat the stupid "spoiler mode" styles */
+a[href$="/sp"], a[href$="/sp"]:hover {
+  color:black!important;
+  background:white!important;
+}
+a[href$="#sp"], a[href$="#sp"]:hover {
+  color:black!important;
+  background:white!important;
 }
 
 /* ---------------------------------------------------------------------------
