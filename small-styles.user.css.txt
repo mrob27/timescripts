@@ -59,6 +59,7 @@ tr.IVILX2C-p-M {
 
 a:link { color: #00F !important; }
 a:visited { color: #80F !important; }
-span.spoiler { color: black !important; background: white !important; border-color: white !important; }
-span.spoiler:hover { color: black !important; }
+span.spoiler { font-weight:bold; color: black !important;
+  background: white !important; border-color: white !important; }
+span.spoiler:hover { font-weight:bold; color: black !important; }
 
