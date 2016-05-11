@@ -1,3 +1,23 @@
+/* xkcd-forums-clean-theme.user.css.txt
+Based on a similar theme by AluisioASG.
+
+Here I've made the contrast as high as possible, black-on-white as
+recommended by optomotrists. If it's too bright, turn down the
+brightness of your display. That's why displays have a brightness
+control.
+
+REVISION HISTORY:
+ 20140414 Make navigation page-numbers bold
+ 20140417 Add overflow: auto to post content (wide posts are now scrollable!)
+ 20140804 Use serif fonts
+ 20150620 Hide useless headerbar
+ 20160228 Visited links are now purple
+ 20160324 Force super- and subscripts to be displayed as such
+ 20160510 Massively-nested quotes now indent less pixels per level.
+Okay, we get it, you love recursion.
+
+*/
+
 /* @namespace url('http://www.w3.org/1999/xhtml');
 
 @-moz-document
@@ -172,6 +192,15 @@ a.top {
 
 .post blockquote.uncited {
   padding-top: 5px !important;
+}
+
+/* Massively nested quotes don't need so much indentation. You love recursion. We get it. */
+blockquote blockquote blockquote blockquote blockquote {
+  margin: 0.1em 1px 0 2px !important;
+  margin-top: 0.1em !important;
+  margin-right: 1px;
+  margin-bottom: 0px;
+  margin-left: 2px !important;
 }
 
 /* Add a horizontal scroll-bar to any post that has wide images, very long
