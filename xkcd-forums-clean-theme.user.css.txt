@@ -1,5 +1,6 @@
-/* xkcd-forums-clean-theme.user.css.txt
-Based on a similar theme by AluisioASG.
+/* Clean theme for the phpBB forums, to be used over the "prosilver"
+ * (not "prosilver_left") theme.
+ * based on 'Dark' theme by Aluísio Augusto Silva Gonçalves.
 
 Here I've made the contrast as high as possible, black-on-white as
 recommended by optomotrists. If it's too bright, turn down the
@@ -28,9 +29,6 @@ Okay, we get it, you love recursion.
   url-prefix('http://www.echochamber.me/viewtopic.php')
 { */
 
-/* Clean theme for the phpBB forums, to be used over the "prosilver"
- * (not "prosilver_left") theme.
- * based on 'Dark' theme by Aluísio Augusto Silva Gonçalves. */
 
 sub { font-size: smaller; vertical-align: sub !important; }
 sup { font-size: smaller; vertical-align: super !important; }
@@ -194,7 +192,8 @@ a.top {
   padding-top: 5px !important;
 }
 
-/* Massively nested quotes don't need so much indentation. You love recursion. We get it. */
+/* Massively nested quotes don't need so much indentation.
+   You love recursion. We get it. */
 blockquote blockquote blockquote blockquote blockquote {
   margin: 0.1em 1px 0 2px !important;
   margin-top: 0.1em !important;
