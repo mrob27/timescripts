@@ -3,7 +3,7 @@
 // @name         newpix-converter for OTT
 // @description  Converts phpBB dates into the One Time Unit: the newpix. For this to work your date format must be: "D M d, Y g:i:s a e" without the quotes.
 // @author       Mrob27, Pikrass, and Smithers
-// @version      26836.20
+// @version      27650.25
 // @downloadURL  http://mrob.com/time/scripts-beta/newpix-convertor.user.js.txt
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -33,8 +33,11 @@
 // np14757.49 Remove 'dnsd' from bicyclesonthemoon hostname
 // np21083.61 Add @grant and @run-at requests
 // np26836.20 Clean up syntax (semicolons, == vs. ===, etc.)
+// np27650.25 Make sure the script runs at least once
 
 console.info("Newpix Converter: A 'GM_getValue is not supported' message following this one is benign and results from a runtime compatibility test.");
+
+var needrun = 1;
 
 newpixConverter = {
   // Change this according to your preference
@@ -47,8 +50,7 @@ newpixConverter = {
 
   /* Chrome provides a bogus nonfunctional GM_getValue function,
      so we have to do this stupid two-step test */
-  isGM: ((typeof GM_getValue != 'undefined')
-         && (typeof GM_getValue('a', 'b') != 'undefined')),
+  isGM: ((typeof GM_getValue != 'undefined') && (typeof GM_getValue('a', 'b') != 'undefined')),
 
   /* Use this instead of GM_getValue */
   vget: function(key, def) {
@@ -260,6 +262,11 @@ newpixConverter = {
   },
 
   convert: function() {
+    if (needrun === 0) {
+      return(0);
+    }
+    needrun = 0;
+
     // Initialize options, create the checkboxes.
     this.o_keep_heret = { val: this.jsdec(this.vget('o_keep_heret', '0')) };
     if (typeof this.o_keep_heret == 'undefined') {
@@ -291,8 +298,8 @@ newpixConverter = {
     }
 
     var i, j, npd;
-    var newpix_dates = new Array();
-    var postnodes = new Array();
+    var newpix_dates = []; // was "new Array();"
+    var postnodes = [];
 
     // Convert original post times.
     var authors = document.getElementsByClassName('author');
@@ -343,8 +350,7 @@ newpixConverter = {
     for (i = 0; i < profiles.length; i++) {
       for (j = 0; j < profiles[i].childNodes.length; j++) {
         var node = profiles[i].childNodes[j];
-        if (node.localName == 'dd'
-           && node.firstChild.outerHTML == '<strong>Joined:</strong>')
+        if ((node.localName == 'dd') && (node.firstChild.outerHTML == '<strong>Joined:</strong>'))
         {
           npd = this.hereticToNewpix(node.lastChild.data.substr(1));
           node.lastChild.data = ' ' + this.NewpixToString(npd);
@@ -358,3 +364,6 @@ newpixConverter = {
 
 window.addEventListener('DOMContentLoaded',
   newpixConverter.convert.bind(newpixConverter));
+
+// make sure it runs at least once
+newpixConverter.convert(newpixConverter);
