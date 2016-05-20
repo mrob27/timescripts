@@ -5,12 +5,25 @@ This is a collection of small stylesheets for very specific tasks.
  */
 
 /* ---------------------------------------------------------------------------
+    a Std Link Colours (all sites/URLs)
+ */
+
+a:link { color: #00F !important; background:white!important; }
+a:visited { color: #808 !important; background:white!important; }
+a:hover { color: #40C !important; background:white!important; }
+
+/* ---------------------------------------------------------------------------
     Boston Museum of Science (experimental)
  */
 td table tbody tr td { background:white; }
 td table tbody tr td font a:link { color: #00F !important; background:white!important; }
 td table tbody tr td font a:visited { color: #808 !important; background:white!important; }
 td table tbody tr td font a:hover { color: #40C !important; background:white!important; }
+
+/* ---------------------------------------------------------------------------
+    www.dicecollector.com
+ */
+body { color: #000 !important; background:white!important; }
 
 /* ---------------------------------------------------------------------------
     Make Reddit readable
