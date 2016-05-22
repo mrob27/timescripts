@@ -8,9 +8,9 @@ This is a collection of small stylesheets for very specific tasks.
     a Std Link Colours (all sites/URLs)
  */
 
-a:link { color: #00F !important; background:white!important; }
-a:visited { color: #808 !important; background:white!important; }
-a:hover { color: #40C !important; background:white!important; }
+a:link { color: #00F !important; }
+a:visited { color: #808 !important; }
+a:hover { color: #40C !important; }
 
 /* ---------------------------------------------------------------------------
     Boston Museum of Science (experimental)
