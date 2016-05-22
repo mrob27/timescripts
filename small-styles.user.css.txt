@@ -26,6 +26,15 @@ td table tbody tr td font a:hover { color: #40C !important; background:white!imp
 body { color: #000 !important; background:white!important; }
 
 /* ---------------------------------------------------------------------------
+    Goodman Games readable
+    goodman-games.com
+ */
+* {
+    color: black !important;
+    background-color: white !important;
+}
+
+/* ---------------------------------------------------------------------------
     Make Reddit readable
     www.reddit.com
  */
