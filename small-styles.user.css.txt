@@ -12,6 +12,28 @@ a:link { color: #00F !important; }
 a:visited { color: #808 !important; }
 a:hover { color: #40C !important; }
 
+/* For wikipedia.org */
+#p-personal ul { background-color: #ddf; }
+
+
+
+/* ---------------------------------------------------------------------------
+   Amazon: readable, and hide superfluous filler ads
+   URLs in the domain  amazon.com
+ */
+#gw-desktop-herotator, #gw-content-grid { display: none; }
+#nav-upnav { display: none; }
+    
+#navbar.nav-bluebeacon #nav-main { background-color: #fff; }
+.gw-hud-t2 #hud-dashboard { background-color: #fff; }
+
+#navbar.nav-bluebeacon #nav-search-label, #navbar.nav-bluebeacon .nav-a-2 .nav-line-1, #navbar.nav-bluebeacon .nav-a-2 .nav-line-2 { color: #000; }
+#navbar.nav-bluebeacon #nav-tools .nav-line-1 { color: #000; }
+.gw-hud-t2 #hud-dashboard .value { color: #000; }
+.gw-hud-t2 #hud-dashboard .label { color: #000; }
+.navFooterDescText { color: #000; }
+
+
 /* ---------------------------------------------------------------------------
     Boston Museum of Science (experimental)
  */
@@ -24,6 +46,20 @@ td table tbody tr td font a:hover { color: #40C !important; background:white!imp
     www.dicecollector.com
  */
 body { color: #000 !important; background:white!important; }
+
+
+/* ---------------------------------------------------------------------------
+  URLs in the domain
+    edengame.net
+ */
+#primary_nav { background: #fff; }
+#header_bar { background: #fff; }
+.maintitle { background: #fff; }
+.ipsFilterbar li a { opacity: 1.0; }
+#community_app_menu>li>a { background: #fff; }
+.topic_buttons li a { background: #fff; }
+.ipsFilterbar li.active a { background: #fff; }
+
 
 /* ---------------------------------------------------------------------------
     Goodman Games readable
