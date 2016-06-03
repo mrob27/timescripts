@@ -32,6 +32,7 @@ a:hover { color: #40C !important; }
 .gw-hud-t2 #hud-dashboard .value { color: #000; }
 .gw-hud-t2 #hud-dashboard .label { color: #000; }
 .navFooterDescText { color: #000; }
+#navbar.nav-bluebeacon #nav-xshop .nav-a { color: #000; }
 
 
 /* ---------------------------------------------------------------------------
