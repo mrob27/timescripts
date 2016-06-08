@@ -122,3 +122,10 @@ span.spoiler { font-weight:bold; color: black !important;
   background: white !important; border-color: white !important; }
 span.spoiler:hover { font-weight:bold; color: black !important; }
 
+
+/* ---------------------------------------------------------------------------
+   xkcd (comic and fora)
+   URLs on the domain xkcd.com
+ */
+
+ul.comicNav li a { background-color: #fff; }
