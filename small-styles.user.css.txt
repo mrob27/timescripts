@@ -124,6 +124,26 @@ span.spoiler:hover { font-weight:bold; color: black !important; }
 
 
 /* ---------------------------------------------------------------------------
+   Wikia clean
+   URLs on the domain wikia.com
+ */
+
+.WikiHeader > nav li { border-bottom: 1px solid #fff; }
+.WikiHeader > nav li.marked { background-color: #fff; }
+.WikiHeader .navbackground { background-color: #fff; }
+
+a.wikia-button, .wikia-single-button a, .wikia-menu-button, input[type="submit"], input[type="reset"], input[type="button"], .button, button, .wikia-menu-button > a:hover, .wikia-menu-button .drop:hover, .wikia-menu-button > li > a:hover, .wikia-menu-button:hover {
+  background-color: #ddd;
+  background-image: -moz-linear-gradient(top,#ddd 35%,#ddd 65%);
+  background-image: -webkit-gradient(linear,0% 0%,0% 100%,color-stop(35%,#ddd),color-stop(65%,#ddd));
+  background-image: -o-linear-gradient(top,#ddd 35%,#ddd 65%);
+  background-image: -ms-linear-gradient(top,#ddd 35%,#ddd 65%);
+}
+
+.global-navigation.inverse { background-color: rgba(140,140,140,0.5); }
+
+
+/* ---------------------------------------------------------------------------
    xkcd (comic and fora)
    URLs on the domain xkcd.com
  */
