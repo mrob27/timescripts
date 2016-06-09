@@ -54,12 +54,14 @@ body { color: #000 !important; background:white!important; }
     edengame.net
  */
 #primary_nav { background: #fff; }
-#header_bar { background: #fff; }
+#header_bar { background: #ccc; }
 .maintitle { background: #fff; }
 .ipsFilterbar li a { opacity: 1.0; }
 #community_app_menu>li>a { background: #fff; }
 .topic_buttons li a { background: #fff; }
 .ipsFilterbar li.active a { background: #fff; }
+
+#user_link { font-size: 15px; }
 
 
 /* ---------------------------------------------------------------------------
