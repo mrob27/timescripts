@@ -43,6 +43,7 @@ td table tbody tr td font a:link { color: #00F !important; background:white!impo
 td table tbody tr td font a:visited { color: #808 !important; background:white!important; }
 td table tbody tr td font a:hover { color: #40C !important; background:white!important; }
 
+
 /* ---------------------------------------------------------------------------
     www.dicecollector.com
  */
@@ -63,7 +64,6 @@ body { color: #000 !important; background:white!important; }
 
 #user_link { font-size: 15px; }
 
-<<<<<<< HEAD
 
 /* ---------------------------------------------------------------------------
    URLs in domain google.com */
@@ -80,8 +80,6 @@ tr.IVILX2C-p-M {
   background-image: none !important;
 }
 
-=======
->>>>>>> 9dc829e492fe8b8780426cdbc20f445aa6e45d03
 
 /* ---------------------------------------------------------------------------
     Goodman Games readable
