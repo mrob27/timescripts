@@ -63,6 +63,7 @@ body { color: #000 !important; background:white!important; }
 
 #user_link { font-size: 15px; }
 
+<<<<<<< HEAD
 
 /* ---------------------------------------------------------------------------
    URLs in domain google.com */
@@ -79,6 +80,8 @@ tr.IVILX2C-p-M {
   background-image: none !important;
 }
 
+=======
+>>>>>>> 9dc829e492fe8b8780426cdbc20f445aa6e45d03
 
 /* ---------------------------------------------------------------------------
     Goodman Games readable
