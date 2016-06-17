@@ -16,6 +16,15 @@ a:hover { color: #40C !important; }
 #p-personal ul { background-color: #ddf; }
 
 
+/* ---------------------------------------------------------------------------
+  Verizon router (192.168.1.1)
+  In "Applies to" area, set it to "URLS on the domain 168.1.1"
+ */
+
+* {
+  background-color: #fff !important;
+}
+
 
 /* ---------------------------------------------------------------------------
    Amazon: readable, and hide superfluous filler ads
@@ -92,7 +101,7 @@ tr.IVILX2C-p-M {
 
 
 /* ---------------------------------------------------------------------------
-    Make Reddit readable
+    Reddit: make it readable
     www.reddit.com
  */
 
