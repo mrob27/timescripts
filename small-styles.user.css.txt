@@ -101,6 +101,18 @@ tr.IVILX2C-p-M {
 
 
 /* ---------------------------------------------------------------------------
+   Guardian
+   URLs on the domain  theguardian.com
+ */
+.ad-slot-container { display: none !important; }
+div#dfp-ad--inline2 { display: none; }
+div#dfp-ad--inline3 { display: none; }
+.teads-inread.sm-screen { display: none; }
+.top-banner-ad-container { display: none !important; }
+li.social__item { display: none; }
+
+
+/* ---------------------------------------------------------------------------
     Reddit: make it readable
     www.reddit.com
  */
