@@ -181,4 +181,4 @@ a.wikia-button, .wikia-single-button a, .wikia-menu-button, input[type="submit"]
    URLs on the domain xkcd.com
  */
 
-ul.comicNav li a { background-color: #fff; }
+ul.comicNav li a { color:#000; background-color: #fff; }
