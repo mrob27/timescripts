@@ -117,31 +117,42 @@ li.social__item { display: none; }
     www.reddit.com
  */
 
-/* hide useless button-bar beneath each post */
-.flat-list {
-    display: none !important;
-}
-.buttons {
-    display: none !important;
-}
-/* Everything should be black on white */
-* {
-  color: black !important;
-  background-color: white !important;
-}
-/* make links obvious, and visited links need to look different */
+/* Hide the links that appear after every comment, and that I never use */
+.entry .buttons .share { display: none !important; }
+.entry .buttons .save-button { display: none !important; }
+.entry .buttons .hide-button { display: none !important; }
+.entry .buttons .report-button { display: none !important; }
+.entry .buttons .embed-comment { display: none !important; }
+.entry .buttons .give-gold-button { display: none !important; }
+.entry .buttons .reply-button { display: none !important; }
+
+/* There seems to be no way to hide the "permalink" and "parent" links without also hiding the "27 comments" link that appears on the subreddit's main listing. */
+.entry .buttons .bylink-xx { display: none !important; }
+
+/* Black text on a white background, blue links and purple visited */
 a:link { color: #00F !important; }
 a:visited { color: #808 !important; }
 a:hover { color: #40C !important; }
-/* Defeat the stupid "spoiler mode" styles */
 a[href$="/sp"], a[href$="/sp"]:hover {
-  color:black!important;
-  background:white!important;
+    color:black!important;
+    background:white!important;
 }
+
+/* Defeat the stupid "spoiler mode" styles */
 a[href$="#sp"], a[href$="#sp"]:hover {
-  color:black!important;
-  background:white!important;
+    color:black!important;
+    background:white!important;
 }
+* {
+    color: black !important;
+    background-color: white !important;
+}
+
+/* All of this is for /r/The_Donald */
+.titlebox .fancy-toggle-button { display: none !important; }
+body:not(.subscriber) .arrow { visibility: visible !important; }
+.link .arrow.down { display: block !important; }
+.link .arrow.downmod { display: block !important; }
 
 
 /* ---------------------------------------------------------------------------
