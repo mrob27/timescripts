@@ -14,19 +14,20 @@
 // @grant           GM_xmlhttpRequest
 // ==/UserScript==
 
-/* AUTOMOMEify version 26494.20
- * Copyright (C) 2014 Penguin Development and Robert Munafo (mrob27)
- * 
+/* AUTOMOMEify version 29519.72
+ * Copyright (C) 2014 Penguin Development,
+ * Copyright (c) 2014-2016 Robert Munafo (mrob27)
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -50,6 +51,8 @@ doubling letters without my consent.
 on any OTT-related page; this makes the meme-in-subject thing work
 when posting a reply via the "quote" button, in addition to when
 making an original comment with the Post Reply button.
+ np26494.20 Clean up (syntax errors, etc.). Increase length limit to 100
+(because the fora software's limit has increased).
 
  */
 
@@ -62,20 +65,19 @@ function htmlify(m)
   var s = spl[0];
 
   for (j = 1; j < spl.length - 1; j++) {
-    s = s + ((j % 2) ? "<span style=\"font-style: italic\">" : "<\/span>")
-          + spl[j];
+    s = s + ((j % 2) ? "<span style=\"font-style: italic\">" : "<\/span>");
+    s = s + spl[j];
   }
 
   if (spl.length > 1) {
-    s = s + ((spl.length % 2) ? "<\/span>" : "_")
-          + spl[spl.length - 1];
+    s = s + ((spl.length % 2) ? "<\/span>" : "_") + spl[spl.length - 1];
   }
 
-  return ("<blockquote><div><cite>" + 
-    "<a href=\"http://automome.penguindevelopment.org/\"" + 
+  return ("<blockquote><div><cite>" +
+    "<a href=\"http://automome.penguindevelopment.org/\"" +
     " class=\"postlink\">AUTOMOME</a> wrote:</cite>" + s +
     "</div></blockquote>");
-};
+}
 
 /* Submit a request to Link's AUTOMOME server and get some meme
  * phrases. %%% I should also initiate a request to
@@ -85,7 +87,7 @@ function htmlify(m)
  * more resilient to the failage caused by a non-responsive server.*/
 function get_memes ()
 {
-  if (memes.length == 0) {
+  if (memes.length === 0) {
     var req = new GM_xmlhttpRequest ({
       method: "GET",
            /* "http://automome.penguindevelopment.org/automome-web.py?n=32" */
@@ -100,7 +102,7 @@ function get_memes ()
   } else {
     automomeify(false);
   }
-};
+}
 
 /* %%% Once I figure out how O_o, this will:
  *   Change a text node to a more complex node containing some of the
@@ -119,15 +121,12 @@ function replaceTextContent(tNode)
     // console.info('rtc found magic char in "' + txt + '"');
 
     mix = (mix + 1) % (memes.length);
-    txt = txt.slice(0, idx)
-          // + htmlify(memes[mix])
-          + memes[mix] // plain-text cop-out
-          + txt.slice(idx + 1);
+    txt = txt.slice(0, idx) + memes[mix] + txt.slice(idx + 1);
   }
 
   // tNode.innerHTML = txt; // This does not work `\O_o/'
   tNode.textContent = txt; // plain-text cop-out
-};
+}
 
 /* This recursively (depth-first) traverses a given DOM node and its
  * subnodes for text, and applies the filter to each. */
@@ -146,12 +145,12 @@ function changeTextNodes(node)
       changeTextNodes(childNodes[i]);
     }
   }
-};
+}
 
 /* Maximum length for the title "subject" of a post. The posting page
  * lets you type 64 characters, but silently truncates it to 60; we
  * need 12 for "1190: Time: " */
-var max_title_length = 64 - 4 - 12;
+var max_title_length = 100; /* formerly 64 - 4 - 12; */
 
 /* If the 'detect' flag is true, determine whether there is any
  * AUTOMOMEing to do on this page, and return true or false. If
@@ -191,7 +190,7 @@ function automomeify (detect)
     /* Test for the generic subject; if it's anything else we should
      * leave it alone. */
     if (subj.value == "Re: 1190: \"Time\"") {
-      if (memes.length == 0) {
+      if (memes.length === 0) {
         if (detect) {
           return true;
         } else {
@@ -230,7 +229,7 @@ function automomeify (detect)
        return false;
     }
     changeTextNodes(document.body);
-  };
+  }
   return false;
 }
 
