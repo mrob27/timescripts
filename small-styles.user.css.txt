@@ -45,6 +45,12 @@ a:hover { color: #40C !important; }
 
 
 /* ---------------------------------------------------------------------------
+   askubuntu.com (a StackExchange site)
+ */
+.topbar { background: #FFF !important; }
+
+
+/* ---------------------------------------------------------------------------
     Boston Museum of Science (experimental)
  */
 td table tbody tr td { background:white; }
