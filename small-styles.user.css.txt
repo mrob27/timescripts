@@ -25,7 +25,6 @@ a:hover { color: #40C !important; }
   background-color: #fff !important;
 }
 
-
 /* ---------------------------------------------------------------------------
   URLs in the domain
     amazon.com
@@ -182,6 +181,15 @@ a:visited { color: #80F !important; }
 span.spoiler { font-weight:bold; color: black !important;
   background: white !important; border-color: white !important; }
 span.spoiler:hover { font-weight:bold; color: black !important; }
+
+
+/* ---------------------------------------------------------------------------
+  weather.gov
+ */
+
+div#leftnav {
+    background: white !important;
+}
 
 
 /* ---------------------------------------------------------------------------
