@@ -43,6 +43,8 @@ a:hover { color: #40C !important; }
 .navFooterDescText { color: #000; }
 #navbar.nav-bluebeacon #nav-xshop .nav-a { color: #000; }
 
+div { min-width:1px !important; }
+
 
 /* ---------------------------------------------------------------------------
   URLs in the domain
