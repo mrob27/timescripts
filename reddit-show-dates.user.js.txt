@@ -1,0 +1,30 @@
+// ==UserScript==
+// @namespace   http://mrob.com/time/scripts-beta
+// @name Show absolute dates/times on Reddit pages
+// @description Adds a text node below post/comment header giving the exact date and time of the post/comment
+// @author      Robert Munafo
+// @version     31703.57
+// @downloadURL http://mrob.com/time/scripts-beta/reddit-show-dates.user.js.txt
+// @include     https://www.reddit.com/*
+// ==/UserScript==
+
+// REVISION HISTORY:
+//
+// np31703.57: First version.
+
+showAltText = function (D)
+{
+  var i, f, j, e;
+
+  var l1 = D.getElementsByTagName("time");
+
+  for (i=0; f=l1[i], f; ++i) {
+    if (f.title !== "") {
+      var x = D.createElement("div"),
+          x.innerHTML = f.title;
+          f.parentNode.insertBefore(x, f.nextSibling);
+    }
+  }
+};
+
+showAltText(document);
