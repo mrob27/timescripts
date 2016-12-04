@@ -9,6 +9,7 @@
 // @include     https://www.reddit.com/*
 // @match       https://reddit.com/*
 // @match       https://www.reddit.com/*
+// @grant       none
 // ==/UserScript==
 
 // REVISION HISTORY:
