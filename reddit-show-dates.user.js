@@ -27,6 +27,8 @@ showDates = function (D)
   for (i=0; i<nt; i++) {
     if (tms[i].title) {
       tms[i].innerHTML = tms[i].title;
+      tms[i].style.color = "#000";
+      tms[i].style.background = "#FFF";
     }
   }
 };
